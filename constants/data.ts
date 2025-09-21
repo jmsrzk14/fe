@@ -123,12 +123,8 @@ export const menuItems = [
 
 export const menuItemsbem = [
   { key: "dashboard", label: "Dashboard", icon: Home, path: "/bem/dashboard" },
-  { key: "mahasiswa", label: "Mahasiswa", icon: Users, path: "/bem/mahasiswa" },
-  { key: "himpunan", label: "Himpunan Mahasiswa", icon: GraduationCap, path: "/bem/himpunan" },
-  // { key: "ukm", label: "UKM", icon: BookOpen, path: "/bem/ukm" },
-  // { key: "departement", label: "Departemen", icon: Briefcase, path: "/bem/department" },
-  // { key: "galeri", label: "Galeri", icon: ImageIcon, path: "/bem/galery" },
-  // { key: "berita", label: "Berita", icon: Newspaper, path: "/bem/news" },
+  { key: "galeri", label: "Galeri", icon: ImageIcon, path: "/bem/galery" },
+  { key: "berita", label: "Berita", icon: Newspaper, path: "/bem/news" },
   { key: "pengumuman", label: "Pengumuman", icon: Megaphone, path: "/bem/announcement" },
   { key: "visiMisi", label: "Visi & Misi", icon: Target, path: "/bem/visimisi" },
   { key: "profile", label: "Profile", icon: Settings, path: "/bem/profile" },

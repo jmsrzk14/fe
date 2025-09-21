@@ -114,7 +114,7 @@ export default function AdminLayout({
       {/* Main Layout */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header (fixed, tidak ikut scroll konten) */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-200/50 sticky top-0 z-40">
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-200/50 sticky top-0 z-10">
           <div className="p-6 flex justify-between items-center">
             {/* Title & Breadcrumb */}
             <div className="flex items-center gap-4">

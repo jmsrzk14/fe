@@ -91,12 +91,12 @@ const TableContainer: React.FC = () => {
 
   // Available periods - you can modify this based on your needs
   const availablePeriods: Period[] = [
-    { value: "2023/2024", label: "2023/2024", year: "2023" },
-    { value: "2024/2025", label: "2024/2025", year: "2024" },
-    { value: "2025/2026", label: "2025/2026", year: "2025" },
-    { value: "2026/2027", label: "2026/2027", year: "2026" },
-    { value: "2027/2028", label: "2027/2028", year: "2027" },
-    { value: "2028/2029", label: "2028/2029", year: "2028" },
+    { value: "2023-2024", label: "2023/2024", year: "2023" },
+    { value: "2024-2025", label: "2024/2025", year: "2024" },
+    { value: "2025-2026", label: "2025/2026", year: "2025" },
+    { value: "2026-2027", label: "2026/2027", year: "2026" },
+    { value: "2027-2028", label: "2027/2028", year: "2027" },
+    { value: "2028-2029", label: "2028/2029", year: "2028" },
   ];
 
   // Base role categories with their respective roles
@@ -258,18 +258,18 @@ const TableContainer: React.FC = () => {
       color: "from-emerald-500 to-teal-500",
       roles: [
         {
-          value: "kepala_department",
-          label: "Kepala Department",
+          value: "ketua_department",
+          label: "Ketua Department",
           icon: <Crown className="w-4 h-4" />,
           color: "from-emerald-500 to-emerald-600",
           description: "Memimpin department"
         },
         {
-          value: "wakil_kepala_department",
-          label: "Wakil Kepala Department",
+          value: "wakil_ketua_department",
+          label: "Wakil Ketua Department",
           icon: <Crown className="w-4 h-4" />,
           color: "from-emerald-400 to-emerald-500",
-          description: "Membantu kepala department"
+          description: "Membantu Ketua department"
         },
         {
           value: "sekretaris_departemen_1",
@@ -504,7 +504,7 @@ const TableContainer: React.FC = () => {
   }) => {
     const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
     const [expandedOrganization, setExpandedOrganization] = useState<number | null>(null);
-    const [selectedPeriod, setSelectedPeriod] = useState<string>(availablePeriods.find(p => p.isActive)?.value || availablePeriods[0]?.value || "");
+    const [selectedPeriod, setSelectedPeriod] = useState<string>(availablePeriods.find(p => p)?.value || availablePeriods[0]?.value || "");
 
     if (!isOpen || !student) return null;
 

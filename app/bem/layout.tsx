@@ -35,7 +35,7 @@ export default function AdminLayout({
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    const userStr = sessionStorage.getItem("user"); // simpan user pas login
+    const userStr = sessionStorage.getItem("data.user"); // simpan user pas login
     const user = userStr ? JSON.parse(userStr) : null;
 
     if (!token || !user) {
@@ -43,7 +43,9 @@ export default function AdminLayout({
       return;
     }
 
-    if (user.position !== "bem") {
+    console.log(user.position);
+
+    if (user.position !== "ketua_bem") {
       if (user.position === "student") {
         router.push("/student/home");
       } else if (user.position === "lecturer") {

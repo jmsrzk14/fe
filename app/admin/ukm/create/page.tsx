@@ -1,9 +1,21 @@
 "use client";
-
+import Swal from "sweetalert2";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
-import { Users, Type, Target, Upload, Save, ArrowLeft, Building2, Image, CheckCircle2, Info, Star, Zap } from "lucide-react";
+import {
+  Users,
+  Type,
+  Target,
+  Upload,
+  Save,
+  ArrowLeft,
+  Building2,
+  Image,
+  CheckCircle2,
+  Info,
+  Zap,
+} from "lucide-react";
 
 interface FormData {
   nama: string;
@@ -30,22 +42,17 @@ export default function MahasiswaCreatePage() {
 
   const handleChange = (key: keyof FormData, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
-    setError(null); // Clear error on input change
+    setError(null);
 
-    // Handle image preview
     if (key === "gambar" && value instanceof File) {
-      // Validate file size (max 5MB)
       if (value.size > 5 * 1024 * 1024) {
         setError("Ukuran logo tidak boleh melebihi 5MB.");
         setFormData((prev) => ({ ...prev, gambar: null }));
         setPreviewImage(null);
         return;
       }
-
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewImage(e.target?.result as string);
-      };
+      reader.onload = (e) => setPreviewImage(e.target?.result as string);
       reader.readAsDataURL(value);
     } else if (key === "gambar" && !value) {
       setPreviewImage(null);
@@ -56,7 +63,6 @@ export default function MahasiswaCreatePage() {
     e.preventDefault();
     setError(null);
 
-    // Validate form
     if (!formData.nama || !formData.namaSingkat || !formData.visi || !formData.misi) {
       setError("Semua kolom wajib diisi.");
       return;
@@ -70,12 +76,13 @@ export default function MahasiswaCreatePage() {
     setIsSubmitting(true);
 
     try {
-      const token = sessionStorage.getItem("token"); // Changed from localStorage to sessionStorage
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("Anda harus login untuk melakukan aksi ini.");
-        router.push("/login"); // Redirect to login page
+        router.push("/login");
         return;
       }
+
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.nama);
       formDataToSend.append("short_name", formData.namaSingkat);
@@ -86,7 +93,6 @@ export default function MahasiswaCreatePage() {
         formDataToSend.append("image", formData.gambar);
       }
 
-      // Send to API with Authorization header
       const response = await axios.post("http://localhost:8080/api/admin/clubs", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -95,14 +101,27 @@ export default function MahasiswaCreatePage() {
       });
 
       if (response.status === 201 || response.status === 200) {
-        alert("Data UKM berhasil ditambahkan!");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "success",
+          title: "Data himpunan berhasil ditambahkan!",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#22c55e",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
         router.push("/admin/mahasiswa");
       }
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       if (error.response?.status === 401) {
         setError("Sesi tidak valid atau telah berakhir. Silakan login kembali.");
-        sessionStorage.removeItem("authToken"); // Changed from localStorage to sessionStorage
+        sessionStorage.removeItem("token");
         router.push("/auth/login");
       } else {
         setError(error.response?.data?.message || "Terjadi kesalahan saat menyimpan data.");
@@ -133,15 +152,15 @@ export default function MahasiswaCreatePage() {
           <div className="flex items-center gap-4 mb-2">
             <div className="relative">
               <div className="p-4 bg-blue-600 rounded-2xl shadow-lg">
-                <Activity className="text-white" size={32} />
+                <Building2 className="text-white" size={32} />
               </div>
               <div className="absolute -top-1 -right-1 p-1 bg-white rounded-full shadow-md">
-                <Star size={16} className="text-blue-600" />
+                <Zap size={16} className="text-blue-600" />
               </div>
             </div>
             <div>
               <h1 className="text-3xl font-bold text-blue-900">Tambah Data UKM</h1>
-              <p className="text-blue-600">Buat data Unit Kegiatan Mahasiswa baru</p>
+              <p className="text-blue-600">Buat data UKM mahasiswa baru</p>
             </div>
           </div>
         </div>
@@ -175,7 +194,7 @@ export default function MahasiswaCreatePage() {
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
                     value={formData.nama}
                     onChange={(e) => handleChange("nama", e.target.value)}
-                    placeholder="🏛️ Contoh: Del Robotic Clubs"
+                    placeholder="🏛 Contoh: Del Robotic Clubs"
                     required
                     disabled={isSubmitting}
                   />
@@ -467,7 +486,7 @@ export default function MahasiswaCreatePage() {
                     <li>🎯 Gunakan nama resmi yang lengkap</li>
                     <li>⚡ Singkatan harus mudah diingat</li>
                     <li>✨ Visi & misi harus jelas dan inspiratif</li>
-                    <li>🖼️ Logo sebaiknya format PNG transparan</li>
+                    <li>🖼 Logo sebaiknya format PNG transparan</li>
                     <li>✅ Pastikan semua data sudah benar</li>
                   </ul>
                 </div>

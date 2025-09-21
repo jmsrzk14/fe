@@ -49,14 +49,11 @@ export default function LoginPage() {
 
       if (data.user.position === 'admin') {
         router.push('/admin/dashboard');
-      } else if (data.user.position === 'student') {
-        router.push('/student/home');
+      } else if (data.position === 'ketua_bem') {
+        router.push('/bem/dashboard');
       } else if (data.user.position === 'lecturer') {
         router.push('/lecturer/home');
-      } else {
-        router.push('/');
       }
-
     } catch (err) {
       console.error(err);
       alert('Login gagal, cek username/password!');

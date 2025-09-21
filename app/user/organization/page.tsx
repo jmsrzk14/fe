@@ -128,7 +128,7 @@ export default function OrganizationPage() {
         <div className="relative z-10 flex items-center justify-center min-h-[60vh] text-center px-4">
           <div className="max-w-4xl mx-auto">
             <div className="relative z-10">
-              <div className="inline-flex items-center bg-white rounded-full shadow-md">
+              <div className="inline-flex items-center">
                 {/* Icon */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -137,7 +137,7 @@ export default function OrganizationPage() {
                   className="inline-flex items-center bg-white rounded-full shadow-md px-6 py-3 mb-6"
                 >
                   <div className="w-11 h-11 rounded-full flex items-center justify-center mr-3">
-                    <img src="./del.png" alt="Institut Teknologi Del" />
+                    <img src="/del.png" alt="Institut Teknologi Del" />
                   </div>
                   {/* Text */}
                   <span className="text-[1.2em] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
@@ -218,12 +218,12 @@ export default function OrganizationPage() {
                     <motion.div
                       whileHover={{ scale: 1.1 }}
                       transition={{ type: "spring", stiffness: 300 }}
-                      className="p-4 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 mb-4 shadow-lg shadow-blue-300/50 flex items-center justify-center"
+                      className="p-4 rounded-lg mb-4 flex items-center justify-center"
                     >
                     <img 
-                        src={`association.image`} 
+                        src={`http://localhost:8080/associations/${item.image}`} 
                         alt={`Logo ${item.image}`}
-                        className="w-10 h-10 object-contain"
+                        className="w-16 h-16 object-contain"
                       />
                     </motion.div>
                     <CardTitle className="text-xl font-bold">{item.name}</CardTitle>
