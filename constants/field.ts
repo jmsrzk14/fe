@@ -41,10 +41,10 @@ export const fieldConfigs = {
     ],
     pengumuman: [
       { key: 'judul', label: 'Judul Pengumuman', type: 'text' },
-      { key: 'konten', label: 'Konten', type: 'textarea' },
-      { key: 'tanggal', label: 'Tanggal', type: 'date' },
-      { key: 'prioritas', label: 'Prioritas', type: 'select', options: ['Rendah', 'Sedang', 'Tinggi'] },
-      { key: 'kategori', label: 'Kategori', type: 'select', options: ['Pendaftaran', 'Akademik', 'Libur', 'Pembayaran'] }
+      { key: 'content', label: 'Content', type: 'textarea' },
+      { key: 'filepath', label: 'File Path', type: 'text' },
+      { key: 'tanggal_mulai', label: 'Tanggal Mulai', type: 'date' },
+      { key: 'tanggal_tutup', label: 'Tanggal Tutup', type: 'date' }
     ],
     ukm: [
       { key: 'nama', label: 'Nama UKM', type: 'text' },

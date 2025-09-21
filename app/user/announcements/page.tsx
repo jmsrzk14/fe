@@ -1,275 +1,254 @@
+'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Calendar, Clock, MapPin, Users, AlertCircle, Info, CheckCircle, Bell } from 'lucide-react';
+import { Progress } from "@/components/ui/progress";
+import { Users, Target, Calendar, Award, Briefcase, User, Star, Sparkles, RefreshCw, AlertCircle } from 'lucide-react';
+import { Viga } from "next/font/google";
+import { motion } from "framer-motion";
+import { useState, useEffect } from 'react';
 
-export default function AnnouncementsPage() {
-  const announcements = [
-    {
-      id: 1,
-      title: "Spring Semester Final Exams Schedule Released",
-      content: "The final examination schedule for Spring 2024 semester has been published. All students are advised to check their exam dates and locations on the student portal.",
-      type: "academic",
-      priority: "high",
-      publishDate: "March 20, 2024",
-      deadline: "May 15, 2024",
-      author: "Academic Affairs Office",
-      location: "Various Exam Halls",
-      category: "Academic"
-    },
-    
-    {
-      id: 2,
-      title: "Summer Internship Application Deadline Extended",
-      content: "Due to popular demand, the application deadline for summer internship programs has been extended to April 5, 2024. Don't miss this opportunity to gain valuable work experience.",
-      type: "opportunity",
-      priority: "medium",
-      publishDate: "March 18, 2024", 
-      deadline: "April 5, 2024",
-      author: "Career Services",
-      category: "Career"
-    },
-    {
-      id: 3,
-      title: "Campus WiFi Maintenance Scheduled",
-      content: "Network maintenance will be performed on March 25, 2024, from 2:00 AM to 6:00 AM. Internet connectivity may be intermittent during this period.",
-      type: "maintenance",
-      priority: "medium",
-      publishDate: "March 17, 2024",
-      deadline: "March 25, 2024",
-      author: "IT Services",
-      category: "Technical"
-    },
-    {
-      id: 4,
-      title: "Annual Cultural Festival - Call for Participants",
-      content: "Registration is now open for the Annual Cultural Festival 2024. Students can participate in various categories including music, dance, drama, and art competitions.",
-      type: "event",
-      priority: "high",
-      publishDate: "March 15, 2024",
-      deadline: "April 10, 2024",
-      author: "Student Activities",
-      location: "Main Campus Grounds",
-      category: "Event"
-    },
-    {
-      id: 5,
-      title: "Library Extended Hours During Exam Period",
-      content: "The library will extend its operating hours during the final exam period (May 1-15). It will be open 24/7 to support students' study needs.",
-      type: "service",
-      priority: "low",
-      publishDate: "March 12, 2024",
-      deadline: "May 15, 2024",
-      author: "Library Services",
-      location: "Main Library",
-      category: "Academic"
-    },
-    {
-      id: 6,
-      title: "Health Insurance Enrollment Deadline",
-      content: "All students must enroll in the university health insurance plan by March 30, 2024. Late enrollments will incur additional fees.",
-      type: "requirement",
-      priority: "high",
-      publishDate: "March 10, 2024",
-      deadline: "March 30, 2024", 
-      author: "Student Health Services",
-      category: "Health"
-    },
-    {
-      id: 7,
-      title: "Guest Lecture Series: Innovation in Technology",
-      content: "Join us for an exciting guest lecture series featuring industry leaders discussing the latest innovations in technology and their impact on society.",
-      type: "event",
-      priority: "medium",
-      publishDate: "March 8, 2024",
-      deadline: "March 22, 2024",
-      author: "Engineering Department",
-      location: "Auditorium A",
-      category: "Academic"
-    },
-    {
-      id: 8,
-      title: "Parking Permit Renewal Notice",
-      content: "All campus parking permits expire on March 31, 2024. Students must renew their permits before the deadline to avoid parking violations.",
-      type: "requirement",
-      priority: "medium",
-      publishDate: "March 5, 2024",
-      deadline: "March 31, 2024",
-      author: "Campus Security",
-      category: "Administrative"
-    }
-  ];
+const viga = Viga({
+  weight: "400",
+  subsets: ["latin"],
+});
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-red-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+interface Himpunan {
+  id: number;
+  name: string;
+  short_name: string;
+  image: string;
+  vision: string;
+  mission: string;
+  values: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ApiResponse {
+  status: string;
+  message: string;
+  data: Himpunan[];
+}
+
+export default function OrganizationPage() {
+  const [himpunan, setHimpunan] = useState<Himpunan[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const fetchHimpunanData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch('http://localhost:8080/api/association', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result: ApiResponse = await response.json();
+      setHimpunan(result.data); // Set the fetched data to state
+    } catch (err) {
+      console.error('Error fetching himpunan data:', err);
+      setError(err instanceof Error ? err.message : 'Terjadi kesalahan saat memuat data');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getPriorityIcon = (type: string) => {
-    switch (type) {
-      case 'academic': return <CheckCircle className="w-4 h-4" />;
-      case 'maintenance': return <AlertCircle className="w-4 h-4" />;
-      case 'event': return <Bell className="w-4 h-4" />;
-      default: return <Info className="w-4 h-4" />;
-    }
-  };
+  useEffect(() => {
+    fetchHimpunanData();
+  }, [retryCount]);
 
-  const urgentAnnouncements = announcements.filter(a => a.priority === 'high');
-  const regularAnnouncements = announcements.filter(a => a.priority !== 'high');
+  // Loading Component
+  const LoadingState = () => (
+    <div className="flex flex-col items-center justify-center py-20">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full mb-6"
+      />
+      <h3 className="text-xl font-semibold text-gray-700 mb-2">Memuat Data Himpunan</h3>
+      <p className="text-gray-500">Sedang mengambil informasi terbaru...</p>
+    </div>
+  );
+
+  // Error Component
+  const ErrorState = () => (
+    <div className="flex flex-col items-center justify-center py-20">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", duration: 0.6 }}
+        className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6"
+      >
+        <AlertCircle className="w-8 h-8 text-red-600" />
+      </motion.div>
+      <h3 className="text-xl font-semibold text-gray-700 mb-2">Gagal Memuat Data</h3>
+      <p className="text-gray-500 mb-6 text-center max-w-md">{error}</p>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setRetryCount(prev => prev + 1)} // Trigger refetch on click
+        className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
+      >
+        <RefreshCw className="w-4 h-4 mr-2" />
+        Coba Lagi
+      </motion.button>
+    </div>
+  );
 
   return (
-    <div className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Announcements & Updates</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Stay informed with the latest university announcements, important deadlines, 
-            event notifications, and campus updates.
-          </p>
+    <div className="text-center mb-16">
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="relative min-h-[60vh] bg-gradient-to-br from-[#1c46b9] via-[#2563eb] to-[#3b82f6] overflow-hidden py-16"
+      >
+        <div className="absolute inset-0">
+          {/* Large circles */}
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-1/3 right-20 w-48 h-48 bg-white/5 rounded-full"></div>
+          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-white/10 rounded-full animate-pulse delay-1000"></div>
+          <div className="absolute bottom-32 right-10 w-24 h-24 bg-[#ffe444]/20 rounded-full"></div>
+
+          {/* Gradient overlays for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1c46b9]/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
         </div>
 
-        {/* Urgent Announcements */}
-        {urgentAnnouncements.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <AlertCircle className="w-6 h-6 mr-2 text-red-500" />
-              Urgent Announcements
-            </h2>
-            <div className="space-y-4">
-              {urgentAnnouncements.map((announcement) => (
-                <Alert key={announcement.id} className="border-red-200 bg-red-50">
-                  <AlertCircle className="h-4 w-4 text-red-600" />
-                  <AlertTitle className="text-red-800 font-semibold">
-                    {announcement.title}
-                  </AlertTitle>
-                  <AlertDescription className="text-red-700 mt-2">
-                    {announcement.content}
-                  </AlertDescription>
-                  <div className="flex flex-wrap gap-4 mt-3 text-sm text-red-600">
-                    <span className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      Deadline: {announcement.deadline}
-                    </span>
-                    <span className="flex items-center">
-                      <Users className="w-4 h-4 mr-1" />
-                      {announcement.author}
-                    </span>
+        {/* Main content */}
+        <div className="relative z-10 flex items-center justify-center min-h-[60vh] text-center px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="relative z-10">
+              <div className="inline-flex items-center bg-white rounded-full shadow-md">
+                {/* Icon */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="inline-flex items-center bg-white rounded-full shadow-md px-6 py-3 mb-6"
+                >
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center mr-3">
+                    <img src="./del.png" alt="Institut Teknologi Del" />
                   </div>
-                </Alert>
-              ))}
+                  {/* Text */}
+                  <span className="text-[1.2em] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                    Institut Teknologi Del
+                  </span>
+                </motion.div>
+              </div>
+            </div>
+            <div className='flex flex-col items-center '>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className={`${viga.className} text-[3.5em] font-bold text-white`}
+              >
+                Organisasi Mahasiswa
+              </motion.h1>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className={`${viga.className} text-[3.5em] font-bold text-white`}
+              >
+                HIMPUNAN MAHASISWA
+              </motion.h1>
+              <div className="w-40 h-1 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(0,200,255,0.8)] mt-3"></div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className={`${viga.className} mt-6 w-[40em] text-xl text-white mb-[6em]`}
+              >
+                Wadah pengembangan akademik dan non-akademik mahasiswa sesuai dengan bidang keahlian masing-masing program studi di Institut Teknologi Del
+              </motion.p>
             </div>
           </div>
-        )}
+        </div>
+      </motion.section>
 
-        {/* Regular Announcements */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">All Announcements</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {announcements.map((announcement) => (
-              <Card key={announcement.id} className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-2 h-2 rounded-full ${getPriorityColor(announcement.priority)}`}></div>
-                        <Badge 
-                          variant="secondary" 
-                          className="bg-[#3B82F6]/10 text-[#3B82F6] flex items-center gap-1"
-                        >
-                          {getPriorityIcon(announcement.type)}
-                          {announcement.category}
-                        </Badge>
-                        <Badge 
-                          variant="outline"
-                          className={`capitalize ${
-                            announcement.priority === 'high' ? 'border-red-300 text-red-600' :
-                            announcement.priority === 'medium' ? 'border-yellow-300 text-yellow-600' :
-                            'border-green-300 text-green-600'
-                          }`}
-                        >
-                          {announcement.priority} priority
-                        </Badge>
-                      </div>
-                      <CardTitle className="text-lg leading-tight hover:text-[#3B82F6] transition-colors cursor-pointer">
-                        {announcement.title}
-                      </CardTitle>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-gray-700 mb-4 leading-relaxed">
-                    {announcement.content}
-                  </CardDescription>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-2 text-[#3B82F6]" />
-                      <span className="mr-4">Published: {announcement.publishDate}</span>
-                    </div>
-                    {announcement.deadline && (
-                      <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-2 text-[#3B82F6]" />
-                        <span className="mr-4">Deadline: {announcement.deadline}</span>
-                      </div>
-                    )}
-                    {announcement.location && (
-                      <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-2 text-[#3B82F6]" />
-                        <span className="mr-4">Location: {announcement.location}</span>
-                      </div>
-                    )}
-                    <div className="flex items-center">
-                      <Users className="w-4 h-4 mr-2 text-[#3B82F6]" />
-                      <span>By: {announcement.author}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+      <div className="relative min-h-[60vh] bg-gradient-to-r from-[#F9FBFF] to-[#E9F5FF] overflow-hidden px-16 py-16 mb-[-4em]">
+        {/* Blur Circles */}
+        <div className="absolute top-10 left-10 w-24 h-24 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse"></div>
+        <div className="absolute top-32 left-1/3 w-48 h-48 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute top-20 right-10 w-20 h-20 bg-cyan-300 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-pulse"></div>
+
+        <div className='flex flex-col items-center'>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className={`${viga.className} text-[3.5em] font-bold text-transparent font-bold bg-clip-text bg-gradient-to-r from-blue-800 to-blue-400`}
+          >
+            Himpunan Mahasiswa
+          </motion.h1>
+          <p className='mt-4 w-[30em] text-xl mb-6'>
+            Organisasi mahasiswa berdasarkan program studi untuk pengembangan akademik dan non-akademik
+          </p>
+          <div className="w-40 h-1 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(0,200,255,0.8)] mb-[6em]"></div>
+        </div>
+
+        {/* Conditional Rendering */}
+        {loading ? (
+          <LoadingState />
+        ) : error && himpunan.length === 0 ? (
+          <ErrorState />
+        ) : (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+            {himpunan.map((item, idx) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="shadow-lg hover:shadow-2xl transition duration-300 rounded-2xl bg-white border border-gray-100 h-full">
+                  <CardHeader className="flex flex-col items-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="p-4 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 mb-4 shadow-lg shadow-blue-300/50 flex items-center justify-center"
+                    >
+                    <img 
+                        src={`association.image`} 
+                        alt={`Logo ${item.image}`}
+                        className="w-10 h-10 object-contain"
+                      />
+                    </motion.div>
+                    <CardTitle className="text-xl font-bold">{item.name}</CardTitle>
+                    <CardDescription className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                      {item.short_name}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center flex-1 flex flex-col">
+                    <Progress className="mb-4 w-[7em] h-2 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(0,200,255,0.8)] mx-auto" />
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-2 px-4 bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition"
+                      onClick={() => {
+                        console.log('View detail for:', item.name);
+                      }}
+                    >
+                      Lihat Detail
+                    </motion.button>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
-        </div>
-
-        {/* Subscription Notice */}
-        <div className="mt-16">
-          <Card className="bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white text-center">
-            <CardHeader>
-              <CardTitle className="text-2xl mb-2 flex items-center justify-center">
-                <Bell className="w-6 h-6 mr-2" />
-                Stay Updated
-              </CardTitle>
-              <CardDescription className="text-white/90 text-lg">
-                Never miss important announcements! Subscribe to our notification service.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-white/90 mb-4">
-                Get instant notifications for urgent announcements, deadline reminders, 
-                and important campus updates directly to your email or mobile device.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div>
-                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
-                  <h4 className="font-semibold">Email Notifications</h4>
-                  <p className="text-sm text-white/80">Daily digest of announcements</p>
-                </div>
-                <div>
-                  <Bell className="w-8 h-8 mx-auto mb-2" />
-                  <h4 className="font-semibold">Push Notifications</h4>
-                  <p className="text-sm text-white/80">Instant urgent updates</p>
-                </div>
-                <div>
-                  <Calendar className="w-8 h-8 mx-auto mb-2" />
-                  <h4 className="font-semibold">Calendar Integration</h4>
-                  <p className="text-sm text-white/80">Automatic deadline reminders</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        )}
       </div>
     </div>
   );

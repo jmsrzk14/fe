@@ -57,10 +57,38 @@ himpunan: [
       { id: 4, judul: 'Seminar Nasional: Masa Depan Teknologi AI di Indonesia', konten: 'Seminar yang menghadirkan pakar AI terkemuka membahas perkembangan teknologi AI', penulis: 'Fakultas Teknik', tanggal: '2024-02-28', status: 'Published', kategori: 'Event' }
     ],
     pengumuman: [
-      { id: 1, judul: 'Pendaftaran Mahasiswa Baru Tahun Akademik 2024/2025', konten: 'Pembukaan pendaftaran mahasiswa baru untuk semua program studi. Periode pendaftaran: 1 Maret - 30 April 2024', tanggal: '2024-03-01', prioritas: 'Tinggi', kategori: 'Pendaftaran' },
-      { id: 2, judul: 'Jadwal Ujian Tengah Semester Genap 2023/2024', konten: 'Pengumuman jadwal UTS untuk semua fakultas. Pelaksanaan: 15-26 April 2024', tanggal: '2024-03-12', prioritas: 'Tinggi', kategori: 'Akademik' },
-      { id: 3, judul: 'Libur Semester dan Hari Raya', konten: 'Pengumuman libur semester genap dan libur hari raya. Kuliah dimulai kembali: 6 Mei 2024', tanggal: '2024-03-12', prioritas: 'Sedang', kategori: 'Libur' },
-      { id: 4, judul: 'Pembayaran SPP Semester Genap 2023/2024', konten: 'Batas akhir pembayaran SPP: 31 Maret 2024. Dapat dibayar melalui bank partner atau virtual account', tanggal: '2024-02-15', prioritas: 'Tinggi', kategori: 'Pembayaran' }
+      { 
+        id: 1, 
+        judul: 'Pendaftaran Mahasiswa Baru Tahun Akademik 2024/2025', 
+        content: 'Pembukaan pendaftaran mahasiswa baru untuk semua program studi. Periode pendaftaran: 1 Maret - 30 April 2024. Silahkan siapkan berkas-berkas yang diperlukan sesuai dengan ketentuan yang berlaku.',
+        filepath: '/files/pendaftaran-maba-2024.pdf',
+        tanggal_mulai: '2024-03-01', 
+        tanggal_tutup: '2024-04-30'
+      },
+      { 
+        id: 2, 
+        judul: 'Jadwal Ujian Tengah Semester Genap 2023/2024', 
+        content: 'Pengumuman jadwal UTS untuk semua fakultas. Pelaksanaan: 15-26 April 2024. Harap mempersiapkan diri dengan baik dan mengikuti protokol kesehatan yang berlaku.',
+        filepath: '/files/jadwal-uts-genap-2024.pdf',
+        tanggal_mulai: '2024-03-12', 
+        tanggal_tutup: '2024-04-26'
+      },
+      { 
+        id: 3, 
+        judul: 'Libur Semester dan Hari Raya', 
+        content: 'Pengumuman libur semester genap dan libur hari raya. Kuliah dimulai kembali: 6 Mei 2024. Selamat menikmati libur dan mohon tetap menjaga kesehatan.',
+        filepath: '/files/libur-semester-2024.pdf',
+        tanggal_mulai: '2024-03-12', 
+        tanggal_tutup: '2024-05-06'
+      },
+      { 
+        id: 4, 
+        judul: 'Pembayaran SPP Semester Genap 2023/2024', 
+        content: 'Batas akhir pembayaran SPP: 31 Maret 2024. Dapat dibayar melalui bank partner atau virtual account. Pastikan untuk menyimpan bukti pembayaran dengan baik.',
+        filepath: '/files/pembayaran-spp-genap-2024.pdf',
+        tanggal_mulai: '2024-02-15', 
+        tanggal_tutup: '2024-03-31'
+      }
     ],
     ukm: [
       { id: 1, nama: 'UKM Basket Universitas', pembina: 'Drs. Andi Setiawan, M.Pd.', anggota: 45, deskripsi: 'Unit kegiatan mahasiswa yang bergerak di bidang olahraga bola basket', prestasi: 'Juara 1 Liga Basket Antar Universitas 2023' },
