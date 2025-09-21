@@ -17,6 +17,8 @@ export default function ContactPage() {
         "City, State 12345"
       ]
     },
+    
+
     {
       icon: <Phone className="w-6 h-6 text-[#3B82F6]" />,
       title: "Phone Numbers",

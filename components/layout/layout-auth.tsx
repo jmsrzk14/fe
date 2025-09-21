@@ -12,6 +12,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     pathname.startsWith("/auth") ||
     pathname.startsWith("/register") ||
     pathname.startsWith("/admin") ||
+    pathname.startsWith("/ukm") ||
     pathname.startsWith("/bem");
 
   return (

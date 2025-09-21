@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
-import { useRouter } from "next/navigation"; // ✅ ditambahkan
+import { useRouter } from "next/navigation"; 
 
 interface Departemen {
   id: number;

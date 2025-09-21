@@ -7,7 +7,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Galeri', href: '/user/gallery' },
   { label: 'Berita', href: '/user/news' },
   { label: 'Pengumuman', href: '/user/announcements' },
-  { label: 'Kontak', href: '/user/contact' },
+  { label: 'Layanan', href: '/user/service' },
   { label: 'Dashboard', href: '/admin/dashboard' },
   
   

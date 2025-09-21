@@ -133,3 +133,11 @@ export const menuItemsbem = [
   { key: "visiMisi", label: "Visi & Misi", icon: Target, path: "/bem/visimisi" },
   { key: "profile", label: "Profile", icon: Settings, path: "/bem/profile" },
 ];
+
+ export const ukmMenuItems = [
+  { key: "dashboard", label: "Dashboard", icon: Home, path: "/ukm/dashboard" },
+  { key: "profile", label: "Profile", icon: Newspaper, path: "/ukm/profile" },
+  { key: "galeri", label: "Galeri", icon: ImageIcon, path: "/ukm/galery" }, 
+  { key: "berita", label: "Berita", icon: Newspaper, path: "/ukm/news" },
+  { key: "pengumuman", label: "Pengumuman", icon: Megaphone, path: "/ukm/announcement" },
+  ];

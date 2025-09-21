@@ -13,7 +13,7 @@ const navIcons = {
   '/gallery': { icon: Camera, label: 'Galeri' },
   '/articles': { icon: FileText, label: 'Berita' },
   '/announcements': { icon: Megaphone, label: 'Pengumuman' },
-  '/contact': { icon: Mail, label: 'Kontak' },
+  '/services': { icon: Mail, label: 'Service' },
 };
 
 export default function Navbar() {
