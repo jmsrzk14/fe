@@ -321,4 +321,4 @@ export default function AnnouncementsPage() {
       </section>
     </div>
   );
-}f
+}
