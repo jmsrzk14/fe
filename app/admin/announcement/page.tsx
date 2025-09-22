@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
 import { useRouter } from "next/navigation"; // ✅ ditambahkan
 
-interface News {
+interface Announcement {
   id: number;
   title: string;
   content: string;
@@ -23,11 +23,11 @@ interface ApiResponse {
       last: string;
     };
   };
-  data: News[];
+  data: Announcement[];
 }
 
-const NewsPage: React.FC = () => {
-  const [data, setData] = useState<News[]>([]);
+const AnnouncementPage: React.FC = () => {
+  const [data, setData] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -35,7 +35,7 @@ const NewsPage: React.FC = () => {
   const router = useRouter(); // ✅ inisialisasi router
 
   const fields = [
-    { key: "title", label: "Judul News", type: "string" },
+    { key: "title", label: "Judul Announcement", type: "string" },
     { key: "content", label: "Deskripsi", type: "string" },
   ];
 
@@ -111,11 +111,11 @@ const NewsPage: React.FC = () => {
     router.push("/admin/announcement/create"); 
   };
 
-  const handleEdit = (item: News) => {
+  const handleEdit = (item: Announcement) => {
     console.log("Edit item:", item);
   };
 
-  const handleDelete = async (item: News) => {
+  const handleDelete = async (item: Announcement) => {
     const token = sessionStorage.getItem("token");
 
     try {
@@ -167,7 +167,7 @@ const NewsPage: React.FC = () => {
             <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
           </div>
         </div>
-        <p className="text-gray-600 font-medium">Memuat data news...</p>
+        <p className="text-gray-600 font-medium">Memuat data Announcement...</p>
         <div className="flex justify-center space-x-1">
           <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
           <div
@@ -192,7 +192,7 @@ const NewsPage: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Data News Mahasiswa
+              Announcement
             </h1>
           </div>
           <div className="flex items-center space-x-3">
@@ -213,7 +213,7 @@ const NewsPage: React.FC = () => {
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Tambah News
+              Tambah Announcement
             </button>
             <button
               onClick={handleSearch}
@@ -244,7 +244,7 @@ const NewsPage: React.FC = () => {
               htmlFor="searchName"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Nama News
+              judul Announcement
             </label>
             <div className="relative">
               <input
@@ -253,7 +253,7 @@ const NewsPage: React.FC = () => {
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Nama News"
+                placeholder="Judul Announcement"
                 className="w-full pl-10 pr-4 py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -387,4 +387,4 @@ const NewsPage: React.FC = () => {
   );
 };
 
-export default NewsPage;
+export default AnnouncementPage;
