@@ -81,7 +81,7 @@ export default function MahasiswaCreatePage() {
       }
 
       // Send to API with Authorization header
-      const response = await axios.post("http://localhost:9090/api/admin/news", formDataToSend, {
+      const response = await axios.post("http://localhost:8080/api/admin/news", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

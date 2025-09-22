@@ -93,7 +93,7 @@ export default function MahasiswaCreatePage() {
         formDataToSend.append("image", formData.gambar);
       }
 
-      const response = await axios.post("http://localhost:9090/api/admin/clubs", formDataToSend, {
+      const response = await axios.post("http://localhost:8080/api/admin/clubs", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

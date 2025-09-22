@@ -315,7 +315,7 @@ const TableContainer: React.FC = () => {
 
     try {
       // Fetch Himpunan
-      const himpunanResponse = await fetch("http://localhost:9090/api/association", {
+      const himpunanResponse = await fetch("http://localhost:8080/api/association", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -333,7 +333,7 @@ const TableContainer: React.FC = () => {
 
     // Fetch UKM
     try {
-      const ukmResponse = await fetch("http://localhost:9090/api/club", {
+      const ukmResponse = await fetch("http://localhost:8080/api/club", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -351,7 +351,7 @@ const TableContainer: React.FC = () => {
 
     // Fetch Department
     try {
-      const departmentResponse = await fetch("http://localhost:9090/api/department", {
+      const departmentResponse = await fetch("http://localhost:8080/api/department", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -408,7 +408,7 @@ const TableContainer: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:9090/api/admin/students?${params.toString()}`,
+        `http://localhost:8080/api/admin/students?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -452,7 +452,7 @@ const TableContainer: React.FC = () => {
 
       console.log("Role yang dikirim:", requestBody);
 
-      const response = await fetch(`http://localhost:9090/api/admin/students/${studentId}/assign`, {
+      const response = await fetch(`http://localhost:8080/api/admin/students/${studentId}/assign`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

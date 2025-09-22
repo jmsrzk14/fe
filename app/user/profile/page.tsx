@@ -1,10 +1,7 @@
 'use client';
 
-
 import { User, Star, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
-import { useState } from 'react';
-
-
+import { useState, useEffect } from 'react';
 
 // Data Objects
 const departemenData = [
@@ -161,49 +158,6 @@ const kepalaDepartemenData = [
   }
 ];
 
-const executiveData = [
-  {
-    id: 'ahmad-rizki',
-    name: 'Ahmad Rizki Pratama',
-    position: 'Ketua BEM',
-    initials: 'ARP',
-    prodi: 'Teknik Informatika',
-    angkatan: '2021',
-    color: '#1c46b9',
-    emoji: '🔥'
-  },
-  {
-    id: 'sarah-dewi',
-    name: 'Sarah Dewi Lestari',
-    position: 'Wakil Ketua',
-    initials: 'SDL',
-    prodi: 'Sistem Informasi',
-    angkatan: '2021',
-    color: '#1c46b9',
-    emoji: '⭐'
-  },
-  {
-    id: 'michael-situmorang',
-    name: 'Michael Situmorang',
-    position: 'Sekretaris Umum',
-    initials: 'MS',
-    prodi: 'Manajemen',
-    angkatan: '2022',
-    color: '#1c46b9',
-    emoji: '📋'
-  },
-  {
-    id: 'diana-sari',
-    name: 'Diana Sari Hutagaol',
-    position: 'Bendahara Umum',
-    initials: 'DSH',
-    prodi: 'Manajemen',
-    angkatan: '2022',
-    color: '#60a5fa',
-    emoji: '💰'
-  }
-];
-
 const pencapaianData = [
   {
     id: 'digital-platform',
@@ -329,11 +283,177 @@ const statistikData = [
   }
 ];
 
+interface Executive {
+  id: string;
+  name: string;
+  position: string;
+  image: string;
+  prodi: string;
+  angkatan: string;
+  color: string;
+  emoji: string;
+}
+
 export default function ProfilePage() {
   const [showExecutiveCards, setShowExecutiveCards] = useState(false);
   const [activeFilter, setActiveFilter] = useState('semua');
-  
+  const [executiveData, setExecutiveData] = useState<Executive[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchExecutiveData = async () => {
+      try {
+        setIsLoading(true);
+        // Replace with your actual API endpoint
+        const response = await fetch('http://localhost:8080/api/bems/manage/2024-2025');
+        if (!response.ok) {
+          throw new Error('Failed to fetch executive data');
+        }
+        const data: {
+          leader?: {
+            user_name: string;
+            full_name: string;
+            position: string;
+            study_program: string;
+            year_enrolled: number;
+            image: string;
+          };
+          coleader?: {
+            user_name: string;
+            full_name: string;
+            position: string;
+            study_program: string;
+            year_enrolled: number;
+            image: string;
+          };
+          secretary1?: {
+            user_name: string;
+            full_name: string;
+            position: string;
+            study_program: string;
+            year_enrolled: number;
+            image: string;
+          };
+          secretary2?: {
+            user_name: string;
+            full_name: string;
+            position: string;
+            study_program: string;
+            year_enrolled: number;
+            image: string;
+          };
+          treasurer1?: {
+            user_name: string;
+            full_name: string;
+            position: string;
+            study_program: string;
+            year_enrolled: number;
+            image: string;
+          };
+          treasurer2?: {
+            user_name: string;
+            full_name: string;
+            position: string;
+            study_program: string;
+            year_enrolled: number;
+            image: string;
+          };
+        } = await response.json();
+
+        // Map API data to executiveData structure
+        const mappedData: Executive[] = [];
+        
+        // Map leader (Ketua BEM)
+        if (data.leader) {
+          mappedData.push({
+            id: data.leader.user_name.toLowerCase(),
+            name: data.leader.full_name,
+            position: data.leader.position === 'ketua_bem' ? 'Ketua BEM' : data.leader.position,
+            image: data.leader.image,
+            prodi: data.leader.study_program,
+            angkatan: data.leader.year_enrolled.toString(),
+            color: '#1c46b9',
+            emoji: '🔥'
+          });
+        }
+
+        // Map coleader (Wakil Ketua BEM)
+        if (data.coleader) {          
+          mappedData.push({
+            id: data.coleader.user_name.toLowerCase(),
+            name: data.coleader.full_name,
+            position: data.coleader.position === 'wakil_ketua_bem' ? 'Wakil Ketua BEM' : data.coleader.position,
+            image: data.coleader.image,
+            prodi: data.coleader.study_program,
+            angkatan: data.coleader.year_enrolled.toString(),
+            color: '#1c46b9',
+            emoji: '⭐'
+          });
+        }
+
+        if (data.secretary1) {
+          mappedData.push({
+            id: data.secretary1.user_name.toLowerCase(),
+            name: data.secretary1.full_name,
+            position: data.secretary1.position === 'sekretaris_bem_1' ? 'Sekretaris 1 BEM' : data.secretary1.position,
+            image: data.secretary1.image,
+            prodi: data.secretary1.study_program,
+            angkatan: data.secretary1.year_enrolled.toString(),
+            color: '#1c46b9',
+            emoji: '📋'
+          });
+        }
+
+        if (data.secretary2) {
+          mappedData.push({
+            id: data.secretary2.user_name.toLowerCase(),
+            name: data.secretary2.full_name,
+            position: data.secretary2.position === 'sekretaris_bem_2' ? 'Sekretaris 2 BEM' : data.secretary2.position,
+            image: data.secretary2.image,
+            prodi: data.secretary2.study_program,
+            angkatan: data.secretary2.year_enrolled.toString(),
+            color: '#1c46b9',
+            emoji: '📋'
+          });
+        }
+
+        if (data.treasurer1) {
+          mappedData.push({
+            id: data.treasurer1.user_name.toLowerCase(),
+            name: data.treasurer1.full_name,
+            position: data.treasurer1.position === 'bendahara_bem_1' ? 'Bendahara 1 BEM' : data.treasurer1.position,
+            image: data.treasurer1.image,
+            prodi: data.treasurer1.study_program,
+            angkatan: data.treasurer1.year_enrolled.toString(),
+            color: '#1c46b9',
+            emoji: '📋'
+          });
+        }
+
+        if (data.treasurer2) {      
+          mappedData.push({
+            id: data.treasurer2.user_name.toLowerCase(),
+            name: data.treasurer2.full_name,
+            position: data.treasurer2.position === 'bendahara_bem_2' ? 'Bendahara 2 BEM' : data.treasurer2.position,
+            image: data.treasurer2.image,
+            prodi: data.treasurer2.study_program,
+            angkatan: data.treasurer2.year_enrolled.toString(),
+            color: '#1c46b9',
+            emoji: '📋'
+          });
+        }
+
+        setExecutiveData(mappedData);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setIsLoading(false);
+      }
+    };
+
+    fetchExecutiveData();
+  }, []);
 
   return (
     <div>
@@ -673,7 +793,7 @@ export default function ProfilePage() {
 
           {/* Executive Cards - Conditional Rendering */}
           {showExecutiveCards && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               <style jsx>{`
                 @keyframes slideDownFade {
                   0% {
@@ -700,8 +820,22 @@ export default function ProfilePage() {
                 .executive-card:nth-child(5) { animation-delay: 0.4s; }
               `}</style>
               
+              {/* Loading State */}
+              {isLoading && (
+                <div className="col-span-full text-center">
+                  <p className="text-gray-600">Loading executive data...</p>
+                </div>
+              )}
+
+              {/* Error State */}
+              {error && (
+                <div className="col-span-full text-center">
+                  <p className="text-red-600">Error: {error}</p>
+                </div>
+              )}
+
               {/* Dynamic Executive Cards */}
-              {executiveData.map((executive, index) => (
+              {!isLoading && !error && executiveData.map((executive, index) => (
                 <div 
                   key={executive.id} 
                   className="executive-card bg-white rounded-3xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border border-gray-100 opacity-0"
@@ -713,7 +847,11 @@ export default function ProfilePage() {
                         className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg"
                         style={{ backgroundColor: executive.color }}
                       >
-                        <span className="text-white text-2xl font-bold">{executive.initials}</span>
+                        <img 
+                          src={`http://localhost:8080/bems/${executive.image}`} 
+                          alt={`Logo ${executive.image}`}
+                          className="w-16 h-16 object-contain"
+                        />
                       </div>
                       <div className="absolute -bottom-2 right-1/2 transform translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>
                       <div className="absolute top-0 left-0 w-6 h-6 bg-orange-400 rounded-full flex items-center justify-center">
@@ -746,7 +884,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
               ))}
-          </div>
+            </div>
           )}
         </div>
 
@@ -863,8 +1001,6 @@ export default function ProfilePage() {
             ))}
           </div>
         </div>
-
-        
 
         {/* Pencapaian dan Prestasi Section */}
         <div className="mb-20">

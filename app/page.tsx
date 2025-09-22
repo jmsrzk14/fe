@@ -59,7 +59,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Fetch Departments
-    fetch('http://localhost:9090/api/department')
+    fetch('http://localhost:8080/api/department')
     .then(response => response.json())
     .then(data => {
       console.log('Departments API response:', data.data);
@@ -67,7 +67,7 @@ export default function HomePage() {
     })
 
     // Fetch Himpunan Mahasiswa
-    fetch('http://localhost:9090/api/association')
+    fetch('http://localhost:8080/api/association')
     .then(response => response.json())
     .then(data => {
       console.log('Associations API response:', data.data);
@@ -75,7 +75,7 @@ export default function HomePage() {
     })
 
     // Fetch UKM
-    fetch('http://localhost:9090/api/club')
+    fetch('http://localhost:8080/api/club')
       .then(response => response.json())
       .then(data => {
         console.log('Clubs API response:', data.data);
@@ -184,7 +184,7 @@ export default function HomePage() {
                   <div className="flex justify-center mb-4">
                     <div className="w-20 h-20 mx-auto mb-4">
                     <img
-                      src={`http://localhost:9090/departments/${dept.image}`}
+                      src={`http://localhost:8080/departments/${dept.image}`}
                       alt={dept.name}
                       className="w-full h-full object-contain rounded-full"
                     />
@@ -223,7 +223,7 @@ export default function HomePage() {
                 <div className="flex-shrink-0">
                   <div className="flex-shrink-0">
                   <img
-                    src={`http://localhost:9090/associations/${hmj.image}`}
+                    src={`http://localhost:8080/associations/${hmj.image}`}
                     alt={hmj.name}
                     className="w-20 h-20 rounded-full object-contain"
                   />
@@ -257,7 +257,7 @@ export default function HomePage() {
                 <CardHeader>
                   <div className="w-20 h-20 mx-auto mb-4">
                     <img
-                      src={`http://localhost:9090/clubs/${ukm.image}`}
+                      src={`http://localhost:8080/clubs/${ukm.image}`}
                       alt={ukm.name}
                       className="w-full h-full object-contain rounded-full"
                     />
