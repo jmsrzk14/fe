@@ -25,22 +25,16 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
 interface FormData {
-  nama: string;
-  namaSingkat: string;
-  visi: string;
-  misi: string;
-  nilai: string;
+  title: string;
+  content: string;
   gambar: File | null;
 }
 
-export default function HimpunanCreatePage() {
+export default function GaleryCreatePage() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
-    nama: "",
-    namaSingkat: "",
-    visi: "",
-    misi: "",
-    nilai: "",
+    title: "",
+    content: "",
     gambar: null,
   });
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -105,19 +99,6 @@ export default function HimpunanCreatePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    // Validate form
-    if (!formData.nama || !formData.namaSingkat || !formData.visi || !formData.misi) {
-      setError("Nama, nama singkat, visi, dan misi wajib diisi.");
-      return;
-    }
-
-    // Validate HTML content length
-    if (getTextLength(formData.visi) < 50 || getTextLength(formData.misi) < 50) {
-      setError("Visi dan misi harus minimal 50 karakter teks.");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
@@ -129,17 +110,14 @@ export default function HimpunanCreatePage() {
       }
 
       const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.nama);
-      formDataToSend.append("short_name", formData.namaSingkat);
-      // formDataToSend.append("vision", formData.visi);
-      // formDataToSend.append("mission", formData.misi);
-      // formDataToSend.append("values", formData.nilai);
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("content", formData.content);
       if (formData.gambar) {
-        formDataToSend.append("image", formData.gambar);
+        formDataToSend.append("image_url", formData.gambar);
       }
 
       const response = await axios.post(
-        "http://localhost:9090/api/admin/associations",
+        "http://localhost:9090/api/admin/galery",
         formDataToSend,
         {
           headers: {
@@ -154,11 +132,11 @@ export default function HimpunanCreatePage() {
           toast: true,
           position: "top-end",
           icon: "success",
-          title: "Data himpunan berhasil ditambahkan!",
+          title: "Data Galery berhasil ditambahkan!",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          background: "#fff",
+          background: "#22c55e",
           didOpen: (toast) => {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
@@ -166,7 +144,7 @@ export default function HimpunanCreatePage() {
         });
 
         setTimeout(() => {
-          router.push("/admin/himpunan");
+          router.push("/admin/galery");
         }, 1500);
       }
     } catch (err) {
@@ -186,7 +164,7 @@ export default function HimpunanCreatePage() {
   };
 
   const handleBack = () => {
-    router.push("/admin/himpunan");
+    router.push("/admin/galery");
   };
 
   return (
@@ -203,7 +181,7 @@ export default function HimpunanCreatePage() {
               size={20}
               className="group-hover:-translate-x-1 transition-transform"
             />
-            <span className="font-medium">Kembali ke Data Himpunan</span>
+            <span className="font-medium">Kembali ke Data Galery</span>
           </button>
 
           <div className="flex items-center gap-4 mb-2">
@@ -217,9 +195,9 @@ export default function HimpunanCreatePage() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-blue-900">
-                Tambah Data Himpunan
+                Tambah Data Galery
               </h1>
-              <p className="text-blue-600">Buat data himpunan mahasiswa baru dengan editor rich text</p>
+              <p className="text-blue-600">Buat data galery mahasiswa baru dengan editor rich text</p>
             </div>
           </div>
         </div>
@@ -237,7 +215,7 @@ export default function HimpunanCreatePage() {
               <div className="bg-blue-600 p-6">
                 <h2 className="text-xl font-bold text-white flex items-center gap-3">
                   <Users size={24} />
-                  Informasi Himpunan
+                  Informasi galeri
                 </h2>
               </div>
 
@@ -246,14 +224,14 @@ export default function HimpunanCreatePage() {
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Building2 size={18} className="text-blue-600" />
-                    Nama Lengkap Himpunan
+                    Nama Lengkap galeri
                   </label>
                   <input
                     type="text"
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
-                    value={formData.nama}
-                    onChange={(e) => handleChange("nama", e.target.value)}
-                    placeholder="Contoh: Himpunan Mahasiswa Teknik Informatika"
+                    value={formData.title}
+                    onChange={(e) => handleChange("title", e.target.value)}
+                    placeholder="Contoh: galeri Mahasiswa Teknik Informatika"
                     required
                     disabled={isSubmitting}
                   />
@@ -268,147 +246,18 @@ export default function HimpunanCreatePage() {
                   <input
                     type="text"
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
-                    value={formData.namaSingkat}
-                    onChange={(e) => handleChange("namaSingkat", e.target.value)}
+                    value={formData.content}
+                    onChange={(e) => handleChange("content", e.target.value)}
                     placeholder="Contoh: HMTI"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
-
-                {/* Visi with React Quill */}
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
-                    <Target size={18} className="text-blue-600" />
-                    Visi Himpunan
-                  </label>
-                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
-                    <ReactQuill
-                      theme="snow"
-                      value={formData.visi}
-                      onChange={(value) => handleChange("visi", value)}
-                      modules={quillModules}
-                      formats={quillFormats}
-                      placeholder="Tulis visi himpunan mahasiswa yang inspiratif..."
-                      style={{ 
-                        height: '200px',
-                        backgroundColor: 'white'
-                      }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center mt-12">
-                    <div className="text-sm text-blue-600">
-                      {getTextLength(formData.visi) > 0 && (
-                        <span className="font-medium">
-                          {getTextLength(formData.visi)} karakter teks
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      {getTextLength(formData.visi) >= 50 && (
-                        <CheckCircle2 size={16} className="text-green-500" />
-                      )}
-                      <span
-                        className={
-                          getTextLength(formData.visi) >= 50
-                            ? "text-green-600 font-medium"
-                            : "text-blue-500"
-                        }
-                      >
-                        {getTextLength(formData.visi) >= 50
-                          ? "Panjang yang baik"
-                          : "Minimal 50 karakter"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Misi with React Quill */}
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
-                    <Target size={18} className="text-blue-600" />
-                    Misi Himpunan
-                  </label>
-                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
-                    <ReactQuill
-                      theme="snow"
-                      value={formData.misi}
-                      onChange={(value) => handleChange("misi", value)}
-                      modules={quillModules}
-                      formats={quillFormats}
-                      placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
-                      style={{ 
-                        height: '200px',
-                        backgroundColor: 'white'
-                      }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center mt-12">
-                    <div className="text-sm text-blue-600">
-                      {getTextLength(formData.misi) > 0 && (
-                        <span className="font-medium">
-                          {getTextLength(formData.misi)} karakter teks
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      {getTextLength(formData.misi) >= 50 && (
-                        <CheckCircle2 size={16} className="text-green-500" />
-                      )}
-                      <span
-                        className={
-                          getTextLength(formData.misi) >= 50
-                            ? "text-green-600 font-medium"
-                            : "text-blue-500"
-                        }
-                      >
-                        {getTextLength(formData.misi) >= 50
-                          ? "Panjang yang baik"
-                          : "Minimal 50 karakter"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Values with React Quill */}
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
-                    <Star size={18} className="text-blue-600" />
-                    Nilai-Nilai (Values)
-                  </label>
-                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
-                    <ReactQuill
-                      theme="snow"
-                      value={formData.nilai}
-                      onChange={(value) => handleChange("nilai", value)}
-                      modules={quillModules}
-                      formats={quillFormats}
-                      placeholder="Tulis nilai-nilai atau prinsip dasar himpunan..."
-                      style={{ 
-                        height: '200px',
-                        backgroundColor: 'white'
-                      }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center mt-12">
-                    <div className="text-sm text-blue-600">
-                      {getTextLength(formData.nilai) > 0 && (
-                        <span className="font-medium">
-                          {getTextLength(formData.nilai)} karakter teks
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="text-blue-500">Opsional</span>
-                    </div>
-                  </div>
-                </div>
-
                 {/* File Upload */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Upload size={18} className="text-blue-600" />
-                    Upload Logo Himpunan
+                    Upload Logo galeri
                   </label>
                   <div className="relative">
                     <input
@@ -460,15 +309,13 @@ export default function HimpunanCreatePage() {
                     onClick={handleSubmit}
                     disabled={
                       isSubmitting ||
-                      !formData.nama ||
-                      !formData.namaSingkat ||
-                      getTextLength(formData.visi) < 50 ||
-                      getTextLength(formData.misi) < 50
+                      !formData.title ||
+                      !formData.content
                     }
                     className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                   >
                     <Save size={20} />
-                    {isSubmitting ? "Menyimpan..." : "Simpan Data Himpunan"}
+                    {isSubmitting ? "Menyimpan..." : "Simpan Data Galeri"}
                   </button>
                 </div>
               </div>
@@ -478,11 +325,8 @@ export default function HimpunanCreatePage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Preview Card */}
-            {(formData.nama ||
-              formData.namaSingkat ||
-              formData.visi ||
-              formData.misi ||
-              formData.nilai) && (
+            {(formData.title ||
+              formData.content) && (
               <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
                 <div className="bg-blue-600 p-4">
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -500,46 +344,16 @@ export default function HimpunanCreatePage() {
                       />
                     </div>
                   )}
-                  {formData.nama && (
+                  {formData.title && (
                     <div className="text-center">
                       <h4 className="font-bold text-blue-900 text-lg">
-                        {formData.nama}
+                        {formData.title}
                       </h4>
-                      {formData.namaSingkat && (
+                      {formData.content && (
                         <p className="text-blue-600 font-medium text-sm mt-1">
-                          ({formData.namaSingkat})
+                          ({formData.content})
                         </p>
                       )}
-                    </div>
-                  )}
-                  {formData.visi && (
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
-                        <strong>Visi:</strong>{" "}
-                        {stripHtml(formData.visi).length > 100
-                          ? stripHtml(formData.visi).substring(0, 100) + "..."
-                          : stripHtml(formData.visi)}
-                      </p>
-                    </div>
-                  )}
-                  {formData.misi && (
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
-                        <strong>Misi:</strong>{" "}
-                        {stripHtml(formData.misi).length > 100
-                          ? stripHtml(formData.misi).substring(0, 100) + "..."
-                          : stripHtml(formData.misi)}
-                      </p>
-                    </div>
-                  )}
-                  {formData.nilai && (
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
-                        <strong>Values:</strong>{" "}
-                        {stripHtml(formData.nilai).length > 100
-                          ? stripHtml(formData.nilai).substring(0, 100) + "..."
-                          : stripHtml(formData.nilai)}
-                      </p>
                     </div>
                   )}
                 </div>
@@ -558,7 +372,7 @@ export default function HimpunanCreatePage() {
                   <CheckCircle2
                     size={16}
                     className={
-                      formData.nama ? "text-green-500" : "text-blue-300"
+                      formData.title ? "text-green-500" : "text-blue-300"
                     }
                   />
                 </div>
@@ -567,58 +381,19 @@ export default function HimpunanCreatePage() {
                   <CheckCircle2
                     size={16}
                     className={
-                      formData.namaSingkat ? "text-green-500" : "text-blue-300"
+                      formData.content ? "text-green-500" : "text-blue-300"
                     }
                   />
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Visi (min 50 karakter)</span>
-                  <CheckCircle2
-                    size={16}
-                    className={
-                      getTextLength(formData.visi) >= 50 ? "text-green-500" : "text-blue-300"
-                    }
-                  />
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Misi (min 50 karakter)</span>
-                  <CheckCircle2
-                    size={16}
-                    className={
-                      getTextLength(formData.misi) >= 50 ? "text-green-500" : "text-blue-300"
-                    }
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Values (opsional)</span>
-                  <CheckCircle2
-                    size={16}
-                    className={
-                      formData.nilai ? "text-green-500" : "text-blue-300"
-                    }
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Logo</span>
-                  <CheckCircle2
-                    size={16}
-                    className={
-                      formData.gambar ? "text-green-500" : "text-blue-300"
-                    }
-                  />
-                </div>
-              </div>
-
               {/* Progress Bar */}
               <div className="mt-4">
                 <div className="flex justify-between text-xs text-blue-600 mb-1">
                   <span>Kelengkapan</span>
                   <span>
                     {Math.round(
-                      (((formData.nama ? 1 : 0) +
-                        (formData.namaSingkat ? 1 : 0) +
-                        (getTextLength(formData.visi) >= 50 ? 1 : 0) +
-                        (getTextLength(formData.misi) >= 50 ? 1 : 0) +
+                      (((formData.title ? 1 : 0) +
+                        (formData.content ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
                         5) *
                         100
@@ -631,10 +406,8 @@ export default function HimpunanCreatePage() {
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{
                       width: `${
-                        (((formData.nama ? 1 : 0) +
-                          (formData.namaSingkat ? 1 : 0) +
-                          (getTextLength(formData.visi) >= 50 ? 1 : 0) +
-                          (getTextLength(formData.misi) >= 50 ? 1 : 0) +
+                        (((formData.title ? 1 : 0) +
+                          (formData.content ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
                           5) *
                         100
