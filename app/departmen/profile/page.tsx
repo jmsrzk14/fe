@@ -89,7 +89,7 @@ export default function ProfilePage() {
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border-t-4 border-[#ffd700] animate-fade-in-down hover:shadow-2xl transition-all duration-500 hover:transform hover:scale-102 bg-gradient-to-r from-white to-blue-50/30">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-blue-600 ">Profil UKM User</h1>
+              <h1 className="text-3xl font-bold text-blue-600 ">Profil Departmen User</h1>
               <p className="text-gray-600 mt-2 animate-fade-in animate-typewriter">Kelola informasi profil BEM IT Del Anda</p>
             </div>
             <button

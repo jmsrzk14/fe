@@ -39,11 +39,11 @@ export default function AdminLayout({
     const user = userStr ? JSON.parse(userStr) : null;
 
     if (!token || !user) {
-      router.push("/ukm/dashboard");
+      router.push("/departmen/dashboard");
       return;
     }
 
-    if (user.position !== "ukm") {
+    if (user.position !== "departmen") {
       if (user.position === "student") {
         router.push("/student/home");
       } else if (user.position === "lecturer") {

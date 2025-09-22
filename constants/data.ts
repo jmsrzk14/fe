@@ -137,3 +137,19 @@ export const menuItemsbem = [
   { key: "berita", label: "Berita", icon: Newspaper, path: "/ukm/news" },
   { key: "pengumuman", label: "Pengumuman", icon: Megaphone, path: "/ukm/announcement" },
   ];
+
+   export const departemenMenuItems = [
+  { key: "dashboard", label: "Dashboard", icon: Home, path: "/departmen/dashboard" },
+  { key: "profile", label: "Profile", icon: Newspaper, path: "/departmen/profile" },
+  { key: "galeri", label: "Galeri", icon: ImageIcon, path: "/departmen/galery" }, 
+  { key: "berita", label: "Berita", icon: Newspaper, path: "/departmen/news" },
+  { key: "pengumuman", label: "Pengumuman", icon: Megaphone, path: "/departmen/announcement" },
+  ];
+
+     export const himpunanMenuItems = [
+  { key: "dashboard", label: "Dashboard", icon: Home, path: "/himpunan/dashboard" },
+  { key: "profile", label: "Profile", icon: Newspaper, path: "/himpunan/profile" },
+  { key: "galeri", label: "Galeri", icon: ImageIcon, path: "/himpunan/galery" }, 
+  { key: "berita", label: "Berita", icon: Newspaper, path: "/himpunan/news" },
+  { key: "pengumuman", label: "Pengumuman", icon: Megaphone, path: "/himpunan/announcement" },
+  ];
