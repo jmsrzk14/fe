@@ -63,7 +63,7 @@ const HimpunanPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:8080/api/admin/association?${params.toString()}`,
+        `http://localhost:9090/api/admin/association?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -119,7 +119,7 @@ const HimpunanPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/admin/himpunan/${item.id}`,
+        `http://localhost:9090/api/admin/himpunan/${item.id}`,
         {
           method: "DELETE",
           headers: {

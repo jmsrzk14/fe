@@ -87,7 +87,7 @@ export default function MahasiswaCreatePage() {
       }
 
       // Send to API with Authorization header
-      const response = await axios.post("http://localhost:8080/api/admin/department", formDataToSend, {
+      const response = await axios.post("http://localhost:9090/api/admin/department", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ export default function MahasiswaCreatePage() {
 
       if (response.status === 201 || response.status === 200) {
         alert("Data departemen berhasil ditambahkan!");
-        router.push("/admin/mahasiswa");
+        router.push("/admin/department");
       }
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
@@ -113,7 +113,7 @@ export default function MahasiswaCreatePage() {
   };
 
   const handleBack = () => {
-    router.push("/admin/mahasiswa");
+    router.push("/admin/department");
   };
 
   return (
