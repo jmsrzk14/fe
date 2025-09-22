@@ -46,13 +46,19 @@ export default function LoginPage() {
       sessionStorage.setItem("token", data.token);
       sessionStorage.setItem("refresh_token", data.refresh_token);
       sessionStorage.setItem("user", JSON.stringify(data.user));
+      sessionStorage.setItem("organization", JSON.stringify(data.organization_id));
+      sessionStorage.setItem("position", JSON.stringify(data.position));
 
       if (data.user.position === 'admin') {
         router.push('/admin/dashboard');
-      } else if (data.position === 'ketua_bem') {
+      } else if (data.position === 'ketua_bem, wakil_ketua_bem, sekretaris_bem_1, sekretaris_bem_2, bendahara_bem_1, bendahara_bem_2') {
         router.push('/bem/dashboard');
-      } else if (data.user.position === 'lecturer') {
-        router.push('/lecturer/home');
+      } else if (data.position === 'ketua_himpunan, wakil_ketua_himpunan, sekretaris_himpunan_1, sekretaris_himpunan_2, bendahara_himpunan_1, bendahara_himpunan_2') {
+        router.push('/association/dashboard');
+      } else if (data.position === 'ketua_ukm, wakil_ketua_ukm, sekretaris_ukm_1, sekretaris_ukm_2, bendahara_ukm_1, bendahara_ukm_2') {
+        router.push('/ukm/dashboard');
+      } else if (data.position === 'ketua_department, wakil_ketua_department, sekretaris_department_1, sekretaris_department_2, bendahara_department_1, bendahara_department_2') {
+        router.push('/department/dashboard');
       }
     } catch (err) {
       console.error(err);
@@ -79,7 +85,7 @@ export default function LoginPage() {
               <div className="w-12 h-12  bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] rounded-xl flex items-center justify-center">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <img
-                    src="/bem.png"
+                    src="/himpunanem.png"
                     alt="Logo BEM"
                     className="w-8 h-8 object-contain"
                   />

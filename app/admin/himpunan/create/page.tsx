@@ -131,15 +131,15 @@ export default function HimpunanCreatePage() {
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.nama);
       formDataToSend.append("short_name", formData.namaSingkat);
-      formDataToSend.append("vision", formData.visi);
-      formDataToSend.append("mission", formData.misi);
-      formDataToSend.append("values", formData.nilai);
+      // formDataToSend.append("vision", formData.visi);
+      // formDataToSend.append("mission", formData.misi);
+      // formDataToSend.append("values", formData.nilai);
       if (formData.gambar) {
         formDataToSend.append("image", formData.gambar);
       }
 
       const response = await axios.post(
-        "http://localhost:8080/api/admin/association",
+        "http://localhost:8080/api/admin/associations",
         formDataToSend,
         {
           headers: {
@@ -158,7 +158,7 @@ export default function HimpunanCreatePage() {
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          background: "#22c55e",
+          background: "#fff",
           didOpen: (toast) => {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
