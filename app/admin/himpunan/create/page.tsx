@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
+import dynamic from "next/dynamic";
 import {
   Users,
   Type,
@@ -19,6 +20,10 @@ import {
 } from "lucide-react";
 import Swal from "sweetalert2";
 
+// Dynamic import React Quill to avoid SSR issues
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
+
 interface FormData {
   nama: string;
   namaSingkat: string;
@@ -28,7 +33,7 @@ interface FormData {
   gambar: File | null;
 }
 
-export default function MahasiswaCreatePage() {
+export default function HimpunanCreatePage() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     nama: "",
@@ -42,13 +47,44 @@ export default function MahasiswaCreatePage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Quill modules configuration
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
+      ['link'],
+      ['clean']
+    ],
+  };
+
+  const quillFormats = [
+    'header', 'bold', 'italic', 'underline', 'strike',
+    'list', 'bullet', 'color', 'background', 'align', 'link'
+  ];
+
+  // Helper function to strip HTML and get text length
+  const getTextLength = (html: string) => {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent?.length || tmp.innerText?.length || 0;
+  };
+
+  // Helper function to strip HTML for preview
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+
   const handleChange = (key: keyof FormData, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
-    setError(null); // Clear error on input change
+    setError(null);
 
     // Handle image preview
     if (key === "gambar" && value instanceof File) {
-      // Validate file size (max 5MB)
       if (value.size > 5 * 1024 * 1024) {
         setError("Ukuran logo tidak boleh melebihi 5MB.");
         setFormData((prev) => ({ ...prev, gambar: null }));
@@ -71,28 +107,24 @@ export default function MahasiswaCreatePage() {
     setError(null);
 
     // Validate form
-    if (
-      !formData.nama ||
-      !formData.namaSingkat ||
-      !formData.visi ||
-      !formData.misi
-    ) {
-      setError("Semua kolom wajib diisi.");
+    if (!formData.nama || !formData.namaSingkat || !formData.visi || !formData.misi) {
+      setError("Nama, nama singkat, visi, dan misi wajib diisi.");
       return;
     }
 
-    if (formData.visi.length < 100 || formData.misi.length < 100) {
-      setError("Visi dan misi harus minimal 100 karakter.");
+    // Validate HTML content length
+    if (getTextLength(formData.visi) < 50 || getTextLength(formData.misi) < 50) {
+      setError("Visi dan misi harus minimal 50 karakter teks.");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const token = sessionStorage.getItem("token"); // Changed from localStorage to sessionStorage
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("Anda harus login untuk melakukan aksi ini.");
-        router.push("/login"); // Redirect to login page
+        router.push("/login");
         return;
       }
 
@@ -106,9 +138,8 @@ export default function MahasiswaCreatePage() {
         formDataToSend.append("image", formData.gambar);
       }
 
-      // Send to API with Authorization header
       const response = await axios.post(
-        "http://localhost:9090/api/admin/associations",
+        "http://localhost:8080/api/admin/association",
         formDataToSend,
         {
           headers: {
@@ -133,57 +164,20 @@ export default function MahasiswaCreatePage() {
             toast.addEventListener("mouseleave", Swal.resumeTimer);
           },
         });
-        // Toast untuk update data
-        const showUpdateToast = () => {
-          Swal.fire({
-            toast: true,
-            position: "top-end",
-            icon: "success",
-            title: "Data himpunan berhasil diupdate!",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            background: "#22c55e",
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-        };
 
-        // Toast untuk delete data
-        const showDeleteToast = () => {
-          Swal.fire({
-            toast: true,
-            position: "top-end",
-            icon: "success",
-            title: "Data himpunan berhasil dihapus!",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            background: "#22c55e",
-            didOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-        };
         setTimeout(() => {
-          router.push("/admin/mahasiswa");
+          router.push("/admin/himpunan");
         }, 1500);
       }
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       if (error.response?.status === 401) {
-        setError(
-          "Sesi tidak valid atau telah berakhir. Silakan login kembali."
-        );
-        sessionStorage.removeItem("Token"); // Changed from localStorage to sessionStorage
+        setError("Sesi tidak valid atau telah berakhir. Silakan login kembali.");
+        sessionStorage.removeItem("token");
         router.push("/auth/login");
       } else {
         setError(
-          error.response?.data?.message ||
-            "Terjadi kesalahan saat menyimpan data."
+          error.response?.data?.message || "Terjadi kesalahan saat menyimpan data."
         );
       }
     } finally {
@@ -192,12 +186,12 @@ export default function MahasiswaCreatePage() {
   };
 
   const handleBack = () => {
-    router.push("/admin/mahasiswa");
+    router.push("/admin/himpunan");
   };
 
   return (
     <div className="min-h-screen bg-white p-4 md:p-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <button
@@ -225,7 +219,7 @@ export default function MahasiswaCreatePage() {
               <h1 className="text-3xl font-bold text-blue-900">
                 Tambah Data Himpunan
               </h1>
-              <p className="text-blue-600">Buat data himpunan mahasiswa baru</p>
+              <p className="text-blue-600">Buat data himpunan mahasiswa baru dengan editor rich text</p>
             </div>
           </div>
         </div>
@@ -259,7 +253,7 @@ export default function MahasiswaCreatePage() {
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
                     value={formData.nama}
                     onChange={(e) => handleChange("nama", e.target.value)}
-                    placeholder="🏛 Contoh: Himpunan Mahasiswa Teknik Informatika"
+                    placeholder="Contoh: Himpunan Mahasiswa Teknik Informatika"
                     required
                     disabled={isSubmitting}
                   />
@@ -275,137 +269,137 @@ export default function MahasiswaCreatePage() {
                     type="text"
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
                     value={formData.namaSingkat}
-                    onChange={(e) =>
-                      handleChange("namaSingkat", e.target.value)
-                    }
-                    placeholder="🎯 Contoh: HMTI"
+                    onChange={(e) => handleChange("namaSingkat", e.target.value)}
+                    placeholder="Contoh: HMTI"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
 
-                {/* Visi */}
+                {/* Visi with React Quill */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Target size={18} className="text-blue-600" />
-                    Visi
+                    Visi Himpunan
                   </label>
-                  <textarea
-                    className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none resize-none bg-blue-50 text-blue-900"
-                    rows={6}
-                    value={formData.visi}
-                    onChange={(e) => handleChange("visi", e.target.value)}
-                    placeholder="✨ Tulis visi himpunan mahasiswa yang inspiratif..."
-                    required
-                    disabled={isSubmitting}
-                  />
-                  <div className="flex justify-between items-center">
+                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.visi}
+                      onChange={(value) => handleChange("visi", value)}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Tulis visi himpunan mahasiswa yang inspiratif..."
+                      style={{ 
+                        height: '200px',
+                        backgroundColor: 'white'
+                      }}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-12">
                     <div className="text-sm text-blue-600">
-                      {formData.visi.length > 0 && (
+                      {getTextLength(formData.visi) > 0 && (
                         <span className="font-medium">
-                          {formData.visi.length} karakter
+                          {getTextLength(formData.visi)} karakter teks
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.visi.length >= 100 && (
+                      {getTextLength(formData.visi) >= 50 && (
                         <CheckCircle2 size={16} className="text-green-500" />
                       )}
                       <span
                         className={
-                          formData.visi.length >= 100
+                          getTextLength(formData.visi) >= 50
                             ? "text-green-600 font-medium"
                             : "text-blue-500"
                         }
                       >
-                        {formData.visi.length >= 100
-                          ? "✅ Panjang yang baik"
-                          : "Minimal 100 karakter"}
+                        {getTextLength(formData.visi) >= 50
+                          ? "Panjang yang baik"
+                          : "Minimal 50 karakter"}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Misi */}
+                {/* Misi with React Quill */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Target size={18} className="text-blue-600" />
-                    Misi
+                    Misi Himpunan
                   </label>
-                  <textarea
-                    className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none resize-none bg-blue-50 text-blue-900"
-                    rows={6}
-                    value={formData.misi}
-                    onChange={(e) => handleChange("misi", e.target.value)}
-                    placeholder="✨ Tulis misi himpunan mahasiswa yang motivatif..."
-                    required
-                    disabled={isSubmitting}
-                  />
-                  <div className="flex justify-between items-center">
+                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.misi}
+                      onChange={(value) => handleChange("misi", value)}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
+                      style={{ 
+                        height: '200px',
+                        backgroundColor: 'white'
+                      }}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-12">
                     <div className="text-sm text-blue-600">
-                      {formData.misi.length > 0 && (
+                      {getTextLength(formData.misi) > 0 && (
                         <span className="font-medium">
-                          {formData.misi.length} karakter
+                          {getTextLength(formData.misi)} karakter teks
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.misi.length >= 100 && (
+                      {getTextLength(formData.misi) >= 50 && (
                         <CheckCircle2 size={16} className="text-green-500" />
                       )}
                       <span
                         className={
-                          formData.misi.length >= 100
+                          getTextLength(formData.misi) >= 50
                             ? "text-green-600 font-medium"
                             : "text-blue-500"
                         }
                       >
-                        {formData.misi.length >= 100
-                          ? "✅ Panjang yang baik"
-                          : "Minimal 100 karakter"}
+                        {getTextLength(formData.misi) >= 50
+                          ? "Panjang yang baik"
+                          : "Minimal 50 karakter"}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Misi */}
+                {/* Values with React Quill */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
-                    <Target size={18} className="text-blue-600" />
-                    Nilai
+                    <Star size={18} className="text-blue-600" />
+                    Nilai-Nilai (Values)
                   </label>
-                  <textarea
-                    className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none resize-none bg-blue-50 text-blue-900"
-                    rows={6}
-                    value={formData.nilai}
-                    onChange={(e) => handleChange("nilai", e.target.value)}
-                    placeholder="✨ Tulis misi himpunan mahasiswa yang motivatif..."
-                    required
-                    disabled={isSubmitting}
-                  />
-                  <div className="flex justify-between items-center">
+                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.nilai}
+                      onChange={(value) => handleChange("nilai", value)}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Tulis nilai-nilai atau prinsip dasar himpunan..."
+                      style={{ 
+                        height: '200px',
+                        backgroundColor: 'white'
+                      }}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-12">
                     <div className="text-sm text-blue-600">
-                      {formData.nilai.length > 0 && (
+                      {getTextLength(formData.nilai) > 0 && (
                         <span className="font-medium">
-                          {formData.nilai.length} karakter
+                          {getTextLength(formData.nilai)} karakter teks
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.nilai.length >= 100 && (
-                        <CheckCircle2 size={16} className="text-green-500" />
-                      )}
-                      <span
-                        className={
-                          formData.nilai.length >= 100
-                            ? "text-green-600 font-medium"
-                            : "text-blue-500"
-                        }
-                      >
-                        {formData.nilai.length >= 100
-                          ? "✅ Panjang yang baik"
-                          : "Minimal 100 karakter"}
-                      </span>
+                      <span className="text-blue-500">Opsional</span>
                     </div>
                   </div>
                 </div>
@@ -438,7 +432,7 @@ export default function MahasiswaCreatePage() {
                             className="w-28 h-28 object-cover rounded-xl mx-auto border-2 border-blue-200 shadow-md"
                           />
                           <p className="text-blue-600 font-medium">
-                            📁 {formData.gambar?.name}
+                            {formData.gambar?.name}
                           </p>
                         </div>
                       ) : (
@@ -448,7 +442,7 @@ export default function MahasiswaCreatePage() {
                             className="mx-auto text-blue-400 mb-3"
                           />
                           <p className="text-blue-600 font-medium">
-                            📸 Klik untuk upload logo atau drag & drop
+                            Klik untuk upload logo atau drag & drop
                             <br />
                             <span className="text-sm text-blue-500">
                               PNG, JPG, atau GIF maksimal 5MB
@@ -468,13 +462,13 @@ export default function MahasiswaCreatePage() {
                       isSubmitting ||
                       !formData.nama ||
                       !formData.namaSingkat ||
-                      !formData.visi ||
-                      !formData.misi
+                      getTextLength(formData.visi) < 50 ||
+                      getTextLength(formData.misi) < 50
                     }
                     className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                   >
                     <Save size={20} />
-                    {isSubmitting ? "Menyimpan..." : "💾 Simpan Data Himpunan"}
+                    {isSubmitting ? "Menyimpan..." : "Simpan Data Himpunan"}
                   </button>
                 </div>
               </div>
@@ -487,12 +481,13 @@ export default function MahasiswaCreatePage() {
             {(formData.nama ||
               formData.namaSingkat ||
               formData.visi ||
-              formData.misi) && (
+              formData.misi ||
+              formData.nilai) && (
               <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
                 <div className="bg-blue-600 p-4">
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
                     <CheckCircle2 size={20} />
-                    👀 Preview
+                    Preview
                   </h3>
                 </div>
                 <div className="p-6 space-y-4">
@@ -521,9 +516,9 @@ export default function MahasiswaCreatePage() {
                     <div className="bg-blue-50 rounded-lg p-4">
                       <p className="text-blue-700 text-sm leading-relaxed">
                         <strong>Visi:</strong>{" "}
-                        {formData.visi.length > 150
-                          ? formData.visi.substring(0, 150) + "..."
-                          : formData.visi}
+                        {stripHtml(formData.visi).length > 100
+                          ? stripHtml(formData.visi).substring(0, 100) + "..."
+                          : stripHtml(formData.visi)}
                       </p>
                     </div>
                   )}
@@ -531,9 +526,19 @@ export default function MahasiswaCreatePage() {
                     <div className="bg-blue-50 rounded-lg p-4">
                       <p className="text-blue-700 text-sm leading-relaxed">
                         <strong>Misi:</strong>{" "}
-                        {formData.misi.length > 150
-                          ? formData.misi.substring(0, 150) + "..."
-                          : formData.misi}
+                        {stripHtml(formData.misi).length > 100
+                          ? stripHtml(formData.misi).substring(0, 100) + "..."
+                          : stripHtml(formData.misi)}
+                      </p>
+                    </div>
+                  )}
+                  {formData.nilai && (
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <p className="text-blue-700 text-sm leading-relaxed">
+                        <strong>Values:</strong>{" "}
+                        {stripHtml(formData.nilai).length > 100
+                          ? stripHtml(formData.nilai).substring(0, 100) + "..."
+                          : stripHtml(formData.nilai)}
                       </p>
                     </div>
                   )}
@@ -545,7 +550,7 @@ export default function MahasiswaCreatePage() {
             <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
               <h3 className="font-bold text-blue-900 mb-4 flex items-center gap-2">
                 <Building2 size={18} className="text-blue-600" />
-                📊 Progress Pengisian
+                Progress Pengisian
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -567,20 +572,29 @@ export default function MahasiswaCreatePage() {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Visi</span>
+                  <span className="text-sm text-blue-700">Visi (min 50 karakter)</span>
                   <CheckCircle2
                     size={16}
                     className={
-                      formData.visi ? "text-green-500" : "text-blue-300"
+                      getTextLength(formData.visi) >= 50 ? "text-green-500" : "text-blue-300"
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Misi</span>
+                  <span className="text-sm text-blue-700">Misi (min 50 karakter)</span>
                   <CheckCircle2
                     size={16}
                     className={
-                      formData.misi ? "text-green-500" : "text-blue-300"
+                      getTextLength(formData.misi) >= 50 ? "text-green-500" : "text-blue-300"
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-blue-700">Values (opsional)</span>
+                  <CheckCircle2
+                    size={16}
+                    className={
+                      formData.nilai ? "text-green-500" : "text-blue-300"
                     }
                   />
                 </div>
@@ -603,8 +617,8 @@ export default function MahasiswaCreatePage() {
                     {Math.round(
                       (((formData.nama ? 1 : 0) +
                         (formData.namaSingkat ? 1 : 0) +
-                        (formData.visi ? 1 : 0) +
-                        (formData.misi ? 1 : 0) +
+                        (getTextLength(formData.visi) >= 50 ? 1 : 0) +
+                        (getTextLength(formData.misi) >= 50 ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
                         5) *
                         100
@@ -619,8 +633,8 @@ export default function MahasiswaCreatePage() {
                       width: `${
                         (((formData.nama ? 1 : 0) +
                           (formData.namaSingkat ? 1 : 0) +
-                          (formData.visi ? 1 : 0) +
-                          (formData.misi ? 1 : 0) +
+                          (getTextLength(formData.visi) >= 50 ? 1 : 0) +
+                          (getTextLength(formData.misi) >= 50 ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
                           5) *
                         100
@@ -639,14 +653,15 @@ export default function MahasiswaCreatePage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-blue-900 mb-2">
-                    💡 Tips Mengisi Data
+                    Tips Mengisi Data
                   </h3>
                   <ul className="text-sm text-blue-700 space-y-1">
-                    <li>🎯 Gunakan nama resmi yang lengkap</li>
-                    <li>⚡ Singkatan harus mudah diingat</li>
-                    <li>✨ Visi & misi harus jelas dan inspiratif</li>
-                    <li>🖼 Logo sebaiknya format PNG transparan</li>
-                    <li>✅ Pastikan semua data sudah benar</li>
+                    <li>Gunakan nama resmi yang lengkap</li>
+                    <li>Singkatan harus mudah diingat</li>
+                    <li>Visi & misi harus jelas dan inspiratif</li>
+                    <li>Manfaatkan formatting text untuk tampilan yang menarik</li>
+                    <li>Logo sebaiknya format PNG transparan</li>
+                    <li>Pastikan semua data sudah benar</li>
                   </ul>
                 </div>
               </div>
