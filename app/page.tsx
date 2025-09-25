@@ -182,11 +182,11 @@ export default function HomePage() {
               >
                 <CardHeader>
                   <div className="flex justify-center mb-4">
-                    <div className="w-20 h-20 mx-auto mb-4">
+                    <div className="w-24 h-24 mx-auto mb-4">
                     <img
                       src={`http://localhost:8080/departments/${dept.image}`}
                       alt={dept.name}
-                      className="w-full h-full object-contain rounded-full"
+                      className="w-24 h-24 object-cover rounded-full"
                     />
                   </div>
                   </div>
@@ -225,7 +225,7 @@ export default function HomePage() {
                   <img
                     src={`http://localhost:8080/associations/${hmj.image}`}
                     alt={hmj.name}
-                    className="w-20 h-20 rounded-full object-contain"
+                    className="w-24 h-24 rounded-full object-contain"
                   />
                 </div>
                 </div>
@@ -255,7 +255,7 @@ export default function HomePage() {
             {ukms.map((ukm, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
-                  <div className="w-20 h-20 mx-auto mb-4">
+                  <div className="w-24 h-24 mx-auto mb-4">
                     <img
                       src={`http://localhost:8080/clubs/${ukm.image}`}
                       alt={ukm.name}

@@ -64,6 +64,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">&copy; 2024 BEM. All rights reserved.</p>
+          <p className="text-gray-400">Created By Pakkail x Delpro</p>
         </div>
       </div>
     </footer>

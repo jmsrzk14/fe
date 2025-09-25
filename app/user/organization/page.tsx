@@ -223,7 +223,7 @@ export default function OrganizationPage() {
                     <img 
                         src={`http://localhost:8080/associations/${item.image}`} 
                         alt={`Logo ${item.image}`}
-                        className="w-16 h-16 object-contain"
+                        className="w-24 h-24 object-contain rounded-full"
                       />
                     </motion.div>
                     <CardTitle className="text-xl font-bold">{item.name}</CardTitle>

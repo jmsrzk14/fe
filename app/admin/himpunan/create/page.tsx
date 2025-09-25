@@ -139,7 +139,7 @@ export default function HimpunanCreatePage() {
       }
 
       const response = await axios.post(
-        "http://localhost:9090/api/admin/associations",
+        "http://localhost:8080/api/admin/associations",
         formDataToSend,
         {
           headers: {

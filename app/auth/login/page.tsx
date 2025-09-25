@@ -51,13 +51,41 @@ export default function LoginPage() {
 
       if (data.user.position === 'admin') {
         router.push('/admin/dashboard');
-      } else if (data.position === 'ketua_bem, wakil_ketua_bem, sekretaris_bem_1, sekretaris_bem_2, bendahara_bem_1, bendahara_bem_2') {
+      } else if ([
+        'ketua_bem',
+        'wakil_ketua_bem',
+        'sekretaris_bem_1',
+        'sekretaris_bem_2',
+        'bendahara_bem_1',
+        'bendahara_bem_2'
+      ].includes(data.position)) {
         router.push('/bem/dashboard');
-      } else if (data.position === 'ketua_himpunan, wakil_ketua_himpunan, sekretaris_himpunan_1, sekretaris_himpunan_2, bendahara_himpunan_1, bendahara_himpunan_2') {
+      } else if ([
+        'ketua_himpunan',
+        'wakil_ketua_himpunan',
+        'sekretaris_himpunan_1',
+        'sekretaris_himpunan_2',
+        'bendahara_himpunan_1',
+        'bendahara_himpunan_2'
+      ].includes(data.position)) {
         router.push('/association/dashboard');
-      } else if (data.position === 'ketua_ukm, wakil_ketua_ukm, sekretaris_ukm_1, sekretaris_ukm_2, bendahara_ukm_1, bendahara_ukm_2') {
+      } else if ([
+        'ketua_ukm',
+        'wakil_ketua_ukm',
+        'sekretaris_ukm_1',
+        'sekretaris_ukm_2',
+        'bendahara_ukm_1',
+        'bendahara_ukm_2'
+      ].includes(data.position)) {
         router.push('/ukm/dashboard');
-      } else if (data.position === 'ketua_department, wakil_ketua_department, sekretaris_department_1, sekretaris_department_2, bendahara_department_1, bendahara_department_2') {
+      } else if ([
+        'ketua_department',
+        'wakil_ketua_department',
+        'sekretaris_department_1',
+        'sekretaris_department_2',
+        'bendahara_department_1',
+        'bendahara_department_2'
+      ].includes(data.position)) {
         router.push('/department/dashboard');
       }
     } catch (err) {

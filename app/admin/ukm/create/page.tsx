@@ -105,11 +105,11 @@ export default function MahasiswaCreatePage() {
           toast: true,
           position: "top-end",
           icon: "success",
-          title: "Data himpunan berhasil ditambahkan!",
+          title: "Data UKM berhasil ditambahkan!",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          background: "#22c55e",
+          background: "#fff",
           didOpen: (toast) => {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
