@@ -69,358 +69,475 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50 p-4 md:p-8 relative overflow-hidden">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8 relative overflow-hidden">
+      {/* Beautiful Background Decorations */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-        <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+        {/* Floating Geometric Shapes */}
+        <div className="absolute top-20 left-10 w-24 h-24 bg-gradient-to-br from-blue-200/10 to-indigo-300/12 rounded-full animate-float"></div>
+        <div className="absolute top-40 right-20 w-20 h-20 bg-gradient-to-br from-purple-200/10 to-pink-200/10 rounded-lg rotate-45 animate-float" style={{animationDelay: '1s'}}></div>
+        <div className="absolute bottom-32 left-20 w-16 h-16 bg-gradient-to-br from-indigo-200/8 to-blue-200/8 rounded-full animate-float" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-20 right-32 w-28 h-28 bg-gradient-to-br from-pink-100/6 to-purple-100/6 rounded-2xl rotate-12 animate-float" style={{animationDelay: '0.5s'}}></div>
         
-        {/* Floating Sparkles */}
-        <div className="sparkle sparkle-1"></div>
-        <div className="sparkle sparkle-2"></div>
-        <div className="sparkle sparkle-3"></div>
-        <div className="sparkle sparkle-4"></div>
-        <div className="sparkle sparkle-5"></div>
+        {/* Gradient Circles */}
+        <div className="absolute top-1/3 left-1/4 w-48 h-48 bg-gradient-to-r from-blue-100/8 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-gradient-to-r from-purple-100/8 to-transparent rounded-full blur-2xl"></div>
       </div>
       
       <div className="max-w-4xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border-t-4 border-[#ffd700] animate-fade-in-down hover:shadow-2xl transition-all duration-500 hover:transform hover:scale-102 bg-gradient-to-r from-white to-blue-50/30">
+        {/* Modern Header */}
+        <div className="glass-effect rounded-2xl shadow-xl p-6 mb-8 border border-white/40 hover-lift animate-fade-up">
           <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-blue-600 ">Profil BEM User</h1>
-              <p className="text-gray-600 mt-2 animate-fade-in animate-typewriter">Kelola informasi profil BEM IT Del Anda</p>
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-300/15 to-purple-300/10 rounded-lg blur opacity-40"></div>
+              <div className="relative">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-transparent">
+                  Profil BEM User
+                </h1>
+                <p className="text-neutral-600 mt-2">Kelola informasi profil BEM IT Del Anda dengan mudah</p>
+              </div>
             </div>
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-500 border-2 transform hover:scale-105 active:scale-95 relative overflow-hidden group ${
+              className={`relative flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 overflow-hidden group animate-bounce-in hover-glow ${
                 isEditing 
-                  ? 'bg-gray-500 text-white hover:bg-gray-600 shadow-lg border-gray-500' 
-                  : 'bg-[#ffd700] text-blue-600 border-[#ffd700] hover:bg-yellow-400 hover:border-yellow-400 shadow-lg hover:shadow-2xl animate-pulse-subtle hover:shadow-yellow-300/50'
-              }`}
+                  ? 'bg-yellow-500 text-white hover:bg-yellow-600 shadow-lg animate-wiggle' 
+                  : 'bg-gradient-to-r from-yellow-400 via-blue-500 to-indigo-700 text-white hover:from-yellow-500 hover:to-indigo-800 shadow-lg hover:shadow-yellow-400/20 animate-rainbow'
+              } animate-fadeInUp`}
+              style={{animationDelay:'0.4s'}}
             >
-              {/* Button Shine Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              <Edit2 size={20} className="animate-spin-on-hover" />
-              {isEditing ? 'Batal Edit' : 'Edit Profil'}
+              {/* Button Shimmer Effect */}
+              <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <Edit2 size={20} className="relative z-10 animate-heartbeat" />
+              <span className="relative z-10">{isEditing ? 'Batal Edit' : 'Edit Profil'}</span>
             </button>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Profile Picture Section */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Profile Picture Section - Enhanced */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#ffd700] animate-fade-in-left hover:shadow-2xl transition-all duration-500 hover:border-l-8 hover:transform hover:scale-102 bg-gradient-to-br from-white to-yellow-50/30">
-              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <Camera size={24} className="text-[#ffd700] animate-wiggle hover:animate-bounce" />
-                <span className="animate-slide-in-left">Foto Profil</span>
-              </h2>
+            <div className="glass-effect rounded-2xl shadow-xl p-6 border border-white/40 hover-lift animate-slide-left hover-shadow animate-bounce-in relative overflow-hidden" style={{animationDelay:'0.6s'}}>
+              {/* Decorative Elements dengan warna biru-ungu yang cantik */}
+              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-200/6 to-indigo-200/6 rounded-full blur-xl animate-glow"></div>
+              <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-br from-purple-200/6 to-pink-200/6 rounded-full blur-xl animate-pulse-soft"></div>
               
-              <div className="text-center">
-                <div className="relative w-32 h-32 mx-auto mb-4 group">
-                  {previewImage ? (
-                    <img 
-                      src={previewImage} 
-                      alt="Profile" 
-                      className="w-full h-full rounded-full object-cover border-4 border-[#ffd700] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
-                    />
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-[#ffd700] flex items-center justify-center text-white text-2xl font-bold shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 animate-float">
-                      {profile.nama.split(' ').map(n => n[0]).join('').toUpperCase()}
+              <div className="relative z-10">
+                <h2 className="text-xl font-bold text-neutral-700 mb-6 flex items-center gap-3 animate-typewriter">
+                  <div className="p-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg animate-wiggle">
+                    <Camera size={20} className="text-white animate-heartbeat" />
+                  </div>
+                  <span>Foto Profil</span>
+                </h2>
+                
+                <div className="text-center">
+                  <div className="relative w-32 h-32 mx-auto mb-6">
+                    {/* Profile Image Container dengan warna biru yang cantik */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full p-1 animate-pulse-soft">
+                      <div className="w-full h-full bg-white rounded-full p-1">
+                        {previewImage ? (
+                          <img 
+                            src={previewImage} 
+                            alt="Profile" 
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center text-white text-xl font-bold shadow-inner">
+                            {profile.nama.split(' ').map(n => n[0]).join('').toUpperCase()}
+                          </div>
+                        )}
+                      </div>
                     </div>
+                    
+                    {/* Floating Camera Icon untuk Edit dengan warna cantik */}
+                    {isEditing && (
+                      <label 
+                        htmlFor="profile-image" 
+                        className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-br from-rose-400 to-pink-500 text-white rounded-full flex items-center justify-center cursor-pointer hover:from-rose-500 hover:to-pink-600 transition-all duration-300 shadow-lg transform hover:scale-110"
+                      >
+                        <Camera size={18} />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleInputChange("gambar", e.target.files?.[0] || null)}
+                          className="hidden"
+                          id="profile-image"
+                        />
+                      </label>
+                    )}
+                  </div>
+                  
+                  {isEditing && (
+                    <p className="text-xs text-slate-500 bg-slate-50 rounded-lg p-2 border border-slate-200">
+                      Max 5MB, format JPG/PNG
+                    </p>
                   )}
                 </div>
-                
-                {isEditing && (
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleInputChange("gambar", e.target.files?.[0] || null)}
-                      className="hidden"
-                      id="profile-image"
-                    />
-                    <label 
-                      htmlFor="profile-image" 
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#ffd700] text-blue-600 border-2 border-[#ffd700] rounded-lg hover:bg-yellow-400 hover:border-yellow-400 cursor-pointer transition-all duration-300 transform hover:scale-105 active:scale-95 animate-bounce-on-hover"
-                    >
-                      <Camera size={16} />
-                      Ubah Foto
-                    </label>
-                    <p className="text-xs text-gray-500 mt-2">Max 5MB, format JPG/PNG</p>
-                  </div>
-                )}
-              </div>
 
-              {/* Quick Info */}
-              <div className="mt-6 space-y-3">
-                <div className="text-center">
-                  <h3 className="font-bold text-gray-800">{profile.nama}</h3>
-                  <p className="text-gray-600">@{profile.username}</p>
-                </div>
-                <div className="bg-gradient-to-r from-blue-50 to-yellow-50 rounded-lg p-3 border border-[#ffd700]/20">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Status:</span>
-                    <span className={`font-medium px-2 py-1 rounded-full text-xs ${
-                      profile.status === 'Anggota Aktif' ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-700' :
-                      profile.status === 'Pengurus' ? 'bg-gradient-to-r from-blue-100 to-[#ffd700]/20 text-blue-700' :
-                      profile.status === 'Alumni' ? 'bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700' :
-                      'bg-gradient-to-r from-orange-100 to-orange-200 text-orange-700'
-                    }`}>
-                      {profile.status}
-                    </span>
+                {/* Enhanced Quick Info dengan warna warm */}
+                <div className="mt-8 space-y-4">
+                  <div className="text-center p-4 bg-gradient-to-r from-stone-50 to-neutral-50 rounded-xl border border-stone-200">
+                    <h3 className="font-bold text-neutral-800 text-lg">{profile.nama}</h3>
+                    <p className="text-neutral-600">@{profile.username}</p>
+                  </div>
+                  
+                  <div className="bg-white/85 backdrop-blur-sm rounded-xl p-4 border border-white/60 shadow-inner">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-600 font-medium">Status:</span>
+                      <span className={`font-semibold px-3 py-1 rounded-full text-xs shadow-sm ${
+                        profile.status === 'Anggota Aktif' ? 'bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-700 border border-emerald-200' :
+                        profile.status === 'Pengurus' ? 'bg-gradient-to-r from-sky-100 to-blue-100 text-sky-700 border border-sky-200' :
+                        profile.status === 'Alumni' ? 'bg-gradient-to-r from-stone-100 to-neutral-100 text-stone-700 border border-stone-200' :
+                        'bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 border border-rose-200'
+                      }`}>
+                        {profile.status}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Profile Form Section */}
+          {/* Enhanced Profile Form Section */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6 border-r-4 border-blue-600 animate-fade-in-right">
-              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <User size={24} className="text-blue-600 animate-wiggle" />
-                <span className="text-blue-600">Informasi Pribadi</span>
-              </h2>
-
-              <div className="space-y-6 animate-stagger-children">
-                {/* Username */}
-                <div className="animate-slide-in-up">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    <User size={16} className="inline mr-2 text-[#ffd700] animate-spin-slow" />
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    value={profile.username}
-                    onChange={(e) => handleInputChange("username", e.target.value)}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border rounded-xl transition-all duration-300 ${
-                      isEditing 
-                        ? 'border-[#ffd700] bg-white focus:ring-2 focus:ring-[#ffd700]/50 focus:border-blue-500' 
-                        : 'border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50'
-                    }`}
-                    placeholder="Masukkan username"
-                  />
-                </div>
-
-                {/* Nama Lengkap */}
-                <div className="animate-slide-in-up animation-delay-100">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    <User size={16} className="inline mr-2 text-blue-600 animate-pulse-icon" />
-                    Nama Lengkap
-                  </label>
-                  <input
-                    type="text"
-                    value={profile.nama}
-                    onChange={(e) => handleInputChange("nama", e.target.value)}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border rounded-xl transition-all duration-300 ${
-                      isEditing 
-                        ? 'border-blue-300 bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-[#ffd700]' 
-                        : 'border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50'
-                    }`}
-                    placeholder="Masukkan nama lengkap"
-                  />
-                </div>
-
-                {/* NIM */}
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    <BookOpen size={16} className="inline mr-2 text-[#ffd700]" />
-                    NIM (Nomor Induk Mahasiswa)
-                  </label>
-                  <input
-                    type="text"
-                    value={profile.nim}
-                    onChange={(e) => handleInputChange("nim", e.target.value)}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border rounded-xl transition-all duration-300 ${
-                      isEditing 
-                        ? 'border-[#ffd700] bg-white focus:ring-2 focus:ring-[#ffd700]/50 focus:border-blue-500' 
-                        : 'border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50'
-                    }`}
-                    placeholder="Contoh: 11S21001"
-                  />
-                </div>
-
-                {/* Gmail */}
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    <Mail size={16} className="inline mr-2 text-blue-600" />
-                    Gmail/Email Institusi
-                  </label>
-                  <input
-                    type="email"
-                    value={profile.gmail}
-                    onChange={(e) => handleInputChange("gmail", e.target.value)}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border rounded-xl transition-all duration-300 ${
-                      isEditing 
-                        ? 'border-blue-300 bg-white focus:ring-2 focus:ring-blue-500/50 focus:border-[#ffd700]' 
-                        : 'border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50'
-                    }`}
-                    placeholder="nama@student.del.ac.id"
-                  />
-                </div>
-
-                {/* Program Studi & Angkatan */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">
-                      <BookOpen size={16} className="inline mr-2" />
-                      Program Studi
-                    </label>
-                    <select
-                      value={profile.programStudi}
-                      onChange={(e) => handleInputChange("programStudi", e.target.value)}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-300 transition-colors ${
-                        isEditing 
-                          ? 'border-blue-300 bg-white hover:border-yellow-400' 
-                          : 'border-blue-200 bg-blue-50'
-                      }`}
-                    >
-                      {programStudiOptions.map(option => (
-                        <option key={option} value={option}>{option}</option>
-                      ))}
-                    </select>
+            <div className="glass-effect rounded-2xl shadow-xl p-8 border border-white/40 hover-lift animate-slide-right hover-shadow animate-bounce-in relative overflow-hidden" style={{animationDelay:'0.8s'}}>
+              {/* Decorative Background dengan warna biru-ungu yang cantik */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/4 to-indigo-200/4 rounded-full blur-2xl animate-pulse-soft"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-purple-200/4 to-pink-200/4 rounded-full blur-2xl animate-glow"></div>
+              
+              <div className="relative z-10">
+                <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 animate-typewriter">
+                  <div className="p-3 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl shadow-lg animate-wiggle">
+                    <User size={24} className="text-white animate-heartbeat" />
                   </div>
+                  <span className="bg-gradient-to-r from-blue-700 to-indigo-800 bg-clip-text text-transparent">
+                    Informasi Pribadi
+                  </span>
+                </h2>
 
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">
-                      <Calendar size={16} className="inline mr-2" />
-                      Angkatan
+                <div className="space-y-6">
+                  {/* Username dengan warna cantik */}
+                  <div className="group hover-scale">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-blue-400 to-indigo-500 rounded">
+                        <User size={14} className="text-white" />
+                      </div>
+                      Username
                     </label>
-                    <input
-                      type="text"
-                      value={profile.angkatan}
-                      onChange={(e) => handleInputChange("angkatan", e.target.value)}
-                      disabled={!isEditing}
-                      className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-300 transition-colors ${
-                        isEditing 
-                          ? 'border-blue-300 bg-white hover:border-yellow-400' 
-                          : 'border-blue-200 bg-blue-50'
-                      }`}
-                      placeholder="2021"
-                    />
-                  </div>
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">
-                    <Shield size={16} className="inline mr-2" />
-                    Status BEM
-                  </label>
-                  <select
-                    value={profile.status}
-                    onChange={(e) => handleInputChange("status", e.target.value)}
-                    disabled={!isEditing}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-300 transition-colors ${
-                      isEditing 
-                        ? 'border-blue-300 bg-white hover:border-yellow-400' 
-                        : 'border-blue-200 bg-blue-50'
-                    }`}
-                  >
-                    {statusOptions.map(option => (
-                      <option key={option} value={option}>{option}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Social Media */}
-                <div className="border-t pt-6">
-                  <h3 className="text-lg font-bold text-gray-800 mb-4">Media Sosial & Kontak</h3>
-                  
-                  <div className="space-y-4">
-                    {/* LinkedIn */}
-                    <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
-                        <Linkedin size={16} className="inline mr-2 text-blue-500" />
-                        LinkedIn
-                      </label>
-                      <input
-                        type="url"
-                        value={profile.linkedin}
-                        onChange={(e) => handleInputChange("linkedin", e.target.value)}
-                        disabled={!isEditing}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-300 transition-colors ${
-                          isEditing 
-                            ? 'border-blue-300 bg-white hover:border-yellow-400' 
-                            : 'border-blue-200 bg-blue-50'
-                        }`}
-                        placeholder="https://linkedin.com/in/username"
-                      />
-                    </div>
-
-                    {/* WhatsApp */}
-                    <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
-                        <MessageCircle size={16} className="inline mr-2 text-yellow-500" />
-                        WhatsApp
-                      </label>
-                      <input
-                        type="tel"
-                        value={profile.wa}
-                        onChange={(e) => handleInputChange("wa", e.target.value)}
-                        disabled={!isEditing}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-300 transition-colors ${
-                          isEditing 
-                            ? 'border-blue-300 bg-white hover:border-yellow-400' 
-                            : 'border-blue-200 bg-blue-50'
-                        }`}
-                        placeholder="081234567890"
-                      />
-                    </div>
-
-                    {/* Instagram */}
-                    <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-2">
-                        <Instagram size={16} className="inline mr-2 text-blue-500" />
-                        Instagram
-                      </label>
+                    <div className="relative">
                       <input
                         type="text"
-                        value={profile.ig}
-                        onChange={(e) => handleInputChange("ig", e.target.value)}
+                        value={profile.username}
+                        onChange={(e) => handleInputChange("username", e.target.value)}
                         disabled={!isEditing}
-                        className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-300 transition-colors ${
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
                           isEditing 
-                            ? 'border-blue-300 bg-white hover:border-yellow-400' 
-                            : 'border-blue-200 bg-blue-50'
+                            ? 'border-blue-200 bg-white focus:border-blue-300 focus:ring-4 focus:ring-blue-100 hover:border-blue-250' 
+                            : 'border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 text-neutral-600'
                         }`}
-                        placeholder="username"
+                        placeholder="Masukkan username"
                       />
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-blue-400 to-indigo-500 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
                     </div>
                   </div>
-                </div>
 
-                {/* Save Button */}
-                {isEditing && (
-                  <div className="pt-6 border-t">
-                    <button
-                      onClick={handleSave}
-                      className="w-full bg-[#ffd700] text-blue-600 border-2 border-[#ffd700] py-3 px-6 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:bg-yellow-400 hover:border-yellow-400 hover:shadow-xl transform hover:scale-105 active:scale-95 animate-pulse-button"
-                    >
-                      <Save size={20} />
-                      Simpan Perubahan
-                    </button>
+                  {/* Nama Lengkap */}
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-indigo-500 to-purple-600 rounded">
+                        <User size={14} className="text-white" />
+                      </div>
+                      Nama Lengkap
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={profile.nama}
+                        onChange={(e) => handleInputChange("nama", e.target.value)}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                          isEditing 
+                            ? 'border-indigo-200 bg-white focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 hover:border-indigo-250' 
+                            : 'border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 text-neutral-600'
+                        }`}
+                        placeholder="Masukkan nama lengkap"
+                      />
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-indigo-400 to-purple-500 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
+                    </div>
                   </div>
-                )}
+
+                  {/* NIM */}
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-purple-500 to-pink-600 rounded">
+                        <BookOpen size={14} className="text-white" />
+                      </div>
+                      NIM (Nomor Induk Mahasiswa)
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={profile.nim}
+                        onChange={(e) => handleInputChange("nim", e.target.value)}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                          isEditing 
+                            ? 'border-purple-200 bg-white focus:border-purple-300 focus:ring-4 focus:ring-purple-100 hover:border-purple-250' 
+                            : 'border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 text-neutral-600'
+                        }`}
+                        placeholder="Contoh: 11S21001"
+                      />
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-purple-400 to-pink-500 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Gmail */}
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded">
+                        <Mail size={14} className="text-white" />
+                      </div>
+                      Gmail/Email Institusi
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={profile.gmail}
+                        onChange={(e) => handleInputChange("gmail", e.target.value)}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                          isEditing 
+                            ? 'border-blue-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 hover:border-blue-300' 
+                            : 'border-slate-200 bg-gradient-to-r from-slate-50 to-yellow-50 text-slate-600'
+                        }`}
+                        placeholder="nama@student.del.ac.id"
+                      />
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-blue-400 to-blue-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Program Studi & Angkatan */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="group">
+                      <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                        <div className="p-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded">
+                          <BookOpen size={14} className="text-white" />
+                        </div>
+                        Program Studi
+                      </label>
+                      <div className="relative">
+                        <select
+                          value={profile.programStudi}
+                          onChange={(e) => handleInputChange("programStudi", e.target.value)}
+                          disabled={!isEditing}
+                          className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                            isEditing 
+                              ? 'border-blue-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 hover:border-blue-300' 
+                              : 'border-slate-200 bg-gradient-to-r from-slate-50 to-yellow-50 text-slate-600'
+                          }`}
+                        >
+                          {programStudiOptions.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
+                        {isEditing && (
+                          <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-blue-400 to-blue-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="group">
+                      <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                        <div className="p-1 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded">
+                          <Calendar size={14} className="text-blue-900" />
+                        </div>
+                        Angkatan
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={profile.angkatan}
+                          onChange={(e) => handleInputChange("angkatan", e.target.value)}
+                          disabled={!isEditing}
+                          className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                            isEditing 
+                              ? 'border-yellow-200 bg-white focus:border-yellow-400 focus:ring-4 focus:ring-yellow-100 hover:border-yellow-300' 
+                              : 'border-slate-200 bg-gradient-to-r from-slate-50 to-blue-50 text-slate-600'
+                          }`}
+                          placeholder="2021"
+                        />
+                        {isEditing && (
+                          <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status */}
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded">
+                        <Shield size={14} className="text-white" />
+                      </div>
+                      Status BEM
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={profile.status}
+                        onChange={(e) => handleInputChange("status", e.target.value)}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                          isEditing 
+                            ? 'border-blue-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 hover:border-blue-300' 
+                            : 'border-slate-200 bg-gradient-to-r from-slate-50 to-yellow-50 text-slate-600'
+                        }`}
+                      >
+                        {statusOptions.map(option => (
+                          <option key={option} value={option}>{option}</option>
+                        ))}
+                      </select>
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-blue-400 to-blue-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Enhanced Social Media Section dengan BEM Colors */}
+                  <div className="border-t-2 border-gradient-to-r from-blue-200 to-yellow-200 pt-8 mt-8">
+                    <h3 className="text-xl font-bold text-slate-700 mb-6 flex items-center gap-3">
+                      <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl shadow-lg">
+                        <MessageCircle size={20} className="text-blue-900" />
+                      </div>
+                      <span className="bg-gradient-to-r from-yellow-600 to-slate-700 bg-clip-text text-transparent">
+                        Media Sosial & Kontak
+                      </span>
+                    </h3>
+                    
+                    <div className="space-y-6">
+                      {/* LinkedIn */}
+                      <div className="group">
+                        <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                          <div className="p-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded">
+                            <Linkedin size={14} className="text-white" />
+                          </div>
+                          LinkedIn
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="url"
+                            value={profile.linkedin}
+                            onChange={(e) => handleInputChange("linkedin", e.target.value)}
+                            disabled={!isEditing}
+                            className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                              isEditing 
+                                ? 'border-blue-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 hover:border-blue-300' 
+                                : 'border-slate-200 bg-gradient-to-r from-slate-50 to-blue-50 text-slate-600'
+                            }`}
+                            placeholder="https://linkedin.com/in/username"
+                          />
+                          {isEditing && (
+                            <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-blue-400 to-blue-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* WhatsApp dengan warna hijau BEM */}
+                      <div className="group">
+                        <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                          <div className="p-1 bg-gradient-to-br from-green-500 to-green-600 rounded">
+                            <MessageCircle size={14} className="text-white" />
+                          </div>
+                          WhatsApp
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="tel"
+                            value={profile.wa}
+                            onChange={(e) => handleInputChange("wa", e.target.value)}
+                            disabled={!isEditing}
+                            className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                              isEditing 
+                                ? 'border-green-200 bg-white focus:border-green-400 focus:ring-4 focus:ring-green-100 hover:border-green-300' 
+                                : 'border-slate-200 bg-gradient-to-r from-slate-50 to-green-50 text-slate-600'
+                            }`}
+                            placeholder="081234567890"
+                          />
+                          {isEditing && (
+                            <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-green-400 to-green-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Instagram */}
+                      <div className="group">
+                        <label className="block text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                          <div className="p-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded">
+                            <Instagram size={14} className="text-white" />
+                          </div>
+                          Instagram
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={profile.ig}
+                            onChange={(e) => handleInputChange("ig", e.target.value)}
+                            disabled={!isEditing}
+                            className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${
+                              isEditing 
+                                ? 'border-blue-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 hover:border-blue-300' 
+                                : 'border-slate-200 bg-gradient-to-r from-slate-50 to-yellow-50 text-slate-600'
+                            }`}
+                            placeholder="@username"
+                          />
+                          {isEditing && (
+                            <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-blue-400 to-blue-600 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Enhanced Save Button dengan warna cantik */}
+                  {isEditing && (
+                    <div className="pt-8 border-t-2 border-gradient-to-r from-blue-200 via-yellow-200 to-pink-200 mt-8 animate-fadeInUp">
+                      <button
+                        onClick={handleSave}
+                        className="w-full py-4 px-8 rounded-xl font-bold text-lg bg-gradient-to-r from-blue-500 via-yellow-400 to-pink-500 text-white shadow-2xl hover:from-blue-600 hover:via-yellow-500 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 relative overflow-visible group animate-float hover-glow animate-rainbow"
+                        style={{boxShadow:'0 0 32px 0 rgba(80,80,255,0.15), 0 0 0 4px rgba(255,255,255,0.2)'}}
+                      >
+                        {/* Particle Animation */}
+                        <span className="absolute left-6 top-2 w-2 h-2 bg-gradient-to-br from-blue-200 to-indigo-200 rounded-full opacity-70 animate-float animate-wiggle" style={{animationDuration:'7s', animationDelay:'0.2s'}}></span>
+                        <span className="absolute right-8 top-3 w-1.5 h-1.5 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full opacity-60 animate-float animate-bounce-in" style={{animationDuration:'8s', animationDelay:'0.7s'}}></span>
+                        <span className="absolute left-12 bottom-2 w-1.5 h-1.5 bg-gradient-to-br from-yellow-200 to-pink-200 rounded-full opacity-50 animate-float animate-heartbeat" style={{animationDuration:'6s', animationDelay:'1.1s'}}></span>
+                        {/* Holographic shimmer */}
+                        <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                        <span className="relative z-10 flex items-center justify-center gap-2 animate-fadeInUp">
+                          <Save size={22} className="inline-block animate-float animate-wiggle" style={{animationDuration:'4s', animationDelay:'0.5s'}} />
+                          Simpan Perubahan
+                        </span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Custom CSS Animations */}
+      {/* Modern CSS Styling */}
       <style jsx>{`
-        @keyframes fade-in-down {
+        @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(30px);
           }
           to {
             opacity: 1;
@@ -428,10 +545,10 @@ export default function ProfilePage() {
           }
         }
         
-        @keyframes fade-in-left {
+        @keyframes slideInLeft {
           from {
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateX(-30px);
           }
           to {
             opacity: 1;
@@ -439,23 +556,14 @@ export default function ProfilePage() {
           }
         }
         
-        @keyframes fade-in-right {
+        @keyframes slideInRight {
           from {
             opacity: 0;
-            transform: translateX(20px);
+            transform: translateX(30px);
           }
           to {
             opacity: 1;
             transform: translateX(0);
-          }
-        }
-        
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
           }
         }
         
@@ -468,28 +576,16 @@ export default function ProfilePage() {
           }
         }
         
-        @keyframes wiggle {
-          0%, 100% {
-            transform: rotate(0deg);
+        @keyframes shimmer {
+          0% {
+            background-position: -200% 0;
           }
-          25% {
-            transform: rotate(-5deg);
-          }
-          75% {
-            transform: rotate(5deg);
+          100% {
+            background-position: 200% 0;
           }
         }
         
-        @keyframes bounce-subtle {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-5px);
-          }
-        }
-        
-        @keyframes pulse-subtle {
+        @keyframes pulse {
           0%, 100% {
             opacity: 1;
           }
@@ -498,84 +594,55 @@ export default function ProfilePage() {
           }
         }
         
-        @keyframes slide-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .animate-fade-up {
+          animation: fadeInUp 0.6s ease-out;
         }
         
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
+        .animate-slide-left {
+          animation: slideInLeft 0.7s ease-out;
         }
         
-        .animate-fade-in-down {
-          animation: fade-in-down 0.6s ease-out;
-        }
-        
-        .animate-fade-in-left {
-          animation: fade-in-left 0.6s ease-out 0.2s both;
-        }
-        
-        .animate-fade-in-right {
-          animation: fade-in-right 0.6s ease-out 0.4s both;
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out 0.3s both;
+        .animate-slide-right {
+          animation: slideInRight 0.7s ease-out;
         }
         
         .animate-float {
-          animation: float 3s ease-in-out infinite;
+          animation: float 6s ease-in-out infinite;
         }
         
-        .animate-wiggle {
-          animation: wiggle 2s ease-in-out infinite;
+        .animate-pulse-soft {
+          animation: pulse 3s ease-in-out infinite;
         }
         
-        .animate-bounce-subtle {
-          animation: bounce-subtle 2s ease-in-out infinite;
+        .shimmer-effect {
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          background-size: 200% 100%;
+          animation: shimmer 2s infinite;
         }
         
-        .animate-pulse-subtle {
-          animation: pulse-subtle 2s ease-in-out infinite;
+        .glass-effect {
+          backdrop-filter: blur(10px);
+          background: rgba(255, 255, 255, 0.9);
         }
         
-        .animate-slide-in-up {
-          animation: slide-in-up 0.5s ease-out;
+        .hover-lift {
+          transition: all 0.3s ease;
         }
         
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
+        .hover-lift:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         
-        .animate-pulse-icon {
-          animation: pulse-subtle 1.5s ease-in-out infinite;
-        }
-        
-        .animate-pulse-button {
-          animation: pulse-subtle 3s ease-in-out infinite;
-        }
-        
-        .animate-bounce-on-hover:hover {
-          animation: bounce-subtle 0.6s ease-in-out;
-        }
-        
-        .animate-stagger-children > * {
-          animation-delay: calc(var(--stagger) * 100ms);
-        }
-        
-        .animation-delay-100 {
-          animation-delay: 100ms;
+        .gradient-border {
+          background: linear-gradient(45deg, #3b82f6, #f59e0b, #3b82f6);
+          background-size: 200% 200%;
+          animation: shimmer 3s ease infinite;
         }
       `}</style>
     </div>
