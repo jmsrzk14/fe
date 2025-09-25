@@ -125,7 +125,7 @@ export default function AdminLayout({
                     Dashboard
                   </h1>
                 </div>
-                <p className="w-80 text-gray-600 flex items-center gap-2 animate-slideInLeft">
+                <p className="w-90 text-gray-600 flex items-center gap-2 animate-slideInLeft">
                   Selamat datang di Dashboard {orgName}
                 </p>
               </div>

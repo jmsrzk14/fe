@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { User, Mail, BookOpen, Calendar, Shield, Camera, Linkedin, MessageCircle, Instagram, Save, Edit2 } from "lucide-react";
+import { User, Mail, BookOpen, Calendar, Shield, Camera, Linkedin, MessageCircle, Instagram, Save, Edit2, Crown } from "lucide-react";
 import axios from "axios";
 
 interface UserProfile {
@@ -291,6 +291,34 @@ export default function ProfilePage() {
                       <input
                         type="text"
                         value={profile.nim}
+                        onChange={(e) => handleInputChange("nim", e.target.value)}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${isEditing
+                          ? 'border-purple-200 bg-white focus:border-purple-300 focus:ring-4 focus:ring-purple-100 hover:border-purple-250'
+                          : 'border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 text-neutral-600'
+                          }`}
+                        placeholder="Contoh: 11S21001"
+                      />
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-purple-400 to-pink-500 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Jabatan */}
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-yellow-500 to-orange-500 rounded">
+                        <Crown size={14} className="text-white" />
+                      </div>
+                      Jabatan
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={profile.organization
+                          ? `${profile.position.replace('_himpunan', '')} ${profile.organization.name.replace('_himpunan', '')}`.toUpperCase()
+                          : profile.position.replace('_himpunan', '').toUpperCase()}
                         onChange={(e) => handleInputChange("nim", e.target.value)}
                         disabled={!isEditing}
                         className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${isEditing
