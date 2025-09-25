@@ -68,7 +68,7 @@ export default function LoginPage() {
         'bendahara_himpunan_1',
         'bendahara_himpunan_2'
       ].includes(data.position)) {
-        router.push('/association/dashboard');
+        router.push('/himpunan/dashboard');
       } else if ([
         'ketua_ukm',
         'wakil_ketua_ukm',
@@ -86,7 +86,7 @@ export default function LoginPage() {
         'bendahara_department_1',
         'bendahara_department_2'
       ].includes(data.position)) {
-        router.push('/department/dashboard');
+        router.push('/departmen/dashboard');
       }
     } catch (err) {
       console.error(err);

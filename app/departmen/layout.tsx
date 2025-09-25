@@ -30,12 +30,16 @@ export default function AdminLayout({
   const [notifications, setNotifications] = useState(3);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
+  const [clubData, setClubData] = useState<any | null>(null);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    const userStr = sessionStorage.getItem("user"); // simpan user pas login
+    const userStr = sessionStorage.getItem("user");
+    const position = sessionStorage.getItem("position");
+    const organisasiId = sessionStorage.getItem("organization");
     const user = userStr ? JSON.parse(userStr) : null;
 
     if (!token || !user) {
@@ -43,7 +47,7 @@ export default function AdminLayout({
       return;
     }
 
-    if (user.position !== "departmen") {
+    if (!position?.includes("department")) {
       if (user.position === "student") {
         router.push("/student/home");
       } else if (user.position === "lecturer") {
@@ -52,7 +56,23 @@ export default function AdminLayout({
         router.push("/");
       }
     }
+
+    if (organisasiId && token) {
+      fetch(`http://localhost:8080/api/student/departments/${organisasiId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setClubData(data);
+        })
+        .catch((err) => console.error("Gagal ambil data organisasi:", err));
+    }
   }, [router]);
+
+  const orgLogo = clubData?.data?.image || null;
+  const orgName = clubData?.data?.name || null;
 
   // Auto detect active module from URL
   useEffect(() => {
@@ -77,7 +97,7 @@ export default function AdminLayout({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  
+
   // Auto detect active module from URL
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -118,21 +138,21 @@ export default function AdminLayout({
           <div className="p-6 flex justify-between items-center">
             {/* Title & Breadcrumb */}
             <div className="flex items-center gap-4">
+              {orgLogo && (
+                <img
+                  src={`http://localhost:8080/departments/${orgLogo}`}
+                  alt="Logo Organisasi"
+                  className="w-16 h-16 rounded-full shadow-md"
+                />
+              )}
               <div className="animate-fadeInUp">
                 <div className="flex items-center gap-3 mb-1">
-                  {currentModuleData?.icon &&
-                    React.createElement(currentModuleData.icon, {
-                      size: 20,
-                      className:
-                        "text-white animate-pulse p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-lg",
-                    })}
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 bg-clip-text text-transparent">
                     Dashboard
                   </h1>
                 </div>
-                <p className="text-gray-600 flex items-center gap-2 animate-slideInLeft">
-                  <Activity size={14} className="text-blue-500 animate-bounce" />
-                    Selamat datang di Dashboard Administrasi BEM
+                <p className="w-80 text-gray-600 flex items-center gap-2 animate-slideInLeft">
+                  Selamat datang di Dashboard {orgName}
                 </p>
               </div>
             </div>
@@ -142,16 +162,14 @@ export default function AdminLayout({
               {/* Search */}
               <div className="relative group">
                 <div
-                  className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 ${
-                    isSearchFocused ? "opacity-30" : ""
-                  }`}
+                  className={`absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 ${isSearchFocused ? "opacity-30" : ""
+                    }`}
                 ></div>
                 <Search
-                  className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${
-                    isSearchFocused
+                  className={`absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300 ${isSearchFocused
                       ? "text-blue-500 scale-110"
                       : "text-gray-400"
-                  }`}
+                    }`}
                   size={16}
                 />
                 <input
@@ -161,11 +179,10 @@ export default function AdminLayout({
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setIsSearchFocused(false)}
-                  className={`pl-10 pr-4 py-2.5 border-2 rounded-lg w-64 transition-all duration-300 bg-white/50 backdrop-blur-sm ${
-                    isSearchFocused
+                  className={`pl-10 pr-4 py-2.5 border-2 rounded-lg w-64 transition-all duration-300 bg-white/50 backdrop-blur-sm ${isSearchFocused
                       ? "border-blue-500 ring-2 ring-blue-200 shadow-lg scale-105"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    }`}
                 />
                 {searchTerm && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -230,9 +247,8 @@ export default function AdminLayout({
                   </div>
                   <ChevronDown
                     size={16}
-                    className={`text-gray-500 transition-transform duration-300 ${
-                      showUserDropdown ? "rotate-180" : ""
-                    }`}
+                    className={`text-gray-500 transition-transform duration-300 ${showUserDropdown ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
