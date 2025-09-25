@@ -80,7 +80,20 @@ export default function GaleryCreatePage() {
     // Handle image preview
     if (key === "gambar" && value instanceof File) {
       if (value.size > 5 * 1024 * 1024) {
-        setError("Ukuran logo tidak boleh melebihi 5MB.");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Ukuran logo tidak boleh melebihi 5MB",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fffff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
         setFormData((prev) => ({ ...prev, gambar: null }));
         setPreviewImage(null);
         return;
@@ -395,7 +408,7 @@ export default function GaleryCreatePage() {
                       (((formData.title ? 1 : 0) +
                         (formData.content ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
-                        5) *
+                        3) *
                         100
                     )}
                     %
@@ -409,7 +422,7 @@ export default function GaleryCreatePage() {
                         (((formData.title ? 1 : 0) +
                           (formData.content ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
-                          5) *
+                          3) *
                         100
                       }%`,
                     }}

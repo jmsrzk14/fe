@@ -50,19 +50,28 @@ export default function HimpunanCreatePage() {
   // Quill modules configuration
   const quillModules = {
     toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['link'],
-      ['clean']
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
+      ["link"],
+      ["clean"],
     ],
   };
 
   const quillFormats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'color', 'background', 'align', 'link'
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "color",
+    "background",
+    "align",
+    "link",
   ];
 
   // Helper function to strip HTML and get text length
@@ -86,7 +95,20 @@ export default function HimpunanCreatePage() {
     // Handle image preview
     if (key === "gambar" && value instanceof File) {
       if (value.size > 5 * 1024 * 1024) {
-        setError("Ukuran logo tidak boleh melebihi 5MB.");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Ukuran logo tidak boleh melebihi 5MB",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fffff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
         setFormData((prev) => ({ ...prev, gambar: null }));
         setPreviewImage(null);
         return;
@@ -107,14 +129,48 @@ export default function HimpunanCreatePage() {
     setError(null);
 
     // Validate form
-    if (!formData.nama || !formData.namaSingkat || !formData.visi || !formData.misi) {
-      setError("Nama, nama singkat, visi, dan misi wajib diisi.");
+    if (
+      !formData.nama ||
+      !formData.namaSingkat ||
+      !formData.visi ||
+      !formData.misi
+    ) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Semua Kolom Harus Terisi!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
       return;
     }
 
     // Validate HTML content length
-    if (getTextLength(formData.visi) < 50 || getTextLength(formData.misi) < 50) {
-      setError("Visi dan misi harus minimal 50 karakter teks.");
+    if (
+      getTextLength(formData.visi) < 50 ||
+      getTextLength(formData.misi) < 50
+    ) {
+      Swal.fire({
+              toast: true,
+              position: "top-end",
+              icon: "error",
+              title: "Minimal 50 karakter!",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              background: "#fff",
+              didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+              },
+            });
       return;
     }
 
@@ -158,7 +214,7 @@ export default function HimpunanCreatePage() {
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          background: "#fff",
+          background: "#fffff",
           didOpen: (toast) => {
             toast.addEventListener("mouseenter", Swal.stopTimer);
             toast.addEventListener("mouseleave", Swal.resumeTimer);
@@ -172,12 +228,15 @@ export default function HimpunanCreatePage() {
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       if (error.response?.status === 401) {
-        setError("Sesi tidak valid atau telah berakhir. Silakan login kembali.");
+        setError(
+          "Sesi tidak valid atau telah berakhir. Silakan login kembali."
+        );
         sessionStorage.removeItem("token");
         router.push("/auth/login");
       } else {
         setError(
-          error.response?.data?.message || "Terjadi kesalahan saat menyimpan data."
+          error.response?.data?.message ||
+            "Terjadi kesalahan saat menyimpan data."
         );
       }
     } finally {
@@ -219,7 +278,9 @@ export default function HimpunanCreatePage() {
               <h1 className="text-3xl font-bold text-blue-900">
                 Tambah Data Himpunan
               </h1>
-              <p className="text-blue-600">Buat data himpunan mahasiswa baru dengan editor rich text</p>
+              <p className="text-blue-600">
+                Buat data himpunan mahasiswa baru dengan editor rich text
+              </p>
             </div>
           </div>
         </div>
@@ -269,7 +330,9 @@ export default function HimpunanCreatePage() {
                     type="text"
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
                     value={formData.namaSingkat}
-                    onChange={(e) => handleChange("namaSingkat", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("namaSingkat", e.target.value)
+                    }
                     placeholder="Contoh: HMTI"
                     required
                     disabled={isSubmitting}
@@ -290,9 +353,9 @@ export default function HimpunanCreatePage() {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Tulis visi himpunan mahasiswa yang inspiratif..."
-                      style={{ 
-                        height: '200px',
-                        backgroundColor: 'white'
+                      style={{
+                        height: "200px",
+                        backgroundColor: "white",
                       }}
                     />
                   </div>
@@ -337,9 +400,9 @@ export default function HimpunanCreatePage() {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
-                      style={{ 
-                        height: '200px',
-                        backgroundColor: 'white'
+                      style={{
+                        height: "200px",
+                        backgroundColor: "white",
                       }}
                     />
                   </div>
@@ -384,9 +447,9 @@ export default function HimpunanCreatePage() {
                       modules={quillModules}
                       formats={quillFormats}
                       placeholder="Tulis nilai-nilai atau prinsip dasar himpunan..."
-                      style={{ 
-                        height: '200px',
-                        backgroundColor: 'white'
+                      style={{
+                        height: "200px",
+                        backgroundColor: "white",
                       }}
                     />
                   </div>
@@ -572,25 +635,35 @@ export default function HimpunanCreatePage() {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Visi (min 50 karakter)</span>
+                  <span className="text-sm text-blue-700">
+                    Visi (min 50 karakter)
+                  </span>
                   <CheckCircle2
                     size={16}
                     className={
-                      getTextLength(formData.visi) >= 50 ? "text-green-500" : "text-blue-300"
+                      getTextLength(formData.visi) >= 50
+                        ? "text-green-500"
+                        : "text-blue-300"
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Misi (min 50 karakter)</span>
+                  <span className="text-sm text-blue-700">
+                    Misi (min 50 karakter)
+                  </span>
                   <CheckCircle2
                     size={16}
                     className={
-                      getTextLength(formData.misi) >= 50 ? "text-green-500" : "text-blue-300"
+                      getTextLength(formData.misi) >= 50
+                        ? "text-green-500"
+                        : "text-blue-300"
                     }
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Values (opsional)</span>
+                  <span className="text-sm text-blue-700">
+                    Values (opsional)
+                  </span>
                   <CheckCircle2
                     size={16}
                     className={
@@ -659,7 +732,9 @@ export default function HimpunanCreatePage() {
                     <li>Gunakan nama resmi yang lengkap</li>
                     <li>Singkatan harus mudah diingat</li>
                     <li>Visi & misi harus jelas dan inspiratif</li>
-                    <li>Manfaatkan formatting text untuk tampilan yang menarik</li>
+                    <li>
+                      Manfaatkan formatting text untuk tampilan yang menarik
+                    </li>
                     <li>Logo sebaiknya format PNG transparan</li>
                     <li>Pastikan semua data sudah benar</li>
                   </ul>

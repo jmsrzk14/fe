@@ -46,7 +46,20 @@ export default function MahasiswaCreatePage() {
 
     if (key === "gambar" && value instanceof File) {
       if (value.size > 5 * 1024 * 1024) {
-        setError("Ukuran logo tidak boleh melebihi 5MB.");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Ukuran logo tidak boleh melebihi 5MB",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fffff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
         setFormData((prev) => ({ ...prev, gambar: null }));
         setPreviewImage(null);
         return;
@@ -63,13 +76,45 @@ export default function MahasiswaCreatePage() {
     e.preventDefault();
     setError(null);
 
-    if (!formData.nama || !formData.namaSingkat || !formData.visi || !formData.misi) {
-      setError("Semua kolom wajib diisi.");
+    if (
+      !formData.nama ||
+      !formData.namaSingkat ||
+      !formData.visi ||
+      !formData.misi ||
+      !formData.nilai
+    ) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Semua Kolom Harus Terisi!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
       return;
     }
 
     if (formData.visi.length < 100 || formData.misi.length < 100) {
-      setError("Visi dan misi harus minimal 100 karakter.");
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "error",
+        title: "Visi dan Misi minimal 100 karakter!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
       return;
     }
 
@@ -93,12 +138,16 @@ export default function MahasiswaCreatePage() {
         formDataToSend.append("image", formData.gambar);
       }
 
-      const response = await axios.post("http://localhost:8080/api/admin/clubs", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/admin/clubs",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 201 || response.status === 200) {
         Swal.fire({
@@ -120,11 +169,16 @@ export default function MahasiswaCreatePage() {
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
       if (error.response?.status === 401) {
-        setError("Sesi tidak valid atau telah berakhir. Silakan login kembali.");
+        setError(
+          "Sesi tidak valid atau telah berakhir. Silakan login kembali."
+        );
         sessionStorage.removeItem("token");
         router.push("/auth/login");
       } else {
-        setError(error.response?.data?.message || "Terjadi kesalahan saat menyimpan data.");
+        setError(
+          error.response?.data?.message ||
+            "Terjadi kesalahan saat menyimpan data."
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -145,7 +199,10 @@ export default function MahasiswaCreatePage() {
             className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-6 transition-colors group"
             disabled={isSubmitting}
           >
-            <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft
+              size={20}
+              className="group-hover:-translate-x-1 transition-transform"
+            />
             <span className="font-medium">Kembali ke Data UKM</span>
           </button>
 
@@ -159,7 +216,9 @@ export default function MahasiswaCreatePage() {
               </div>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-blue-900">Tambah Data UKM</h1>
+              <h1 className="text-3xl font-bold text-blue-900">
+                Tambah Data UKM
+              </h1>
               <p className="text-blue-600">Buat data UKM mahasiswa baru</p>
             </div>
           </div>
@@ -210,7 +269,9 @@ export default function MahasiswaCreatePage() {
                     type="text"
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
                     value={formData.namaSingkat}
-                    onChange={(e) => handleChange("namaSingkat", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("namaSingkat", e.target.value)
+                    }
                     placeholder="🎯 Contoh: DRC"
                     required
                     disabled={isSubmitting}
@@ -235,13 +296,25 @@ export default function MahasiswaCreatePage() {
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-blue-600">
                       {formData.visi.length > 0 && (
-                        <span className="font-medium">{formData.visi.length} karakter</span>
+                        <span className="font-medium">
+                          {formData.visi.length} karakter
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.visi.length >= 100 && <CheckCircle2 size={16} className="text-green-500" />}
-                      <span className={formData.visi.length >= 100 ? "text-green-600 font-medium" : "text-blue-500"}>
-                        {formData.visi.length >= 100 ? "✅ Panjang yang baik" : "Minimal 100 karakter"}
+                      {formData.visi.length >= 100 && (
+                        <CheckCircle2 size={16} className="text-green-500" />
+                      )}
+                      <span
+                        className={
+                          formData.visi.length >= 100
+                            ? "text-green-600 font-medium"
+                            : "text-blue-500"
+                        }
+                      >
+                        {formData.visi.length >= 100
+                          ? "✅ Panjang yang baik"
+                          : "Minimal 100 karakter"}
                       </span>
                     </div>
                   </div>
@@ -265,13 +338,25 @@ export default function MahasiswaCreatePage() {
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-blue-600">
                       {formData.misi.length > 0 && (
-                        <span className="font-medium">{formData.misi.length} karakter</span>
+                        <span className="font-medium">
+                          {formData.misi.length} karakter
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.misi.length >= 100 && <CheckCircle2 size={16} className="text-green-500" />}
-                      <span className={formData.misi.length >= 100 ? "text-green-600 font-medium" : "text-blue-500"}>
-                        {formData.misi.length >= 100 ? "✅ Panjang yang baik" : "Minimal 100 karakter"}
+                      {formData.misi.length >= 100 && (
+                        <CheckCircle2 size={16} className="text-green-500" />
+                      )}
+                      <span
+                        className={
+                          formData.misi.length >= 100
+                            ? "text-green-600 font-medium"
+                            : "text-blue-500"
+                        }
+                      >
+                        {formData.misi.length >= 100
+                          ? "✅ Panjang yang baik"
+                          : "Minimal 100 karakter"}
                       </span>
                     </div>
                   </div>
@@ -295,13 +380,25 @@ export default function MahasiswaCreatePage() {
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-blue-600">
                       {formData.nilai.length > 0 && (
-                        <span className="font-medium">{formData.nilai.length} karakter</span>
+                        <span className="font-medium">
+                          {formData.nilai.length} karakter
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.nilai.length >= 100 && <CheckCircle2 size={16} className="text-green-500" />}
-                      <span className={formData.nilai.length >= 100 ? "text-green-600 font-medium" : "text-blue-500"}>
-                        {formData.nilai.length >= 100 ? "✅ Panjang yang baik" : "Minimal 100 karakter"}
+                      {formData.nilai.length >= 100 && (
+                        <CheckCircle2 size={16} className="text-green-500" />
+                      )}
+                      <span
+                        className={
+                          formData.nilai.length >= 100
+                            ? "text-green-600 font-medium"
+                            : "text-blue-500"
+                        }
+                      >
+                        {formData.nilai.length >= 100
+                          ? "✅ Panjang yang baik"
+                          : "Minimal 100 karakter"}
                       </span>
                     </div>
                   </div>
@@ -318,7 +415,12 @@ export default function MahasiswaCreatePage() {
                       type="file"
                       accept="image/png,image/jpeg,image/gif"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      onChange={(e) => handleChange("gambar", e.target.files ? e.target.files[0] : null)}
+                      onChange={(e) =>
+                        handleChange(
+                          "gambar",
+                          e.target.files ? e.target.files[0] : null
+                        )
+                      }
                       disabled={isSubmitting}
                     />
                     <div className="border-2 border-dashed border-blue-300 rounded-xl p-8 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer bg-white">
@@ -329,15 +431,22 @@ export default function MahasiswaCreatePage() {
                             alt="Preview"
                             className="w-28 h-28 object-cover rounded-xl mx-auto border-2 border-blue-200 shadow-md"
                           />
-                          <p className="text-blue-600 font-medium">📁 {formData.gambar?.name}</p>
+                          <p className="text-blue-600 font-medium">
+                            📁 {formData.gambar?.name}
+                          </p>
                         </div>
                       ) : (
                         <div>
-                          <Image size={48} className="mx-auto text-blue-400 mb-3" />
+                          <Image
+                            size={48}
+                            className="mx-auto text-blue-400 mb-3"
+                          />
                           <p className="text-blue-600 font-medium">
                             📸 Klik untuk upload logo atau drag & drop
                             <br />
-                            <span className="text-sm text-blue-500">PNG, JPG, atau GIF maksimal 5MB</span>
+                            <span className="text-sm text-blue-500">
+                              PNG, JPG, atau GIF maksimal 5MB
+                            </span>
                           </p>
                         </div>
                       )}
@@ -349,7 +458,13 @@ export default function MahasiswaCreatePage() {
                 <div className="pt-6 border-t-2 border-blue-100">
                   <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting || !formData.nama || !formData.namaSingkat || !formData.visi || !formData.misi}
+                    disabled={
+                      isSubmitting ||
+                      !formData.nama ||
+                      !formData.namaSingkat ||
+                      !formData.visi ||
+                      !formData.misi
+                    }
                     className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                   >
                     <Save size={20} />
@@ -363,7 +478,10 @@ export default function MahasiswaCreatePage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Preview Card */}
-            {(formData.nama || formData.namaSingkat || formData.visi || formData.misi) && (
+            {(formData.nama ||
+              formData.namaSingkat ||
+              formData.visi ||
+              formData.misi) && (
               <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
                 <div className="bg-blue-600 p-4">
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -383,9 +501,13 @@ export default function MahasiswaCreatePage() {
                   )}
                   {formData.nama && (
                     <div className="text-center">
-                      <h4 className="font-bold text-blue-900 text-lg">{formData.nama}</h4>
+                      <h4 className="font-bold text-blue-900 text-lg">
+                        {formData.nama}
+                      </h4>
                       {formData.namaSingkat && (
-                        <p className="text-blue-600 font-medium text-sm mt-1">({formData.namaSingkat})</p>
+                        <p className="text-blue-600 font-medium text-sm mt-1">
+                          ({formData.namaSingkat})
+                        </p>
                       )}
                     </div>
                   )}
@@ -393,7 +515,9 @@ export default function MahasiswaCreatePage() {
                     <div className="bg-blue-50 rounded-lg p-4">
                       <p className="text-blue-700 text-sm leading-relaxed">
                         <strong>Visi:</strong>{" "}
-                        {formData.visi.length > 150 ? formData.visi.substring(0, 150) + "..." : formData.visi}
+                        {formData.visi.length > 150
+                          ? formData.visi.substring(0, 150) + "..."
+                          : formData.visi}
                       </p>
                     </div>
                   )}
@@ -401,7 +525,9 @@ export default function MahasiswaCreatePage() {
                     <div className="bg-blue-50 rounded-lg p-4">
                       <p className="text-blue-700 text-sm leading-relaxed">
                         <strong>Misi:</strong>{" "}
-                        {formData.misi.length > 150 ? formData.misi.substring(0, 150) + "..." : formData.misi}
+                        {formData.misi.length > 150
+                          ? formData.misi.substring(0, 150) + "..."
+                          : formData.misi}
                       </p>
                     </div>
                   )}
@@ -418,23 +544,48 @@ export default function MahasiswaCreatePage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-blue-700">Nama Lengkap</span>
-                  <CheckCircle2 size={16} className={formData.nama ? "text-green-500" : "text-blue-300"} />
+                  <CheckCircle2
+                    size={16}
+                    className={
+                      formData.nama ? "text-green-500" : "text-blue-300"
+                    }
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-blue-700">Nama Singkat</span>
-                  <CheckCircle2 size={16} className={formData.namaSingkat ? "text-green-500" : "text-blue-300"} />
+                  <CheckCircle2
+                    size={16}
+                    className={
+                      formData.namaSingkat ? "text-green-500" : "text-blue-300"
+                    }
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-blue-700">Visi</span>
-                  <CheckCircle2 size={16} className={formData.visi ? "text-green-500" : "text-blue-300"} />
+                  <CheckCircle2
+                    size={16}
+                    className={
+                      formData.visi ? "text-green-500" : "text-blue-300"
+                    }
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-blue-700">Misi</span>
-                  <CheckCircle2 size={16} className={formData.misi ? "text-green-500" : "text-blue-300"} />
+                  <CheckCircle2
+                    size={16}
+                    className={
+                      formData.misi ? "text-green-500" : "text-blue-300"
+                    }
+                  />
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-blue-700">Logo</span>
-                  <CheckCircle2 size={16} className={formData.gambar ? "text-green-500" : "text-blue-300"} />
+                  <CheckCircle2
+                    size={16}
+                    className={
+                      formData.gambar ? "text-green-500" : "text-blue-300"
+                    }
+                  />
                 </div>
               </div>
 
@@ -444,12 +595,12 @@ export default function MahasiswaCreatePage() {
                   <span>Kelengkapan</span>
                   <span>
                     {Math.round(
-                      ((formData.nama ? 1 : 0) +
+                      (((formData.nama ? 1 : 0) +
                         (formData.namaSingkat ? 1 : 0) +
                         (formData.visi ? 1 : 0) +
                         (formData.misi ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
-                        5 *
+                        5) *
                         100
                     )}
                     %
@@ -460,12 +611,12 @@ export default function MahasiswaCreatePage() {
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{
                       width: `${
-                        ((formData.nama ? 1 : 0) +
+                        (((formData.nama ? 1 : 0) +
                           (formData.namaSingkat ? 1 : 0) +
                           (formData.visi ? 1 : 0) +
                           (formData.misi ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
-                        5 *
+                          5) *
                         100
                       }%`,
                     }}
@@ -481,7 +632,9 @@ export default function MahasiswaCreatePage() {
                   <Info size={20} className="text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-blue-900 mb-2">💡 Tips Mengisi Data</h3>
+                  <h3 className="font-bold text-blue-900 mb-2">
+                    💡 Tips Mengisi Data
+                  </h3>
                   <ul className="text-sm text-blue-700 space-y-1">
                     <li>🎯 Gunakan nama resmi yang lengkap</li>
                     <li>⚡ Singkatan harus mudah diingat</li>

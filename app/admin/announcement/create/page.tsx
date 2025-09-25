@@ -22,7 +22,7 @@ interface FormData {
   endDate: string;
   file: File | null;
 }
-
+import Swal from "sweetalert2";
 export default function AnnouncementCreatePage() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
@@ -42,7 +42,20 @@ export default function AnnouncementCreatePage() {
 
     if (key === "file" && value instanceof File) {
       if (value.size > 5 * 1024 * 1024) {
-        setError("Ukuran file tidak boleh melebihi 5MB.");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Ukuran logo tidak boleh melebihi 5MB",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fffff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
         setFormData((prev) => ({ ...prev, file: null }));
         setPreviewFile(null);
         return;
@@ -58,7 +71,20 @@ export default function AnnouncementCreatePage() {
     setError(null);
 
     if (!formData.title || !formData.content) {
-      setError("Judul dan konten wajib diisi.");
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Semua Kolom Harus Terisi!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
       return;
     }
 
@@ -74,7 +100,8 @@ export default function AnnouncementCreatePage() {
       const formDataToSend = new FormData();
       formDataToSend.append("title", formData.title);
       formDataToSend.append("content", formData.content);
-      if (formData.startDate) formDataToSend.append("start_date", formData.startDate);
+      if (formData.startDate)
+        formDataToSend.append("start_date", formData.startDate);
       if (formData.endDate) formDataToSend.append("end_date", formData.endDate);
       if (formData.file) formDataToSend.append("file", formData.file);
 
@@ -90,7 +117,20 @@ export default function AnnouncementCreatePage() {
       );
 
       if (response.status === 201 || response.status === 200) {
-        alert("Announcement berhasil ditambahkan!");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "success",
+          title: "Data Pengumuman berhasil ditambahkan!",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
         router.push("/admin/announcement");
       }
     } catch (err) {
@@ -110,7 +150,10 @@ export default function AnnouncementCreatePage() {
           className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-6 transition-colors group"
           disabled={isSubmitting}
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft
+            size={20}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
           <span className="font-medium">Kembali ke Data Announcement</span>
         </button>
 
@@ -124,8 +167,12 @@ export default function AnnouncementCreatePage() {
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-blue-900">Tambah Announcement</h1>
-            <p className="text-blue-600">Buat pengumuman baru untuk mahasiswa</p>
+            <h1 className="text-3xl font-bold text-blue-900">
+              Tambah Announcement
+            </h1>
+            <p className="text-blue-600">
+              Buat pengumuman baru untuk mahasiswa
+            </p>
           </div>
         </div>
 
@@ -202,12 +249,15 @@ export default function AnnouncementCreatePage() {
           {/* File Upload */}
           <div>
             <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
-              <Upload size={18} className="text-blue-600" /> Upload File (Opsional)
+              <Upload size={18} className="text-blue-600" /> Upload File
+              (Opsional)
             </label>
             <input
               type="file"
               accept="image/*,.pdf"
-              onChange={(e) => handleChange("file", e.target.files ? e.target.files[0] : null)}
+              onChange={(e) =>
+                handleChange("file", e.target.files ? e.target.files[0] : null)
+              }
               disabled={isSubmitting}
               className="mt-2"
             />
