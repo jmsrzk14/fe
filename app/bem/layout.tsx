@@ -56,6 +56,11 @@ export default function AdminLayout({
     }
   }, [router]);
 
+  const handleLogout = () => {
+    sessionStorage.clear();
+    router.push("/auth/login"); 
+  };
+
   // Auto detect active module from URL
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -263,7 +268,10 @@ export default function AdminLayout({
                       </div>
                     </Link>
                     <div className="border-t border-gray-200 my-2"></div>
-                    <button className="w-full px-4 py-2 text-left hover:bg-red-50 transition-colors duration-200 text-red-600 hover:text-red-700">
+                    <button 
+                      className="w-full px-4 py-2 text-left hover:bg-red-50 transition-colors duration-200 text-red-600 hover:text-red-700"
+                      onClick={handleLogout}
+                    >
                       Logout
                     </button>
                   </div>
