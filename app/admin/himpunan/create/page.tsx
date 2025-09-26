@@ -85,12 +85,10 @@ export default function HimpunanCreatePage() {
   };
 
   const stripHtml = (html: string) => {
-    if (typeof document !== "undefined") {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = html;
-      return tmp.textContent || tmp.innerText || "";
-    }
-    return ""; // default saat server render
+    if (!html) return "";
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
   };
 
 
@@ -641,9 +639,7 @@ export default function HimpunanCreatePage() {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">
-                    Visi (min 50 karakter)
-                  </span>
+                  <span className="text-sm text-blue-700">Visi</span>
                   <CheckCircle2
                     size={16}
                     className={
@@ -654,9 +650,7 @@ export default function HimpunanCreatePage() {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">
-                    Misi (min 50 karakter)
-                  </span>
+                  <span className="text-sm text-blue-700">Misi</span>
                   <CheckCircle2
                     size={16}
                     className={
@@ -667,9 +661,7 @@ export default function HimpunanCreatePage() {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">
-                    Values (opsional)
-                  </span>
+                  <span className="text-sm text-blue-700">Values</span>
                   <CheckCircle2
                     size={16}
                     className={
