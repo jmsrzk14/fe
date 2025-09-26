@@ -67,7 +67,6 @@ export default function MahasiswaCreatePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleChange = (
     key: keyof DepartmentForm,
     value: string | File | null
