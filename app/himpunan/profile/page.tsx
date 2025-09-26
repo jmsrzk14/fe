@@ -672,4 +672,4 @@ export default function ProfilePage() {
       `}</style>
     </div>
   );
-}
+} 
