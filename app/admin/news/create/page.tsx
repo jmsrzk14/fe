@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import {
@@ -37,6 +37,16 @@ export default function MahasiswaCreatePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [token, setToken] = useState<string | null>(null); // Store token in state
+
+  // Safely access sessionStorage in useEffect (client-side only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = sessionStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []);
 
   const handleChange = (key: keyof FormData, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
