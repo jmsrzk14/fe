@@ -52,12 +52,10 @@ export default function MahasiswaCreatePage() {
     "image",
   ];
 
-  const getTextLength = (html: string) => {
-    if (!html) return 0;
-    const tmp = document.createElement("div");
-    tmp.innerHTML = html;
-    return tmp.textContent?.trim().length || 0;
-  };
+const getTextLength = (html: string) => {
+  return stripHtml(html).length;
+};
+
   const router = useRouter();
   const [formData, setFormData] = useState<UKMForm>({
     nama: "",
