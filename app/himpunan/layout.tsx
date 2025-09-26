@@ -136,7 +136,7 @@ export default function AdminLayout({
         <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-200/50 sticky top-0 z-40">
           <div className="p-6 flex justify-between items-center">
             {/* Title & Breadcrumb */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 animate-fadeInUp">
               {orgLogo && (
                 <img
                   src={`http://localhost:8080/associations/${orgLogo}`}
