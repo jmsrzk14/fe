@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mr-3">
-                <img src="bem.png" alt="BEM" />
+                <img src="/bem.png" alt="BEM" />
               </div>
               <span className="text-xl font-bold">BEM 2024</span>
             </div>
