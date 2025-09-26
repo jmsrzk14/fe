@@ -2,7 +2,7 @@
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -53,8 +53,13 @@ export default function MahasiswaCreatePage() {
   ];
 
 const getTextLength = (html: string) => {
-  return stripHtml(html).length;
-};
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent?.length || tmp.innerText?.length || 0;
+    }
+    return 0; // default saat server render
+  };
 
   const router = useRouter();
   const [formData, setFormData] = useState<UKMForm>({
@@ -68,15 +73,6 @@ const getTextLength = (html: string) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [token, setToken] = useState<string | null>(null); // Store token in state
-
-  // Safely access sessionStorage in useEffect (client-side only)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []);
 
   const completenessPercent = Math.round(
     (((formData.nama ? 1 : 0) +
@@ -88,11 +84,14 @@ const getTextLength = (html: string) => {
       6) *
       100
   );
+
   const stripHtml = (html: string) => {
-    if (!html) return "";
-    const tmp = document.createElement("div");
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || "";
+    }
+    return ""; // default saat server render
   };
 
   const handleChange = (key: keyof UKMForm, value: string | File | null) => {
