@@ -1,6 +1,6 @@
 "use client";
 import Swal from "sweetalert2";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import React, { useState } from "react";
