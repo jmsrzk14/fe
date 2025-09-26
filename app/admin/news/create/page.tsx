@@ -518,7 +518,7 @@ export default function MahasiswaCreatePage() {
                         (formData.content ? 1 : 0) +
                         (formData.category ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
-                        5) *
+                        4) *
                         100
                     )}
                     %
@@ -533,7 +533,7 @@ export default function MahasiswaCreatePage() {
                           (formData.content ? 1 : 0) +
                           (formData.category ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
-                          5) *
+                          4) *
                         100
                       }%`,
                     }}
