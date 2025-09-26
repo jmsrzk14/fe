@@ -245,7 +245,7 @@ export default function AdminLayout({
 
                 {showUserDropdown && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 animate-slideInDown">
-                    <Link href="/profile">
+                    <Link href="/bem/profile">
                       <div className="px-4 py-2 hover:bg-blue-50 transition-colors duration-200 flex items-center gap-3 group">
                         <User
                           size={16}
