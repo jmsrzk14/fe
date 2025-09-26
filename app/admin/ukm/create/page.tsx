@@ -73,15 +73,6 @@ export default function MahasiswaCreatePage() {
       100
   );
 
-  const stripHtml = (html: string) => {
-    if (typeof document !== "undefined") {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = html;
-      return tmp.textContent || tmp.innerText || "";
-    }
-    return ""; // default saat server render
-  };
-
   const handleChange = (key: keyof UKMForm, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
     setError(null);
