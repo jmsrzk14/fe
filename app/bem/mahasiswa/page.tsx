@@ -68,6 +68,7 @@ interface Period {
   value: string;
   label: string;
   year: string;
+  isActive?: boolean; // ✅ tambahkan ini
 }
 
 const TableContainer: React.FC = () => {
@@ -988,7 +989,6 @@ const TableContainer: React.FC = () => {
           onEdit={handleAssignRole}
           currentPage={page}
           perPage={10}
-          actionLabel="Atur Role"
           actionIcon={<UserPlus size={16} />}
         />
       </div>
