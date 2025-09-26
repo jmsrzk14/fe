@@ -628,6 +628,9 @@ export default function ProfilePage() {
             </p>
           </div>
 
+
+          
+
           {/* Pengurus Inti Header */}
           <div className="text-center mb-12">
             <h2 className="text-2xl font-bold text-[#1c44ac] mb-4">Pengurus Inti</h2>
