@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import {ReactNode} from "react";
 import { Edit } from "lucide-react";
 
 interface DataTableProps {
@@ -9,6 +9,7 @@ interface DataTableProps {
   onDelete?: (index: number) => void;
   currentPage?: number;
   perPage?: number;
+  actionIcon?: ReactNode;
 }
 
 const DataTable: React.FC<DataTableProps> = ({

@@ -989,7 +989,6 @@ const TableContainer: React.FC = () => {
           onEdit={handleAssignRole}
           currentPage={page}
           perPage={10}
-          actionLabel="Atur Role"
           actionIcon={<UserPlus size={16} />}
         />
       </div>
