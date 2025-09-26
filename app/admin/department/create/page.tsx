@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/navigation";
@@ -66,6 +66,16 @@ export default function MahasiswaCreatePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [token, setToken] = useState<string | null>(null); // Store token in state
+
+  // Safely access sessionStorage in useEffect (client-side only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = sessionStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []);
+  
   const stripHtml = (html: string) => {
     if (!html) return "";
     return html.replace(/<[^>]+>/g, "").trim();
