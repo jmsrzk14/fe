@@ -53,14 +53,24 @@ export default function MahasiswaCreatePage() {
     "image",
   ];
 
-  const getTextLength = (html: string) => {
-    if (typeof document !== "undefined") {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = html;
-      return tmp.textContent?.length || tmp.innerText?.length || 0;
-    }
-    return 0; // default saat server render
-  };
+const getTextLength = (html: string) => {
+  if (typeof window !== "undefined") {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent?.length || tmp.innerText?.length || 0;
+  }
+  return 0;
+};
+
+const stripHtml = (html: string) => {
+  if (typeof window !== "undefined") {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  }
+  return "";
+};
+
   const router = useRouter();
   const [formData, setFormData] = useState<DepartmentForm>({
     nama: "",
@@ -74,15 +84,6 @@ export default function MahasiswaCreatePage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const stripHtml = (html: string) => {
-    if (typeof document !== "undefined") {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = html;
-      return tmp.textContent || tmp.innerText || "";
-    }
-    return ""; // default saat server render
-  };
-  
   const handleChange = (
     key: keyof DepartmentForm,
     value: string | File | null
