@@ -458,71 +458,65 @@ export default function ProfilePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] bg-gradient-to-br from-[#1c46b9] via-[#2563eb] to-[#3b82f6] overflow-hidden">
-        {/* Background Decorative Elements */}
-        <div className="absolute inset-0">
-          {/* Large circles */}
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
-          <div className="absolute top-1/3 right-20 w-48 h-48 bg-white/5 rounded-full"></div>
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-white/10 rounded-full animate-pulse delay-1000"></div>
-          <div className="absolute bottom-32 right-10 w-24 h-24 bg-[#ffe444]/20 rounded-full"></div>
-          
-          {/* Small decorative elements */}
-          <div className="absolute top-20 right-1/3 text-[#ffe444]">
-            <Star className="w-6 h-6 animate-bounce" />
-          </div>
-          <div className="absolute bottom-1/3 left-16 text-[#ffe444]">
-            <Sparkles className="w-8 h-8 animate-pulse" />
-          </div>
-          <div className="absolute top-1/2 right-12 text-white/30">
-            <Sparkles className="w-4 h-4 animate-bounce delay-500" />
-          </div>
-          
-          {/* Gradient overlays for depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1c46b9]/20 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+<section className="relative min-h-[70vh] mt-16 bg-white bg-[url('/gd5.png')] bg-cover bg-center bg-fixed overflow-hidden">
+  {/* Background Decorative Elements */}
+  <div className="absolute inset-0">
+    {/* Dekorasi masih bisa kamu pakai kalau perlu */}
+  </div>
+
+  {/* Main Content */}
+  <div className="relative z-10 flex items-center justify-center min-h-[70vh] text-center px-6">
+    <div className="max-w-5xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-black mb-6 leading-tight tracking-tight drop-shadow-md">
+          Profil Organisasi
+        </h1>
+      </div>
+
+      <p className="text-black/70 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10 font-light">
+        Mengenal lebih dalam tentang organisasi mahasiswa yang berkomitmen
+        membangun generasi unggul dan berkarakter di Institut Teknologi Del
+      </p>
+
+      {/* Scroll Indicator */}
+      <div className="flex justify-center">
+        <div className="animate-bounce-slow">
+          <svg
+            className="w-8 h-12 text-black/40"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+            />
+          </svg>
         </div>
+      </div>
+    </div>
+  </div>
 
-        {/* Logo/Icon at top */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-          <div className="w-16 h-12 bg-[#1c46b9] rounded-2xl flex items-center justify-center shadow-xl border-4 border-white/20">
-            <User className="w-8 h-8 text-[#ffe444]" />
-          </div>
-        </div>
+  {/* Animations */}
+  <style jsx>{`
+    @keyframes bounce-slow {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(10px);
+      }
+    }
+    .animate-bounce-slow {
+      animation: bounce-slow 3s ease-in-out infinite;
+    }
+  `}</style>
+</section>
 
-        {/* Main content */}
-        <div className="relative z-10 flex items-center justify-center min-h-[60vh] text-center px-4">
-          <div className="max-w-4xl mx-auto">
-            {/* Main heading */}
-            <div className="mb-6">
-              <h2 className="text-white/90 text-lg md:text-xl font-medium mb-2 tracking-wide">
-                BEM IT DEL
-              </h2>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                Profil Organisasi
-              </h1>
-            </div>
 
-            {/* Description */}
-            <p className="text-white/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-8">
-              Mengenal lebih dalam tentang organisasi mahasiswa yang berkomitmen 
-              membangun generasi unggul dan berkarakter di Institut Teknologi Del
-            </p>
 
-            {/* Scroll indicator */}
-            <div className="flex justify-center">
-              <div className="animate-bounce">
-                <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-                  <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
-      </section>
 
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -623,146 +617,6 @@ export default function ProfilePage() {
           </div>
         </div>
         
-        {/* VISI MISI */}
-        <div className="mb-20">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold text-[#1c44ac] mb-4">Visi & Misi</h1>
-            <div className="w-20 h-1 bg-[#1c44ac] mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Fondasi dan arah perjuangan BEM dalam melayani mahasiswa dan membangun masa depan yang lebih baik
-            </p>
-          </div>
-          
-          {/* CARD VISI MISI */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
-            {/* Card Visi */}
-            <div className="bg-gradient-to-br from-[#1c44ac] to-[#2563eb] rounded-3xl p-8 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mr-4">
-                  <span className="text-2xl">🎯</span>
-                </div>
-                <h2 className="text-2xl font-bold">Visi</h2>
-              </div>
-              <p className="text-white/95 leading-relaxed text-lg">
-                Menjadi organisasi mahasiswa yang unggul, inovatif, dan berkarakter dalam mengembangkan potensi mahasiswa 
-                Institut Teknologi Del untuk berkontribusi positif bagi masyarakat dan bangsa.
-              </p>
-            </div>
-
-            {/* Card Misi */}
-            <div className="bg-gradient-to-br from-[#3b82f6] to-[#1c44ac] rounded-3xl p-8 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mr-4">
-                  <span className="text-2xl">🚀</span>
-                </div>
-                <h2 className="text-2xl font-bold">Misi</h2>
-              </div>
-              <p className="text-white/95 leading-relaxed text-lg">
-                Menjadi organisasi mahasiswa yang unggul, inovatif, dan berkarakter dalam mengembangkan potensi mahasiswa 
-                Institut Teknologi Del untuk berkontribusi positif bagi masyarakat dan bangsa.
-              </p>
-            </div>
-          </div>
-        </div> 
-
-
-        {/* Our Values */}
-        <div className="mb-20">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold text-[#1c44ac] mb-4">Our Values</h1>
-            <div className="w-20 h-1 bg-[#1c44ac] mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Tiga nilai fundamental yang menjadi landasan setiap tindakan dan keputusan BEM IT Del dalam melayani mahasiswa
-            </p>
-          </div>
-
-          {/* Values Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* MarTuhan Card */}
-            <div className="bg-gradient-to-br from-[#1c46b9] to-[#2563eb] rounded-3xl p-8 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-[#ffe444] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">🙏</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-2">MarTuhan</h3>
-                <div className="w-12 h-1 bg-[#ffe444] mx-auto"></div>
-              </div>
-              <ul className="space-y-3 text-left">
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Menjalankan setiap aktivitas dengan landasan spiritual yang kuat</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Menjunjung tinggi nilai-nilai ketuhanan dalam setiap keputusan</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Membangun karakter yang berintegritas dan bermoral</span>
-                </li>
-              </ul>
-              <div className="mt-6 text-center">
-                <span className="text-[#ffe444] text-sm font-semibold">Spiritual Foundation</span>
-              </div>
-            </div>
-
-            {/* MarRoha Card */}
-            <div className="bg-gradient-to-br from-[#3b82f6] to-[#1c46b9] rounded-3xl p-8 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-[#ffe444] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">🤝</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-2">MarRoha</h3>
-                <div className="w-12 h-1 bg-[#ffe444] mx-auto"></div>
-              </div>
-              <ul className="space-y-3 text-left">
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Membangun persaudaraan yang erat antar mahasiswa</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Mengembangkan kerjasama dan gotong royong</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Menciptakan lingkungan yang harmonis dan inklusif</span>
-                </li>
-              </ul>
-              <div className="mt-6 text-center">
-                <span className="text-[#ffe444] text-sm font-semibold">Brotherhood & Unity</span>
-              </div>
-            </div>
-
-            {/* MarBisuk Card */}
-            <div className="bg-gradient-to-br from-[#60a5fa] to-[#3b82f6] rounded-3xl p-8 text-white shadow-2xl transform hover:scale-105 transition-all duration-300">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-[#ffe444] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">💼</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-2">MarBisuk</h3>
-                <div className="w-12 h-1 bg-[#ffe444] mx-auto"></div>
-              </div>
-              <ul className="space-y-3 text-left">
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Bekerja dengan dedikasi dan etos kerja tinggi</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Mengutamakan hasil yang berkualitas dan bermanfaat</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-[#ffe444] mr-2">•</span>
-                  <span className="text-white/95">Berkomitmen pada excellence dalam setiap tugas</span>
-                </li>
-              </ul>
-              <div className="mt-6 text-center">
-                <span className="text-[#ffe444] text-sm font-semibold">Excellence & Dedication</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Struktur Organisasi */}
         <div className="mb-20">
@@ -889,59 +743,66 @@ export default function ProfilePage() {
         </div>
 
         {/* Kepala Departemen Section */}
-        <div className="mb-20">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl font-bold text-[#1c44ac] mb-4">Kepala Departemen</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Para pemimpin departemen yang menjalankan program kerja strategis BEM IT Del
-            </p>
-          </div>
+       <div className="relative py-20 bg-white bg-[url('/gd5.png')] bg-cover bg-center bg-fixed">
+  <div className="mb-20 relative z-10">
+    <div className="text-center mb-16">
+      <h2 className="text-2xl font-bold text-[#1c44ac] mb-4">Kepala Departemen</h2>
+      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        Para pemimpin departemen yang menjalankan program kerja strategis BEM IT Del
+      </p>
+    </div>
 
-          {/* Department Heads Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {kepalaDepartemenData.map((kepala) => (
-              <div key={kepala.id} className="bg-white rounded-3xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border border-gray-100">
-                <div className="text-center">
-                  <div className="relative mb-4">
-                    <div 
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg"
-                      style={{ backgroundColor: kepala.color }}
-                    >
-                      <span className="text-white text-2xl font-bold">{kepala.initials}</span>
-                    </div>
-                    <div className="absolute -bottom-2 right-1/2 transform translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>
-                    <div className="absolute top-0 right-0 w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">{kepala.emoji}</span>
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">{kepala.name}</h3>
-                  <p className="text-sm text-blue-600 font-semibold mb-4">{kepala.position}</p>
-                  
-                  <div className="text-left space-y-2 text-xs text-gray-600 bg-gray-50 rounded-lg p-3">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium text-gray-500">Prodi:</span>
-                      <span className="text-blue-600 font-medium">{kepala.prodi}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium text-gray-500">Angkatan:</span>
-                      <span className="text-blue-600 font-medium">{kepala.angkatan}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-center space-x-3 mt-4">
-                    <div className="w-8 h-8 bg-[#0077b5] rounded-lg flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">in</span>
-                    </div>
-                    <div className="w-8 h-8 bg-[#ea4335] rounded-lg flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">M</span>
-                    </div>
-                  </div>
-                </div>
+    {/* Department Heads Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+      {kepalaDepartemenData.map((kepala) => (
+        <div
+          key={kepala.id}
+          className="bg-white rounded-3xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300 border border-gray-100"
+        >
+          <div className="text-center">
+            <div className="relative mb-4">
+              <div
+                className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto shadow-lg"
+                style={{ backgroundColor: kepala.color }}
+              >
+                <span className="text-white text-2xl font-bold">{kepala.initials}</span>
               </div>
-            ))}
+              <div className="absolute -bottom-2 right-1/2 transform translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>
+              <div className="absolute top-0 right-0 w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">{kepala.emoji}</span>
+              </div>
+            </div>
+
+            <h3 className="text-lg font-bold text-gray-800 mb-1">{kepala.name}</h3>
+            <p className="text-sm text-blue-600 font-semibold mb-4">{kepala.position}</p>
+
+            <div className="text-left space-y-2 text-xs text-gray-600 bg-gray-50 rounded-lg p-3">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-500">Prodi:</span>
+                <span className="text-blue-600 font-medium">{kepala.prodi}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-500">Angkatan:</span>
+                <span className="text-blue-600 font-medium">{kepala.angkatan}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-center space-x-3 mt-4">
+              <div className="w-8 h-8 bg-[#0077b5] rounded-lg flex items-center justify-center">
+                <span className="text-white text-xs font-bold">in</span>
+              </div>
+              <div className="w-8 h-8 bg-[#ea4335] rounded-lg flex items-center justify-center">
+                <span className="text-white text-xs font-bold">M</span>
+              </div>
+            </div>
           </div>
         </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+
         {/* Departemen-Departemen BEM IT DEL */}
         <div className="mb-20">
           <div className="text-center mb-16">
