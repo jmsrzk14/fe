@@ -10,22 +10,18 @@ import { Camera, Upload, Save, FileImage, Type, FileText } from "lucide-react";
 export default function TambahGaleriPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState<File |null>(null);
   const [photoPreview, setPhotoPreview] = useState("");
 
-  const handlePhotoUpload = (e) => {
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return; // keluar kalau null
+
     const file = e.target.files[0];
-    if (file) {
-      setPhoto(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', title);
