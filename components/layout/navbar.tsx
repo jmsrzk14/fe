@@ -58,7 +58,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center group">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center mr-3 transition-transform duration-300 group-hover:rotate-6">
-                <img src="./bem.png" alt="Logo" />
+                <img src="/bem.png" alt="Logo" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold text-gray-900 group-hover:text-[#1c46b9] transition-colors">

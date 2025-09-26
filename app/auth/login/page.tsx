@@ -113,7 +113,7 @@ export default function LoginPage() {
               <div className="w-12 h-12  bg-gradient-to-br from-[#3B82F6] to-[#1E40AF] rounded-xl flex items-center justify-center">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <img
-                    src="/himpunanem.png"
+                    src="/bem.png"
                     alt="Logo BEM"
                     className="w-8 h-8 object-contain"
                   />
@@ -122,10 +122,10 @@ export default function LoginPage() {
             </div>
             <div className="text-center space-y-2">
               <CardTitle className="text-2xl font-bold font-Viga text-[#1E40AF]">
-                {isLogin ? 'Selamat Datang' : 'Join BEM 2024'}
+                Selamat Datang
               </CardTitle>
               <CardTitle className="text-lg font-bold font-Viga text-[#3B82F6]">
-                {isLogin ? 'Portal BEM IT Del' : 'Join BEM 2024'}
+                Portal BEM IT Del
               </CardTitle>
               <CardDescription className='m-10'>
                 {isLogin 
