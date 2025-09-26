@@ -161,7 +161,11 @@ export default function ProfilePage() {
                           />
                         ) : (
                           <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center text-white text-xl font-bold shadow-inner">
-                            {profile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            <img
+                              src={`http://localhost:8080/users/${profile.image}`}
+                              alt="Profile"
+                              className="w-full h-full rounded-full object-cover"
+                            />
                           </div>
                         )}
                       </div>
@@ -690,13 +694,13 @@ export default function ProfilePage() {
               formData.append("linkedin", updated.linkedin || "");
               formData.append("instagram", updated.instagram || "");
               formData.append("whatsapp", updated.whatsapp || "");
-              if (updated.image instanceof File) {
-                formData.append("image", updated.image);
+              if (updated.imageFile) {
+                formData.append("image", updated.imageFile);
               }
 
               formData.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
+                console.log(`${key}:`, value);
+              });
 
               const res = await axios.put(
                 `http://localhost:8080/api/student/profile`,

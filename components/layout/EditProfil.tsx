@@ -36,7 +36,6 @@ export default function EditSocialModal({
 
       await onSave(formData);
 
-      setMessage({ type: "success", text: "Berhasil menyimpan perubahan!" });
       setTimeout(() => {
         setLoading(false);
         onClose();
@@ -55,7 +54,7 @@ export default function EditSocialModal({
 
   return (
     <div className="absolute inset-0 bg-black/20 flex justify-center z-50">
-      <div className="bg-white w-full h-[90vh] max-w-lg rounded-2xl shadow-xl p-6 relative mt-12">
+      <div className="bg-white w-full h-[80vh] max-w-lg rounded-2xl shadow-xl p-6 relative mt-12">
         {/* Header */}
         <button
           onClick={onClose}
@@ -88,9 +87,18 @@ export default function EditSocialModal({
               onChange={(e) => {
                 if (e.target.files && e.target.files[0]) {
                   const file = e.target.files[0];
+
+                  setFormData((prev) => ({
+                    ...prev,
+                    imageFile: file,
+                  }));
+
                   const reader = new FileReader();
                   reader.onloadend = () => {
-                    handleChange("image", reader.result as string);
+                    setFormData((prev) => ({
+                      ...prev,
+                      image: reader.result as string,
+                    }));
                   };
                   reader.readAsDataURL(file);
                 }
