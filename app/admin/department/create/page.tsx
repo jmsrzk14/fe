@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/navigation";
@@ -54,7 +54,12 @@ export default function MahasiswaCreatePage() {
   ];
 
   const getTextLength = (html: string) => {
-    return stripHtml(html).length;
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent?.length || tmp.innerText?.length || 0;
+    }
+    return 0; // default saat server render
   };
   const router = useRouter();
   const [formData, setFormData] = useState<DepartmentForm>({
@@ -68,20 +73,16 @@ export default function MahasiswaCreatePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [token, setToken] = useState<string | null>(null); // Store token in state
 
-  // Safely access sessionStorage in useEffect (client-side only)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = sessionStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []);
-  
   const stripHtml = (html: string) => {
-    if (!html) return "";
-    return html.replace(/<[^>]+>/g, "").trim();
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || "";
+    }
+    return ""; // default saat server render
   };
+  
   const handleChange = (
     key: keyof DepartmentForm,
     value: string | File | null
