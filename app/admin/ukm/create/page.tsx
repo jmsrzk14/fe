@@ -2,7 +2,7 @@
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -64,6 +64,15 @@ export default function MahasiswaCreatePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [token, setToken] = useState<string | null>(null); // Store token in state
+
+  // Safely access sessionStorage in useEffect (client-side only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = sessionStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []);
 
   const completenessPercent = Math.round(
     (((formData.nama ? 1 : 0) +
