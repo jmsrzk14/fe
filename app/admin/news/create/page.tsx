@@ -17,7 +17,7 @@ import {
   Star,
   Zap,
 } from "lucide-react";
-
+import ReactQuill from "react-quill";
 interface FormData {
   title: string;
   content: string;
@@ -25,6 +25,7 @@ interface FormData {
   gambar: File | null;
 }
 import Swal from "sweetalert2";
+import "react-quill/dist/quill.snow.css";
 export default function MahasiswaCreatePage() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
@@ -72,6 +73,10 @@ export default function MahasiswaCreatePage() {
     } else if (key === "gambar" && !value) {
       setPreviewImage(null);
     }
+  };
+  const stripHtml = (html: string) => {
+    if (!html) return "";
+    return html.replace(/<[^>]+>/g, ""); // hapus semua tag
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -259,15 +264,18 @@ export default function MahasiswaCreatePage() {
                     <Target size={18} className="text-blue-600" />
                     Deskripsi
                   </label>
-                  <textarea
-                    className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none resize-none bg-blue-50 text-blue-900"
-                    rows={6}
-                    value={formData.content}
-                    onChange={(e) => handleChange("content", e.target.value)}
-                    placeholder="✨ Tulis visi News yang inspiratif..."
-                    required
-                    disabled={isSubmitting}
-                  />
+                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.content}
+                      onChange={(value) => handleChange("content", value)}
+                      placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
+                      style={{
+                        height: "200px",
+                        backgroundColor: "white",
+                      }}
+                    />
+                  </div>
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-blue-600">
                       {formData.content.length > 0 && (
@@ -300,15 +308,18 @@ export default function MahasiswaCreatePage() {
                     <Target size={18} className="text-blue-600" />
                     Category
                   </label>
-                  <textarea
-                    className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none resize-none bg-blue-50 text-blue-900"
-                    rows={6}
-                    value={formData.category}
-                    onChange={(e) => handleChange("category", e.target.value)}
-                    placeholder="✨ Tulis misi News yang motivatif..."
-                    required
-                    disabled={isSubmitting}
-                  />
+                  <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.category}
+                      onChange={(value) => handleChange("category", value)}
+                      placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
+                      style={{
+                        height: "200px",
+                        backgroundColor: "white",
+                      }}
+                    />
+                  </div>
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-blue-600">
                       {formData.category.length > 0 && (
@@ -427,42 +438,41 @@ export default function MahasiswaCreatePage() {
                       />
                     </div>
                   )}
+
                   {formData.title && (
                     <div className="text-center">
-                      <h4 className="font-bold text-blue-900 text-lg">
+                      <h4 className="font-bold text-blue-900 text-lg break-words">
                         {formData.title}
                       </h4>
-                      {formData.content && (
-                        <p className="text-blue-600 font-medium text-sm mt-1">
-                          ({formData.content})
-                        </p>
-                      )}
                     </div>
                   )}
+
                   {formData.content && (
                     <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
+                      <p className="text-blue-700 text-sm leading-relaxed break-words line-clamp-3">
                         <strong>Visi:</strong>{" "}
-                        {formData.content.length > 150
-                          ? formData.content.substring(0, 150) + "..."
-                          : formData.content}
+                        {stripHtml(formData.content).length > 150
+                          ? stripHtml(formData.content).substring(0, 150) +
+                            "..."
+                          : stripHtml(formData.content)}
                       </p>
                     </div>
                   )}
+
                   {formData.category && (
                     <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
+                      <p className="text-blue-700 text-sm leading-relaxed break-words line-clamp-3">
                         <strong>Misi:</strong>{" "}
-                        {formData.category.length > 150
-                          ? formData.category.substring(0, 150) + "..."
-                          : formData.category}
+                        {stripHtml(formData.category).length > 150
+                          ? stripHtml(formData.category).substring(0, 150) +
+                            "..."
+                          : stripHtml(formData.category)}
                       </p>
                     </div>
                   )}
                 </div>
               </div>
             )}
-
             {/* Progress Card */}
             <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
               <h3 className="font-bold text-blue-900 mb-4 flex items-center gap-2">
@@ -553,9 +563,8 @@ export default function MahasiswaCreatePage() {
                     💡 Tips Mengisi Data
                   </h3>
                   <ul className="text-sm text-blue-700 space-y-1">
-                    <li>🎯 Gunakan nama resmi yang lengkap</li>
-                    <li>⚡ Singkatan harus mudah diingat</li>
-                    <li>✨ Visi & misi harus jelas dan inspiratif</li>
+                    <li>🎯 Judul harus jelas dan tepat</li>
+                    <li>⚡ Deskripsi harus memenuhi judul</li>
                     <li>🖼️ Logo sebaiknya format PNG transparan</li>
                     <li>✅ Pastikan semua data sudah benar</li>
                   </ul>

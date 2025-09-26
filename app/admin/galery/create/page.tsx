@@ -444,8 +444,6 @@ export default function GaleryCreatePage() {
                   <ul className="text-sm text-blue-700 space-y-1">
                     <li>Gunakan nama resmi yang lengkap</li>
                     <li>Singkatan harus mudah diingat</li>
-                    <li>Visi & misi harus jelas dan inspiratif</li>
-                    <li>Manfaatkan formatting text untuk tampilan yang menarik</li>
                     <li>Logo sebaiknya format PNG transparan</li>
                     <li>Pastikan semua data sudah benar</li>
                   </ul>
