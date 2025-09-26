@@ -1,6 +1,7 @@
 "use client";
 import Swal from "sweetalert2";
 import ReactQuill from "react-quill";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import React, { useState } from "react";
 import NextImage from "next/image";
