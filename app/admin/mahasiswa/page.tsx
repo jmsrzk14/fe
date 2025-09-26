@@ -15,6 +15,7 @@ interface Mahasiswa {
   current_organization_shortname?: string;
   current_position_title?: string;
   period?: string;
+  user_id: number;
 }
 
 interface ApiResponse {
