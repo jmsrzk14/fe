@@ -6,6 +6,51 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Users, Award, Megaphone, ArrowRight, Star, Target } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+
+
+
+// Komponen FlipCard
+function FlipCard({ icon, title, description }: any) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+   <div
+      className="w-full h-72 perspective cursor-pointer"
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+      onClick={() => setFlipped(!flipped)} // biar jalan di mobile juga
+    >
+      <motion.div
+        animate={{ rotateX: flipped ? 180 : 0 }}
+        transition={{ duration: 0.7, ease: 'easeInOut' }}
+        className="relative w-full h-full preserve-3d"
+      >
+        {/* Front Side */}
+        <Card className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 rounded-2xl shadow-lg backface-hidden">
+          {/* Icon */}
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-600 text-3xl mb-6 transform-gpu translate-z-10">
+            {icon}
+          </div>
+          {/* Title floating */}
+          <CardHeader className="p-0 transform-gpu translate-z-20">
+            <CardTitle className="text-2xl font-bold drop-shadow-md">{title}</CardTitle>
+          </CardHeader>
+        </Card>
+
+        {/* Back Side */}
+        <Card className="absolute inset-0 flex items-center justify-center text-center p-6 rounded-2xl shadow-xl bg-indigo-600 text-white rotateX-180 backface-hidden">
+          <CardContent className="transform-gpu translate-z-20">
+            <CardDescription className="text-lg leading-relaxed text-white/90 drop-shadow-lg">
+              {description}
+            </CardDescription>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function HomePage() {
   const [himpunans, setHimpunans] = useState<any[]>([]);
@@ -89,35 +134,37 @@ export default function HomePage() {
       <HeroSection />
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Mission & Vision</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Committed to creating a vibrant academic environment that fosters student growth,
-              innovation, and collaborative success.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
-                <CardHeader className="pb-4">
-                  <div className="flex justify-center mb-4">
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-xl font-semibold">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-relaxed">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+     <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Title */}
+        <div className="text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl font-bold text-gray-900 mb-4"
+          >
+            Our Mission & Vision
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-xl text-gray-600 max-w-3xl mx-auto"
+          >
+            Committed to creating a vibrant academic environment that fosters student growth,
+            innovation, and collaborative success.
+          </motion.p>
         </div>
-      </section>
+
+        {/* Features Flip Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <FlipCard key={index} {...feature} />
+          ))}
+        </div>
+      </div>
+    </section>
 
       {/* Vision & Mission Cards */}
       <section className="py-20">
