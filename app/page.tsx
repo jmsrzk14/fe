@@ -5,54 +5,13 @@ import HeroSection from '@/components/ui/hero-section';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Users, Award, Megaphone, ArrowRight, Star, Target } from 'lucide-react';
+import { Calendar, Users, Award, Megaphone, ArrowRight, Star, Target, Clock, Eye, TrendingUp, Play, Zap, Lightbulb, Heart,Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 
 
-
-// Komponen FlipCard
-function FlipCard({ icon, title, description }: any) {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-   <div
-      className="w-full h-72 perspective cursor-pointer"
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
-      onClick={() => setFlipped(!flipped)} // biar jalan di mobile juga
-    >
-      <motion.div
-        animate={{ rotateX: flipped ? 180 : 0 }}
-        transition={{ duration: 0.7, ease: 'easeInOut' }}
-        className="relative w-full h-full preserve-3d"
-      >
-        {/* Front Side */}
-        <Card className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 rounded-2xl shadow-lg backface-hidden">
-          {/* Icon */}
-          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-600 text-3xl mb-6 transform-gpu translate-z-10">
-            {icon}
-          </div>
-          {/* Title floating */}
-          <CardHeader className="p-0 transform-gpu translate-z-20">
-            <CardTitle className="text-2xl font-bold drop-shadow-md">{title}</CardTitle>
-          </CardHeader>
-        </Card>
-
-        {/* Back Side */}
-        <Card className="absolute inset-0 flex items-center justify-center text-center p-6 rounded-2xl shadow-xl bg-indigo-600 text-white rotateX-180 backface-hidden">
-          <CardContent className="transform-gpu translate-z-20">
-            <CardDescription className="text-lg leading-relaxed text-white/90 drop-shadow-lg">
-              {description}
-            </CardDescription>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
-  );
-}
-
 export default function HomePage() {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [himpunans, setHimpunans] = useState<any[]>([]);
   const [ukms, setUkms] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
@@ -82,22 +41,23 @@ export default function HomePage() {
         'Departemen Sosial BEM IT Del menggalang dana untuk mendukung pendidikan anak-anak di daerah terpencil.',
       featured: false,
     },
+    
   ];
 
   const features = [
     {
       icon: <Users className="w-8 h-8 text-[#3B82F6]" />,
-      title: "Student Representation",
+      title: "Martuhan",
       description: "Representing student interests and fostering academic excellence through collaborative initiatives."
     },
     {
       icon: <Award className="w-8 h-8 text-[#3B82F6]" />,
-      title: "Achievement Programs",
+      title: "Maroha",
       description: "Developing programs that enhance student skills and academic performance across all departments."
     },
     {
       icon: <Megaphone className="w-8 h-8 text-[#3B82F6]" />,
-      title: "Communication Hub",
+      title: "Marbisuk",
       description: "Bridging communication between students, faculty, and administration for better campus life."
     }
   ];
@@ -133,245 +93,486 @@ export default function HomePage() {
       {/* Hero Section */}
       <HeroSection />
 
-      {/* Features Section */}
-     <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Title */}
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-bold text-gray-900 mb-4"
-          >
-            Our Mission & Vision
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
-          >
-            Committed to creating a vibrant academic environment that fosters student growth,
-            innovation, and collaborative success.
-          </motion.p>
-        </div>
+     {/* Mission & Vision */}
+    <section className="py-20 relative overflow-hidden bg-blue-600 rounded-t-3xl shadow-xl">
+  {/* Background grid */}
+  <div
+    className="absolute inset-0 opacity-20 rounded-3xl"
+    style={{
+      backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='grid' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grid)'/%3E%3C/svg%3E")`,
+    }}
+  />
 
-        {/* Features Flip Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <FlipCard key={index} {...feature} />
-          ))}
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    {/* Title */}
+    <div className="text-center mb-16">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6"
+      >
+        <Target className="w-8 h-8 text-indigo-600" />
+        <span className="text-lg font-semibold text-white-700">
+          Mission & Vision
+        </span>
+      </motion.div>
+
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-white mb-6"
+      >
+        Our Mission & Vision
+      </motion.h2>
+
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="text-xl text-white-600 max-w-3xl mx-auto leading-relaxed"
+      >
+        Committed to creating a vibrant academic environment that fosters
+        student growth, innovation, and collaborative success through
+        excellence and dedication.
+      </motion.p>
+    </div>
+
+    {/* Columns */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative">
+      {/* Vertical dividers */}
+      <div className="hidden md:block absolute inset-y-0 left-1/3 w-px bg-gradient-to-b from-transparent via-indigo-200 to-transparent" />
+      <div className="hidden md:block absolute inset-y-0 right-1/3 w-px bg-gradient-to-b from-transparent via-indigo-200 to-transparent" />
+
+      {/* Martuhan */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="group px-6"
+      >
+        <div className="inline-flex items-center justify-center w-20 h-20  rounded-2xl mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+          <img src="./martuhan.png" alt="" />
         </div>
+        <h3 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-white transition-colors">
+          Martuhan
+        </h3>
+       <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="text-white leading-relaxed text-left"
+      >
+        Building meaningful relationships and fostering a caring community
+        where every individual feels valued, supported, and empowered to reach
+        their full potential.
+      </motion.p>
+
+      </motion.div>
+
+      {/* Maroha */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="group px-6"
+      >
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+          <img src="./maroha.png" alt="" />
+        </div>
+        <h3 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-white transition-colors">
+          Maroha
+        </h3>
+        <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="text-white leading-relaxed text-left"
+      >
+        Building meaningful relationships and fostering a caring community
+        where every individual feels valued, supported, and empowered to reach
+        their full potential.
+      </motion.p>
+      </motion.div>
+
+      {/* Marbisuk */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9 }}
+        viewport={{ once: true }}
+        className="group px-6"
+      >
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-lg group-hover:rotate-6 transition-transform duration-300">
+          <img src="./marbisuk.png" alt="" />
+        </div>
+        <h3 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-white transition-colors">
+          Marbisuk
+        </h3>
+        <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+        className="text-white leading-relaxed text-left"
+      >
+        Building meaningful relationships and fostering a caring community
+        where every individual feels valued, supported, and empowered to reach
+        their full potential.
+      </motion.p>
+      </motion.div>
+    </div>
+
+    {/* Bottom CTA */}
+    <div className="flex justify-center mt-16">
+      <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm px-8 py-4 rounded-full shadow-lg border border-white/20">
+        <Users className="w-6 h-6 text-indigo-600" />
+        <span className="text-gray-700 font-medium">
+          Together We Achieve Excellence
+        </span>
+        <Lightbulb className="w-6 h-6 text-indigo-600" />
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-      {/* Vision & Mission Cards */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Vision Card */}
-            <Card className="relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#3B82F6]/20 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
-              <CardHeader className="relative">
-                <div className="flex items-center mb-4">
-                  <Star className="w-6 h-6 text-[#3B82F6] mr-2" />
-                  <Badge variant="secondary" className="bg-[#3B82F6]/10 text-[#3B82F6]">Vision</Badge>
-                </div>
-                <CardTitle className="text-2xl text-[#3B82F6]">Our Vision</CardTitle>
-              </CardHeader>
-              <CardContent className="relative">
-                <p className="text-gray-700 text-lg leading-relaxed">
-                  Menjadi organisasi mahasiswa yang unggul, inovatif, dan berkomitmen dalam
-                  mengembangkan potensi mahasiswa untuk berkontribusi positif bagi masyarakat
-                  dan bangsa.
-                </p>
-              </CardContent>
-            </Card>
 
-            {/* Mission Card */}
-            <Card className="relative overflow-hidden">
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#3B82F6]/20 to-transparent rounded-full transform -translate-x-16 translate-y-16"></div>
-              <CardHeader className="relative">
-                <div className="flex items-center mb-4">
-                  <Target className="w-6 h-6 text-[#3B82F6] mr-2" />
-                  <Badge variant="secondary" className="bg-[#3B82F6]/10 text-[#3B82F6]">Mission</Badge>
-                </div>
-                <CardTitle className="text-2xl text-[#3B82F6]">Our Mission</CardTitle>
-              </CardHeader>
-              <CardContent className="relative">
-                <p className="text-gray-700 text-lg leading-relaxed">
-                  Menjadi organisasi mahasiswa yang unggul, inovatif, dan berkomitmen dalam
-                  mengembangkan potensi mahasiswa Institut Teknologi Del untuk
-                  berkontribusi positif bagi masyarakat dan bangsa.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Departemen BEM</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Departemen-departemen yang menjalankan program kerja untuk kemajuan mahasiswa IT Del
-            </p>
-          </div>
 
-          {/* Grid Departemen */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {departments.map((dept, index) => (
-              <Card
-                key={index}
-                className="text-center rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-              >
-                <CardHeader>
-                  <div className="flex justify-center mb-4">
-                    <div className="w-24 h-24 mx-auto mb-4">
-                    <img
-                      src={`http://localhost:8080/departments/${dept.image}`}
-                      alt={dept.name}
-                      className="w-24 h-24 object-cover rounded-full"
-                    />
+    <section className="relative py-32 overflow-hidden bg-gradient-to-br from-white via-blue-50/40 to-slate-50">
+  {/* Background Elements */}
+  <div className="absolute inset-0">
+    <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100/30 rounded-full blur-3xl animate-pulse"></div>
+    <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-slate-100/20 rounded-full blur-3xl animate-pulse delay-500"></div>
+  </div>
+
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    {/* Section Header */}
+    <div className="text-center mb-20">
+      
+      <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+        Membangun Masa Depan
+        <span className="block text-blue-600">Yang Gemilang</span>
+      </h2>
+      <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Bersama-sama mewujudkan visi dan menjalankan misi untuk kemajuan mahasiswa Institut Teknologi Del
+      </p>
+    </div>
+
+    {/* Cards Container */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {[0, 1].map((index) => {
+        const isHovered = hoveredCard === index;
+        return (
+          <motion.div
+            key={index}
+            className="group relative cursor-pointer"
+            onHoverStart={() => setHoveredCard(index)}
+            onHoverEnd={() => setHoveredCard(null)}
+            animate={{
+              scale: 1,
+              zIndex: isHovered ? 50 : 10,
+              y: isHovered ? '-5%' : 0,
+              filter: hoveredCard !== null && !isHovered ? 'blur(2px)' : 'blur(0px)',
+              transition: { type: 'spring', stiffness: 150, damping: 20 }
+            }}
+          >
+            {/* Card Background Effects */}
+            <div
+              className="absolute -inset-1 rounded-3xl blur opacity-20 transition-all duration-700"
+              style={{
+                background: index === 0
+                  ? 'linear-gradient(to right, #3b82f6, #2563eb, #1d4ed8)' // gradient biru VISI
+                  : 'linear-gradient(to right, #60a5fa, #3b82f6, #2563eb)' // gradient biru MISI
+              }}
+            ></div>
+
+            {/* Card */}
+            <div
+  className={`relative bg-white backdrop-blur-xl rounded-3xl p-8 shadow-xl border transition-all duration-500 group-hover:shadow-2xl ${
+    index === 0 ? 'border-blue-100/50' : 'border-slate-100/50'
+  } min-h-[420px] flex flex-col`}
+>
+              {/* Decorative Elements */}
+              {index === 0 ? (
+                <>
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 via-blue-400/20 to-transparent rounded-full transform translate-x-20 -translate-y-20 group-hover:scale-110 transition-transform duration-700"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/15 to-transparent rounded-full transform -translate-x-12 translate-y-12 group-hover:scale-125 transition-transform duration-700"></div>
+                </>
+              ) : (
+                <>
+                  <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-bl from-blue-400/10 via-blue-300/15 to-transparent rounded-full transform -translate-x-20 -translate-y-20 group-hover:scale-110 transition-transform duration-700"></div>
+                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-blue-500/15 to-transparent rounded-full transform translate-x-12 translate-y-12 group-hover:scale-125 transition-transform duration-700"></div>
+                </>
+              )}
+
+              {/* Card Content */}
+              <div className="relative z-10">
+                <div className="flex items-center mb-6">
+                  <div
+                    className={`p-3 rounded-2xl shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-110 ${
+                      index === 0 ? 'bg-blue-500 group-hover:bg-blue-600' : 'bg-blue-600 group-hover:bg-blue-700'
+                    }`}
+                  >
+                    {index === 0 ? <Star className="w-8 h-8 text-white" /> : <Target className="w-8 h-8 text-white" />}
                   </div>
+                  <div className="ml-4">
+                    <span
+                      className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
+                        index === 0 ? 'bg-blue-100 text-blue-700 border-blue-200/50' : 'bg-blue-200 text-blue-800 border-blue-300/50'
+                      }`}
+                    >
+                      {index === 0 ? 'VISI' : 'MISI'}
+                    </span>
                   </div>
-                  <CardTitle className="text-xl font-bold text-gray-800">{dept.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base text-gray-600 leading-relaxed mb-6">
-                    {dept.short_name}
-                  </CardDescription>
-                  <Button className="w-30 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-700 hover:to-gray-100 text-blue-900 font-semibold transition-all duration-300">
-                    Pelajari
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Himpunan Mahasiswa Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#1E3A8A] mb-4">Himpunan Mahasiswa</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Organisasi mahasiswa berdasarkan program studi di Institut Teknologi Del
-            </p>
-          </div>
-
-          {/* Grid Himpunan */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {himpunans.map((hmj, index) => (
-              <Card key={index} className="flex items-center p-6 hover:shadow-lg transition-shadow duration-300">
-                <div className="flex-shrink-0">
-                  <div className="flex-shrink-0">
-                  <img
-                    src={`http://localhost:8080/associations/${hmj.image}`}
-                    alt={hmj.name}
-                    className="w-24 h-24 rounded-full object-contain"
-                  />
                 </div>
+
+                <h3 className="text-3xl font-bold text-gray-900 mb-6 transition-colors group-hover:text-blue-900">
+                  {index === 0 ? 'Visi Kami' : 'Misi Kami'}
+                </h3>
+
+                <div className="space-y-4">
+                  <p className="text-gray-700 text-lg leading-relaxed font-medium">
+                    {index === 0
+                      ? (
+                        <>Menjadi organisasi mahasiswa yang <span className="text-blue-600 font-semibold">unggul</span>, <span className="text-blue-700 font-semibold">inovatif</span>, dan <span className="text-blue-800 font-semibold">berkomitmen</span> dalam mengembangkan potensi mahasiswa untuk berkontribusi positif bagi masyarakat dan bangsa.</>
+                      )
+                      : (
+                        <>Menjadi organisasi mahasiswa yang unggul, inovatif, dan berkomitmen dalam mengembangkan potensi mahasiswa <span className="text-blue-600 font-semibold">Institut Teknologi Del</span> untuk berkontribusi positif bagi masyarakat dan bangsa.</>
+                      )
+                    }
+                  </p>
+
+                  {index === 0 ? (
+                    <div className="flex flex-wrap gap-2 mt-6">
+                      <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200/50 hover:bg-blue-100 transition-colors">Unggul</span>
+                      <span className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium border border-blue-300/50 hover:bg-blue-200 transition-colors">Inovatif</span>
+                      <span className="px-3 py-1.5 bg-blue-200 text-blue-900 rounded-full text-sm font-medium border border-blue-400/50 hover:bg-blue-300 transition-colors">Berkomitmen</span>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-3 mt-6">
+                      <div className="p-3 bg-blue-50 rounded-xl border border-blue-200/50 hover:bg-blue-100 transition-colors">
+                        <div className="text-blue-700 font-semibold text-sm mb-1">Pengembangan</div>
+                        <div className="text-gray-600 text-xs">Potensi Mahasiswa</div>
+                      </div>
+                      <div className="p-3 bg-blue-100 rounded-xl border border-blue-300/50 hover:bg-blue-200 transition-colors">
+                        <div className="text-blue-800 font-semibold text-sm mb-1">Kontribusi</div>
+                        <div className="text-gray-600 text-xs">Masyarakat & Bangsa</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="ml-6 flex-1">
-                  <CardTitle className="text-xl font-semibold mb-2">{hmj.name}</CardTitle>
-                  <CardDescription className="text-base text-gray-600 mb-4">{hmj.short_name}</CardDescription>
-                  <Button className="bg-[#3B82F6] hover:bg-blue-600 text-white">Info Lengkap</Button>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Unit Kegiatan Mahasiswa Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#1E3A8A] mb-4">Unit Kegiatan Mahasiswa</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Новости pengembangan minat dan bakat mahasiswa di berbagai bidang
-            </p>
-          </div>
-
-          {/* Grid UKM */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {ukms.map((ukm, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <div className="w-24 h-24 mx-auto mb-4">
-                    <img
-                      src={`http://localhost:8080/clubs/${ukm.image}`}
-                      alt={ukm.name}
-                      className="w-full h-full object-contain rounded-full"
-                    />
-                  </div>
-                  <CardTitle className="text-xl font-semibold">{ukm.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-relaxed mb-4">
-                    {ukm.short_name}
-                  </CardDescription>
-                  <Button className="bg-[#2563EB] hover:bg-blue-600 text-white">Bergabung</Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* News & Announcements */}
-       <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Latest News & Updates</h2>
-              <p className="text-xl text-gray-600">Stay updated with our latest activities and announcements</p>
+              </div>
             </div>
-            <Button variant="outline" className="hidden md:flex items-center">
+          </motion.div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+    {/* News & Announcements - TV News Style */}
+      <section className="relative py-24 bg-blue-600 overflow-hidden rounded-t-[2rem]">
+        {/* TV Screen Background Pattern */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-blue-600"></div>
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25px 25px, rgba(255,255,255,0.1) 2px, transparent 0), 
+                             radial-gradient(circle at 75px 75px, rgba(255,255,255,0.05) 2px, transparent 0)`,
+            backgroundSize: '100px 100px'
+          }}></div>
+          
+          {/* Animated Elements */}
+          <div className="absolute top-20 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-blue-300/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Breaking News Style Header */}
+          <div className="text-center mb-16">
+          
+
+            {/* Main Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-6"
+            >
+              <h2 className="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
+                HOT NEWS
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-white mx-auto rounded-full"></div>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed"
+            >
+              Bringing you the latest updates, announcements, and breaking news from Institut Teknologi Del
+            </motion.p>
+          </div>
+
+          {/* News Navigation Bar */}
+          <div className="flex justify-between items-center mb-12 bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border border-white/20">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-white">
+                <TrendingUp className="w-5 h-5 text-blue-300" />
+                <span className="font-semibold">Trending Now</span>
+              </div>
+              <div className="hidden md:flex items-center gap-2 text-blue-200">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm">Updated 5 minutes ago</span>
+              </div>
+            </div>
+            <Button 
+              variant="outline" 
+              className="hidden md:flex items-center bg-white/10 border-white/30 text-white hover:bg-white/20 transition-all duration-300"
+            >
               View All <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* News Cards Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {recentNews.map((news, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className={`hover:shadow-lg transition-shadow duration-300 ${
-                  news.featured ? 'md:col-span-2 lg:col-span-1' : ''
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`group cursor-pointer ${
+                  news.featured ? 'lg:col-span-2 lg:row-span-2' : ''
                 }`}
               >
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="secondary" className="bg-[#3B82F6]/10 text-[#3B82F6]">
-                      {news.category}
-                    </Badge>
-                    {news.featured && <Badge className="bg-[#3B82F6]">Featured</Badge>}
-                  </div>
-                  <CardTitle className="text-xl hover:text-[#3B82F6] transition-colors cursor-pointer">
-                    {news.title}
-                  </CardTitle>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    {news.date}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base leading-relaxed">
-                    {news.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+                <Card className={`relative overflow-hidden bg-white/95 backdrop-blur-sm border-0 shadow-2xl transition-all duration-500 hover:shadow-blue-900/20 hover:scale-105 ${
+                  news.featured 
+                    ? 'min-h-[500px]' 
+                    : 'min-h-[350px]'
+                }`}>
+                  {/* Overlay Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                  
+                  {/* Play Button Overlay for Featured */}
+                  {news.featured && (
+                    <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 group-hover:scale-110 transition-transform">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                  )}
+
+                  <CardHeader className={`relative z-10 ${news.featured ? 'p-8' : 'p-6'}`}>
+                    {/* Top Meta Info */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <Badge 
+                          className={`font-semibold text-xs tracking-wider shadow-lg ${
+                            news.category === 'Announcement' 
+                              ? 'bg-red-500 hover:bg-red-600' 
+                              : news.category === 'Event'
+                              ? 'bg-green-500 hover:bg-green-600'
+                              : 'bg-blue-500 hover:bg-blue-600'
+                          }`}
+                        >
+                          {news.category.toUpperCase()}
+                        </Badge>
+                        {news.featured && (
+                          <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg">
+                            <Star className="w-3 h-3 mr-1" />
+                            FEATURED
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 text-blue-600">
+                        <Zap className="w-4 h-4" />
+                      </div>
+                    </div>
+
+                    {/* News Title */}
+                    <CardTitle className={`font-black text-gray-900 leading-tight group-hover:text-blue-900 transition-colors duration-300 ${
+                      news.featured ? 'text-3xl mb-4' : 'text-xl mb-3'
+                    }`}>
+                      {news.title}
+                    </CardTitle>
+
+                    {/* Date and Time */}
+                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{new Date(news.date).toLocaleDateString('id-ID', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        })}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {/* <span>{news.readTime}</span> */}
+                      </div>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className={`relative z-10 ${news.featured ? 'px-8 pb-8' : 'px-6 pb-6'}`}>
+                    {/* News Description */}
+                    <CardDescription className={`text-gray-700 leading-relaxed mb-6 ${
+                      news.featured ? 'text-lg' : 'text-base'
+                    }`}>
+                      {news.description}
+                    </CardDescription>
+
+                    {/* Bottom Meta */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Eye className="w-4 h-4" />
+                        {/* <span>{news.views.toLocaleString()} views</span> */}
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 font-semibold"
+                      >
+                        Read More
+                        <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
 
-          <div className="text-center mt-8 md:hidden">
-            <Button variant="outline" className="flex items-center mx-auto">
-              View All News <ArrowRight className="w-4 h-4 ml-2" />
+          {/* Bottom CTA for Mobile */}
+          <div className="text-center mt-12 md:hidden">
+            <Button 
+              className="bg-white text-blue-900 hover:bg-blue-50 font-bold px-8 py-3 rounded-full shadow-lg"
+            >
+              View All News
+              <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
+          </div>
+
+          {/* Ticker Tape Effect */}
+          <div className="mt-16 bg-white/10 backdrop-blur-md rounded-full py-3 px-6 border border-white/20 overflow-hidden">
+            <div className="flex items-center gap-8 animate-marquee whitespace-nowrap">
+              <span className="text-white font-semibold">🔥 BREAKING:</span>
+              <span className="text-blue-200">Pendaftaran anggota baru BEM IT Del dibuka hingga 30 September</span>
+              <span className="text-white">•</span>
+              <span className="text-blue-200">Kompetisi programming antar jurusan akan dimulai bulan depan</span>
+              <span className="text-white">•</span>
+              <span className="text-blue-200">Workshop AI dan Machine Learning gratis untuk semua mahasiswa</span>
+            </div>
           </div>
         </div>
       </section>
