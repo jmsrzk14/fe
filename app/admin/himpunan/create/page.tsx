@@ -76,17 +76,23 @@ export default function HimpunanCreatePage() {
 
   // Helper function to strip HTML and get text length
   const getTextLength = (html: string) => {
-    const tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-    return tmp.textContent?.length || tmp.innerText?.length || 0;
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent?.length || tmp.innerText?.length || 0;
+    }
+    return 0; // default saat server render
   };
 
-  // Helper function to strip HTML for preview
   const stripHtml = (html: string) => {
-    const tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || "";
+    }
+    return ""; // default saat server render
   };
+
 
   const handleChange = (key: keyof FormData, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -158,19 +164,19 @@ export default function HimpunanCreatePage() {
       getTextLength(formData.misi) < 50
     ) {
       Swal.fire({
-              toast: true,
-              position: "top-end",
-              icon: "error",
-              title: "Minimal 50 karakter!",
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-              background: "#fff",
-              didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-              },
-            });
+        toast: true,
+        position: "top-end",
+        icon: "error",
+        title: "Minimal 50 karakter!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
       return;
     }
 
@@ -236,7 +242,7 @@ export default function HimpunanCreatePage() {
       } else {
         setError(
           error.response?.data?.message ||
-            "Terjadi kesalahan saat menyimpan data."
+          "Terjadi kesalahan saat menyimpan data."
         );
       }
     } finally {
@@ -546,68 +552,68 @@ export default function HimpunanCreatePage() {
               formData.visi ||
               formData.misi ||
               formData.nilai) && (
-              <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
-                <div className="bg-blue-600 p-4">
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <CheckCircle2 size={20} />
-                    Preview
-                  </h3>
-                </div>
-                <div className="p-6 space-y-4">
-                  {previewImage && (
-                    <div className="text-center">
-                      <img
-                        src={previewImage}
-                        alt="Logo Preview"
-                        className="w-24 h-24 object-cover rounded-xl mx-auto border-2 border-blue-200 shadow-md"
-                      />
-                    </div>
-                  )}
-                  {formData.nama && (
-                    <div className="text-center">
-                      <h4 className="font-bold text-blue-900 text-lg">
-                        {formData.nama}
-                      </h4>
-                      {formData.namaSingkat && (
-                        <p className="text-blue-600 font-medium text-sm mt-1">
-                          ({formData.namaSingkat})
+                <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
+                  <div className="bg-blue-600 p-4">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                      <CheckCircle2 size={20} />
+                      Preview
+                    </h3>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    {previewImage && (
+                      <div className="text-center">
+                        <img
+                          src={previewImage}
+                          alt="Logo Preview"
+                          className="w-24 h-24 object-cover rounded-xl mx-auto border-2 border-blue-200 shadow-md"
+                        />
+                      </div>
+                    )}
+                    {formData.nama && (
+                      <div className="text-center">
+                        <h4 className="font-bold text-blue-900 text-lg">
+                          {formData.nama}
+                        </h4>
+                        {formData.namaSingkat && (
+                          <p className="text-blue-600 font-medium text-sm mt-1">
+                            ({formData.namaSingkat})
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    {formData.visi && (
+                      <div className="bg-blue-50 rounded-lg p-4">
+                        <p className="text-blue-700 text-sm leading-relaxed">
+                          <strong>Visi:</strong>{" "}
+                          {stripHtml(formData.visi).length > 100
+                            ? stripHtml(formData.visi).substring(0, 100) + "..."
+                            : stripHtml(formData.visi)}
                         </p>
-                      )}
-                    </div>
-                  )}
-                  {formData.visi && (
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
-                        <strong>Visi:</strong>{" "}
-                        {stripHtml(formData.visi).length > 100
-                          ? stripHtml(formData.visi).substring(0, 100) + "..."
-                          : stripHtml(formData.visi)}
-                      </p>
-                    </div>
-                  )}
-                  {formData.misi && (
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
-                        <strong>Misi:</strong>{" "}
-                        {stripHtml(formData.misi).length > 100
-                          ? stripHtml(formData.misi).substring(0, 100) + "..."
-                          : stripHtml(formData.misi)}
-                      </p>
-                    </div>
-                  )}
-                  {formData.nilai && (
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <p className="text-blue-700 text-sm leading-relaxed">
-                        <strong>Values:</strong>{" "}
-                        {stripHtml(formData.nilai).length > 100
-                          ? stripHtml(formData.nilai).substring(0, 100) + "..."
-                          : stripHtml(formData.nilai)}
-                      </p>
-                    </div>
-                  )}
+                      </div>
+                    )}
+                    {formData.misi && (
+                      <div className="bg-blue-50 rounded-lg p-4">
+                        <p className="text-blue-700 text-sm leading-relaxed">
+                          <strong>Misi:</strong>{" "}
+                          {stripHtml(formData.misi).length > 100
+                            ? stripHtml(formData.misi).substring(0, 100) + "..."
+                            : stripHtml(formData.misi)}
+                        </p>
+                      </div>
+                    )}
+                    {formData.nilai && (
+                      <div className="bg-blue-50 rounded-lg p-4">
+                        <p className="text-blue-700 text-sm leading-relaxed">
+                          <strong>Values:</strong>{" "}
+                          {stripHtml(formData.nilai).length > 100
+                            ? stripHtml(formData.nilai).substring(0, 100) + "..."
+                            : stripHtml(formData.nilai)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Progress Card */}
             <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
@@ -694,7 +700,7 @@ export default function HimpunanCreatePage() {
                         (getTextLength(formData.misi) >= 50 ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
                         5) *
-                        100
+                      100
                     )}
                     %
                   </span>
@@ -703,15 +709,14 @@ export default function HimpunanCreatePage() {
                   <div
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${
-                        (((formData.nama ? 1 : 0) +
+                      width: `${(((formData.nama ? 1 : 0) +
                           (formData.namaSingkat ? 1 : 0) +
                           (getTextLength(formData.visi) >= 50 ? 1 : 0) +
                           (getTextLength(formData.misi) >= 50 ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
                           5) *
                         100
-                      }%`,
+                        }%`,
                     }}
                   ></div>
                 </div>
