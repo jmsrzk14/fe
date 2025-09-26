@@ -9,13 +9,13 @@ interface Mahasiswa {
   full_name: string;
   study_program: string;
   year_enrolled: number;
+  user_id: number;
   current_role?: string;
   current_category?: string;
   current_organization_id?: number;
   current_organization_shortname?: string;
   current_position_title?: string;
   period?: string;
-  user_id: number;
 }
 
 interface ApiResponse {
@@ -434,9 +434,9 @@ const TableContainer: React.FC = () => {
   };
 
   // Assign role to student - UPDATED to include period parameter
-  const assignRole = async (studentId: number, role: string, category: string, period: string, organizationId?: number, organizationShortname?: string, positionTitle?: string) => {
+  const assignRole = async (studentId: number, role: string, category: string, period: string, organizationId?: number, organizationShortname?: string, positionTitle?: string, userId: number) => {
     const token = sessionStorage.getItem("token");
-    setAssigningRole(studentId);
+    setAssigningRole(userId);
 
     try {
       const requestBody: any = { 
@@ -444,7 +444,8 @@ const TableContainer: React.FC = () => {
         role, 
         category,
         period, // Added period to the request body
-        position_title: positionTitle || role // Use provided position title or fallback to role
+        position_title: positionTitle || role, // Use provided position title or fallback to role
+        userId
       };
       if (organizationId) {
         requestBody.organization_id = organizationId;
@@ -453,7 +454,7 @@ const TableContainer: React.FC = () => {
 
       console.log("Role yang dikirim:", requestBody);
 
-      const response = await fetch(`http://localhost:8080/api/admin/students/${studentId}/assign`, {
+      const response = await fetch(`http://localhost:8080/api/admin/students/${userId}/assign`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -661,7 +662,7 @@ const TableContainer: React.FC = () => {
                                       alert('Silakan pilih periode terlebih dahulu!');
                                       return;
                                     }
-                                    assignRole(student.id, role.value, category.id, selectedPeriod, undefined, undefined, role.label);
+                                    assignRole(student.id, role.value, category.id, selectedPeriod, undefined, undefined, role.label, student.user_id);
                                     onClose();
                                   }}
                                   disabled={assigningRole === student.id || !selectedPeriod}
@@ -720,7 +721,7 @@ const TableContainer: React.FC = () => {
                                                 alert('Silakan pilih periode terlebih dahulu!');
                                                 return;
                                               }
-                                              assignRole(student.id, role.value, category.id, selectedPeriod, organization.id, organization.shortname || organization.name, role.label);
+                                              assignRole(student.id, role.value, category.id, selectedPeriod, organization.id, organization.shortname || organization.name, role.label, student.user_id);
                                               onClose();
                                             }}
                                             disabled={assigningRole === student.id || !selectedPeriod}
