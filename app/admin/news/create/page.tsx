@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
@@ -17,7 +18,6 @@ import {
   Star,
   Zap,
 } from "lucide-react";
-import ReactQuill from "react-quill";
 interface FormData {
   title: string;
   content: string;
@@ -25,6 +25,7 @@ interface FormData {
   gambar: File | null;
 }
 import Swal from "sweetalert2";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 export default function MahasiswaCreatePage() {
   const router = useRouter();
