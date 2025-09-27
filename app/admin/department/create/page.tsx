@@ -54,7 +54,11 @@ export default function MahasiswaCreatePage() {
   ];
 
   const getTextLength = (html: string) => {
-    return stripHtml(html).length;
+    if (!html) return 0;
+    if (typeof document === "undefined") return 0;
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent?.trim().length || 0;
   };
   const router = useRouter();
   const [formData, setFormData] = useState<DepartmentForm>({

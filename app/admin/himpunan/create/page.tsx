@@ -75,14 +75,21 @@ export default function HimpunanCreatePage() {
   ];
 
   // Helper function to strip HTML and get text length
-  const stripHtml = (html: string) => {
-    return html.replace(/<[^>]*>?/gm, ""); 
-  };
-
   const getTextLength = (html: string) => {
-    return stripHtml(html).length;
+    if (typeof document !== "undefined") {
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent?.length || tmp.innerText?.length || 0;
+    }
+    return 0; // default saat server render
   };
 
+  const stripHtml = (html: string) => {
+    if (!html) return "";
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
 
 
   const handleChange = (key: keyof FormData, value: string | File | null) => {
