@@ -29,11 +29,36 @@ interface ApiResponse {
   data: Himpunan[];
 }
 
+// Tambahkan tipe untuk UKM
+interface Ukm {
+  id: number;
+  name: string;
+  short_name: string;
+  image: string;
+  vision?: string;
+  mission?: string;
+  values?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface ApiResponseUkm {
+  status: string;
+  message: string;
+  data: Ukm[];
+}
+
 export default function OrganizationPage() {
   const [himpunan, setHimpunan] = useState<Himpunan[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+
+  // UKM state
+  const [ukm, setUkm] = useState<Ukm[]>([]);
+  const [loadingUkm, setLoadingUkm] = useState(true);
+  const [errorUkm, setErrorUkm] = useState<string | null>(null);
+  const [retryCountUkm, setRetryCountUkm] = useState(0);
 
   const fetchHimpunanData = async () => {
     try {
@@ -61,9 +86,39 @@ export default function OrganizationPage() {
     }
   };
 
+  // Fetch UKM data (mirip dengan himpunan)
+  const fetchUkmData = async () => {
+    try {
+      setLoadingUkm(true);
+      setErrorUkm(null);
+
+      const response = await fetch('http://localhost:8080/api/ukm', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result: ApiResponseUkm = await response.json();
+      setUkm(result.data);
+    } catch (err) {
+      console.error('Error fetching ukm data:', err);
+      setErrorUkm(err instanceof Error ? err.message : 'Terjadi kesalahan saat memuat data UKM');
+    } finally {
+      setLoadingUkm(false);
+    }
+  };
+
   useEffect(() => {
     fetchHimpunanData();
   }, [retryCount]);
+
+  // jalankan fetch UKM sendiri sehingga bisa retry independen
+  useEffect(() => {
+    fetchUkmData();
+  }, [retryCountUkm]);
 
   // Loading Component
   const LoadingState = () => (
@@ -95,6 +150,43 @@ export default function OrganizationPage() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setRetryCount(prev => prev + 1)} // Trigger refetch on click
+        className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
+      >
+        <RefreshCw className="w-4 h-4 mr-2" />
+        Coba Lagi
+      </motion.button>
+    </div>
+  );
+
+  // Loading/Error untuk UKM (sama gaya, tapi menggunakan state ukm)
+  const LoadingUkmState = () => (
+    <div className="flex flex-col items-center justify-center py-20">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full mb-6"
+      />
+      <h3 className="text-xl font-semibold text-gray-700 mb-2">Memuat Data UKM</h3>
+      <p className="text-gray-500">Sedang mengambil informasi terbaru...</p>
+    </div>
+  );
+
+  const ErrorUkmState = () => (
+    <div className="flex flex-col items-center justify-center py-20">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", duration: 0.6 }}
+        className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6"
+      >
+        <AlertCircle className="w-8 h-8 text-red-600" />
+      </motion.div>
+      <h3 className="text-xl font-semibold text-gray-700 mb-2">Gagal Memuat Data UKM</h3>
+      <p className="text-gray-500 mb-6 text-center max-w-md">{errorUkm}</p>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setRetryCountUkm(prev => prev + 1)} // Trigger refetch UKM on click
         className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200"
       >
         <RefreshCw className="w-4 h-4 mr-2" />
@@ -250,6 +342,76 @@ export default function OrganizationPage() {
           </div>
         )}
       </div>
+
+      {/* Tambahkan section UKM di bawah Himpunan dengan tampilan sama */}
+      <div className="relative min-h-[50vh] bg-gradient-to-r from-[#F9FBFF] to-[#E9F5FF] overflow-hidden px-16 py-16 mt-8">
+        <div className='flex flex-col items-center'>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className={`${viga.className} text-[3.0em] font-bold text-transparent font-bold bg-clip-text bg-gradient-to-r from-blue-800 to-blue-400`}
+          >
+            Unit Kegiatan Mahasiswa (UKM)
+          </motion.h1>
+          <p className='mt-4 w-[30em] text-xl mb-6'>
+            Unit kegiatan mahasiswa pengembangan minat, bakat dan bidang non-akademik.
+          </p>
+          <div className="w-40 h-1 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(0,200,255,0.8)] mb-[3em]"></div>
+        </div>
+
+        {loadingUkm ? (
+          <LoadingUkmState />
+        ) : errorUkm && ukm.length === 0 ? (
+          <ErrorUkmState />
+        ) : (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+            {ukm.map((item, idx) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="shadow-lg hover:shadow-2xl transition duration-300 rounded-2xl bg-white border border-gray-100 h-full">
+                  <CardHeader className="flex flex-col items-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="p-4 rounded-lg mb-4 flex items-center justify-center"
+                    >
+                      <img 
+                        src={`http://localhost:8080/clubs/${item.image}`} 
+                        alt={`Logo ${item.image}`}
+                        className="w-24 h-24 object-contain rounded-full"
+                      />
+                    </motion.div>
+                    <CardTitle className="text-xl font-bold">{item.name}</CardTitle>
+                    <CardDescription className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                      {item.short_name}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center flex-1 flex flex-col">
+                    <Progress className="mb-4 w-[7em] h-2 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 shadow-[0_0_15px_rgba(0,200,255,0.8)] mx-auto" />
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-2 px-4 bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition"
+                      onClick={() => {
+                        console.log('View UKM detail for:', item.name);
+                      }}
+                    >
+                      Lihat Detail
+                    </motion.button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }
