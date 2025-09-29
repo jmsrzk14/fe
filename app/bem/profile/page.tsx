@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { User, Mail, BookOpen, Calendar, Shield, Camera, Linkedin, MessageCircle, Instagram, Save, Edit2 } from "lucide-react";
+import { User, Mail, BookOpen, Calendar, Shield, Camera, Linkedin, MessageCircle, Instagram, Save, Edit2, Crown } from "lucide-react";
 import axios from "axios";
+import EditSocialModal from "@/components/layout/EditProfil";
+
 
 interface UserProfile {
   user_id: string;
@@ -14,14 +16,19 @@ interface UserProfile {
   status: string;
   image: File | null;
   linkedin: string;
-  wa: string;
-  ig: string;
+  whatsapp: string;
+  instagram: string;
+  position: string;
+  organization?: {
+    name: string;
+  };
 }
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isSocialModalOpen, setSocialModalOpen] = useState(false);
 
   const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
 
@@ -110,7 +117,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <button
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={() => setSocialModalOpen(true)}
               className={`relative flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 overflow-hidden group animate-bounce-in hover-glow ${isEditing
                 ? 'bg-yellow-500 text-white hover:bg-yellow-600 shadow-lg animate-wiggle'
                 : 'bg-gradient-to-r from-yellow-400 via-blue-500 to-indigo-700 text-white hover:from-yellow-500 hover:to-indigo-800 shadow-lg hover:shadow-yellow-400/20 animate-rainbow'
@@ -154,7 +161,11 @@ export default function ProfilePage() {
                           />
                         ) : (
                           <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center text-white text-xl font-bold shadow-inner">
-                            {profile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            <img
+                              src={`http://localhost:8080/users/${profile.image}`}
+                              alt="Profile"
+                              className="w-full h-full rounded-full object-cover"
+                            />
                           </div>
                         )}
                       </div>
@@ -292,6 +303,34 @@ export default function ProfilePage() {
                         type="text"
                         value={profile.nim}
                         onChange={(e) => handleInputChange("nim", e.target.value)}
+                        disabled={!isEditing}
+                        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${isEditing
+                          ? 'border-purple-200 bg-white focus:border-purple-300 focus:ring-4 focus:ring-purple-100 hover:border-purple-250'
+                          : 'border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 text-neutral-600'
+                          }`}
+                        placeholder="Contoh: 11S21001"
+                      />
+                      {isEditing && (
+                        <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-purple-400 to-pink-500 rounded-r-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Jabatan */}
+                  <div className="group">
+                    <label className="block text-sm font-semibold text-neutral-700 mb-3 flex items-center gap-2">
+                      <div className="p-1 bg-gradient-to-br from-yellow-500 to-orange-500 rounded">
+                        <Crown size={14} className="text-white" />
+                      </div>
+                      Jabatan
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={profile.organization
+                          ? `${profile.position.replace('_', ' ')}`.toUpperCase()
+                          : profile.position.replace('_', ' ').toUpperCase()}
+                        onChange={(e) => handleInputChange("position", e.target.value)}
                         disabled={!isEditing}
                         className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${isEditing
                           ? 'border-purple-200 bg-white focus:border-purple-300 focus:ring-4 focus:ring-purple-100 hover:border-purple-250'
@@ -459,8 +498,8 @@ export default function ProfilePage() {
                         <div className="relative">
                           <input
                             type="tel"
-                            value={profile.wa}
-                            onChange={(e) => handleInputChange("wa", e.target.value)}
+                            value={profile.whatsapp}
+                            onChange={(e) => handleInputChange("whatsapp", e.target.value)}
                             disabled={!isEditing}
                             className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${isEditing
                               ? 'border-green-200 bg-white focus:border-green-400 focus:ring-4 focus:ring-green-100 hover:border-green-300'
@@ -485,8 +524,8 @@ export default function ProfilePage() {
                         <div className="relative">
                           <input
                             type="text"
-                            value={profile.ig}
-                            onChange={(e) => handleInputChange("ig", e.target.value)}
+                            value={profile.instagram}
+                            onChange={(e) => handleInputChange("instagram", e.target.value)}
                             disabled={!isEditing}
                             className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none ${isEditing
                               ? 'border-blue-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 hover:border-blue-300'
@@ -531,117 +570,158 @@ export default function ProfilePage() {
       </div>
       {/* Modern CSS Styling */}
       <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          
+          @keyframes slideInLeft {
+            from {
+              opacity: 0;
+              transform: translateX(-30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
           }
-        }
-        
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
+          
+          @keyframes slideInRight {
+            from {
+              opacity: 0;
+              transform: translateX(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateX(0);
+          
+          @keyframes float {
+            0%, 100% {
+              transform: translateY(0px);
+            }
+            50% {
+              transform: translateY(-10px);
+            }
           }
-        }
-        
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
+          
+          @keyframes shimmer {
+            0% {
+              background-position: -200% 0;
+            }
+            100% {
+              background-position: 200% 0;
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateX(0);
+          
+          @keyframes pulse {
+            0%, 100% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.8;
+            }
           }
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
+          
+          .animate-fade-up {
+            animation: fadeInUp 0.6s ease-out;
           }
-          50% {
-            transform: translateY(-10px);
+          
+          .animate-slide-left {
+            animation: slideInLeft 0.7s ease-out;
           }
-        }
-        
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
+          
+          .animate-slide-right {
+            animation: slideInRight 0.7s ease-out;
           }
-          100% {
-            background-position: 200% 0;
+          
+          .animate-float {
+            animation: float 6s ease-in-out infinite;
           }
-        }
-        
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
+          
+          .animate-pulse-soft {
+            animation: pulse 3s ease-in-out infinite;
           }
-          50% {
-            opacity: 0.8;
+          
+          .shimmer-effect {
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.2),
+              transparent
+            );
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
           }
-        }
-        
-        .animate-fade-up {
-          animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .animate-slide-left {
-          animation: slideInLeft 0.7s ease-out;
-        }
-        
-        .animate-slide-right {
-          animation: slideInRight 0.7s ease-out;
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        .animate-pulse-soft {
-          animation: pulse 3s ease-in-out infinite;
-        }
-        
-        .shimmer-effect {
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
-          );
-          background-size: 200% 100%;
-          animation: shimmer 2s infinite;
-        }
-        
-        .glass-effect {
-          backdrop-filter: blur(10px);
-          background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .hover-lift {
-          transition: all 0.3s ease;
-        }
-        
-        .hover-lift:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .gradient-border {
-          background: linear-gradient(45deg, #3b82f6, #f59e0b, #3b82f6);
-          background-size: 200% 200%;
-          animation: shimmer 3s ease infinite;
-        }
-      `}</style>
+          
+          .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+          }
+          
+          .hover-lift {
+            transition: all 0.3s ease;
+          }
+          
+          .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          }
+          
+          .gradient-border {
+            background: linear-gradient(45deg, #3b82f6, #f59e0b, #3b82f6);
+            background-size: 200% 200%;
+            animation: shimmer 3s ease infinite;
+          }
+        `}</style>
+
+        <EditSocialModal
+          isOpen={isSocialModalOpen}
+          onClose={() => setSocialModalOpen(false)}
+          profile={profile}
+          onSave={async (updated) => {
+            try {
+              const token = sessionStorage.getItem("token");
+              const formData = new FormData();
+
+              formData.append("linkedin", updated.linkedin || "");
+              formData.append("instagram", updated.instagram || "");
+              formData.append("whatsapp", updated.whatsapp || "");
+              if (updated.imageFile) {
+                formData.append("image", updated.imageFile);
+              }
+
+              formData.forEach((value, key) => {
+                console.log(`${key}:`, value);
+              });
+
+              const res = await axios.put(
+                `http://localhost:8080/api/student/profile`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              );
+
+              setProfile((prev) => ({
+                ...prev,
+                ...res.data, // backend balikin data terbaru
+              }));
+            } catch (err) {
+              console.error("Gagal update profile:", err);
+            }
+          }}
+        />
     </div>
   );
-}
+} 

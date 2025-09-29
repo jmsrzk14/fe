@@ -101,20 +101,13 @@ export default function HeroSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-            className="flex flex-col sm:flex-row justify-center lg:justify-end items-center gap-6 sm:gap-8"
+            className="flex flex-col sm:flex-row justify-center lg:justify-center items-center gap-6 sm:gap-8"
           >
             <Image
               src="/bem.png"
               alt="BEM IT DEL Logo"
-              width={200}
-              height={200}
-              className="rounded-2xl shadow-xl"
-            />
-            <Image
-              src="/pakkail.png"
-              alt="Logo Tambahan"
-              width={180}
-              height={180}
+              width={300}
+              height={300}
               className="rounded-2xl shadow-xl"
             />
           </motion.div>

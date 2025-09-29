@@ -15,6 +15,8 @@ export default function HomePage() {
   const [himpunans, setHimpunans] = useState<any[]>([]);
   const [ukms, setUkms] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
+  const [visi, setVisi] = useState<string>("");
+  const [misi, setMisi] = useState<string>("");
 
   const recentNews = [
     {
@@ -63,29 +65,18 @@ export default function HomePage() {
   ];
 
   useEffect(() => {
-    // Fetch Departments
-    fetch('http://localhost:8080/api/department')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Departments API response:', data.data);
-        setDepartments(data.data);
-      })
+    const currentYear = new Date().getFullYear() - 2;
+    const nextYear = currentYear + 1;
+    const period = `${currentYear}-${nextYear}`;
 
-    // Fetch Himpunan Mahasiswa
-    fetch('http://localhost:8080/api/association')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Associations API response:', data.data);
-        setHimpunans(data.data);
+    // Ambil data visi & misi
+    fetch(`http://localhost:8080/api/visimisibem/${period}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setVisi(data.data.vision);
+        setMisi(data.data.mission);
       })
-
-    // Fetch UKM
-    fetch('http://localhost:8080/api/club')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Clubs API response:', data.data);
-        setUkms(data.data);
-      })
+      .catch((err) => console.error("Error fetching visi/misi:", err));
   }, []);
 
   return (
@@ -337,37 +328,12 @@ export default function HomePage() {
                         {index === 0 ? 'Visi Kami' : 'Misi Kami'}
                       </h3>
 
-                      <div className="space-y-4">
-                        <p className="text-gray-700 text-lg leading-relaxed font-medium">
-                          {index === 0
-                            ? (
-                              <>Menjadi organisasi mahasiswa yang <span className="text-blue-600 font-semibold">unggul</span>, <span className="text-blue-700 font-semibold">inovatif</span>, dan <span className="text-blue-800 font-semibold">berkomitmen</span> dalam mengembangkan potensi mahasiswa untuk berkontribusi positif bagi masyarakat dan bangsa.</>
-                            )
-                            : (
-                              <>Menjadi organisasi mahasiswa yang unggul, inovatif, dan berkomitmen dalam mengembangkan potensi mahasiswa <span className="text-blue-600 font-semibold">Institut Teknologi Del</span> untuk berkontribusi positif bagi masyarakat dan bangsa.</>
-                            )
-                          }
-                        </p>
-
-                        {index === 0 ? (
-                          <div className="flex flex-wrap gap-2 mt-6">
-                            <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200/50 hover:bg-blue-100 transition-colors">Unggul</span>
-                            <span className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium border border-blue-300/50 hover:bg-blue-200 transition-colors">Inovatif</span>
-                            <span className="px-3 py-1.5 bg-blue-200 text-blue-900 rounded-full text-sm font-medium border border-blue-400/50 hover:bg-blue-300 transition-colors">Berkomitmen</span>
-                          </div>
-                        ) : (
-                          <div className="grid grid-cols-2 gap-3 mt-6">
-                            <div className="p-3 bg-blue-50 rounded-xl border border-blue-200/50 hover:bg-blue-100 transition-colors">
-                              <div className="text-blue-700 font-semibold text-sm mb-1">Pengembangan</div>
-                              <div className="text-gray-600 text-xs">Potensi Mahasiswa</div>
-                            </div>
-                            <div className="p-3 bg-blue-100 rounded-xl border border-blue-300/50 hover:bg-blue-200 transition-colors">
-                              <div className="text-blue-800 font-semibold text-sm mb-1">Kontribusi</div>
-                              <div className="text-gray-600 text-xs">Masyarakat & Bangsa</div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      <div
+                        className="text-gray-700 text-lg leading-relaxed prose max-w-none"
+                        dangerouslySetInnerHTML={{
+                          __html: index === 0 ? visi : misi,
+                        }}
+                      />
                     </div>
                   </div>
                 </motion.div>
@@ -453,8 +419,8 @@ export default function HomePage() {
                   }`}
               >
                 <Card className={`relative overflow-hidden bg-white/95 backdrop-blur-sm border-0 shadow-2xl transition-all duration-500 hover:shadow-blue-900/20 hover:scale-105 ${news.featured
-                    ? 'min-h-[500px]'
-                    : 'min-h-[350px]'
+                  ? 'min-h-[500px]'
+                  : 'min-h-[350px]'
                   }`}>
                   {/* Overlay Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
@@ -474,10 +440,10 @@ export default function HomePage() {
                       <div className="flex items-center gap-2">
                         <Badge
                           className={`font-semibold text-xs tracking-wider shadow-lg ${news.category === 'Announcement'
-                              ? 'bg-red-500 hover:bg-red-600'
-                              : news.category === 'Event'
-                                ? 'bg-green-500 hover:bg-green-600'
-                                : 'bg-blue-500 hover:bg-blue-600'
+                            ? 'bg-red-500 hover:bg-red-600'
+                            : news.category === 'Event'
+                              ? 'bg-green-500 hover:bg-green-600'
+                              : 'bg-blue-500 hover:bg-blue-600'
                             }`}
                         >
                           {news.category.toUpperCase()}

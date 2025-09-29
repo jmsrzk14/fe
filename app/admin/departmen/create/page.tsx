@@ -20,10 +20,6 @@ export default function DepartemenCreatePage() {
   const [formData, setFormData] = useState({
     nama: "",
     namaSingkat: "",
-    visi: "",
-    misi: "",
-    rencanaKerja: "",
-    nilai: "",
     gambar: null as File | null,
   });
 
