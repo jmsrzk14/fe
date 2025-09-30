@@ -405,22 +405,39 @@ export default function ProfilePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] mt-16 bg-white bg-[url('/gd5.png')] bg-cover bg-center bg-fixed overflow-hidden">
-        {/* Background Decorative Elements */}
+      <section className="relative min-h-[80vh] mt-12 overflow-hidden">
+        {/* Video Background */}
         <div className="absolute inset-0">
-          {/* Dekorasi masih bisa kamu pakai kalau perlu */}
+          {/* Video Background */}
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="absolute w-full h-full object-cover z-0"
+            style={{ 
+              filter: 'brightness(0.9)',
+              objectPosition: 'center 60%' 
+            }}
+          >
+            <source src="/0930.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          
+          {/* Light overlay for text visibility */}
+          <div className="absolute inset-0 bg-black/20 z-[1]"></div>
         </div>
 
         {/* Main Content */}
         <div className="relative z-10 flex items-center justify-center min-h-[70vh] text-center px-6">
           <div className="max-w-5xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-black mb-6 leading-tight tracking-tight drop-shadow-md">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 leading-tight tracking-tight drop-shadow-md">
                 Profil Organisasi
               </h1>
             </div>
 
-            <p className="text-black/70 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10 font-light">
+            <p className="text-white/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10 font-light">
               Mengenal lebih dalam tentang organisasi mahasiswa yang berkomitmen
               membangun generasi unggul dan berkarakter di Institut Teknologi Del
             </p>
