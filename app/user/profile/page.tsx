@@ -243,7 +243,7 @@ export default function ProfilePage() {
       try {
         setIsLoading(true);
         // Replace with your actual API endpoint
-        const response = await fetch('http://localhost:8080/api/bems/manage/2024-2025');
+        const response = await fetch('http://localhost:9090/api/bems/manage/2024-2025');
         if (!response.ok) {
           throw new Error('Failed to fetch executive data');
         }
@@ -394,7 +394,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // Fetch Departments
-    fetch('http://localhost:8080/api/department')
+    fetch('http://localhost:9090/api/department')
       .then(response => response.json())
       .then(data => {
         console.log('Departments API response:', data.data);
@@ -652,7 +652,7 @@ export default function ProfilePage() {
                           style={{ backgroundColor: executive.color }}
                         >
                           <img
-                            src={`http://localhost:8080/users/${executive.image}`}
+                            src={`http://localhost:9090/users/${executive.image}`}
                             alt={`Logo ${executive.image}`}
                             className="w-16 h-16 object-contain"
                           />
@@ -772,7 +772,7 @@ export default function ProfilePage() {
                     <div className="relative mb-6">
                       <div className="w-40 h-40 flex items-center justify-center mx-auto rounded-full overflow-hidden">
                         <img
-                          src={`http://localhost:8080/departments/${departemen.image}`}
+                          src={`http://localhost:9090/departments/${departemen.image}`}
                           alt={`Logo ${departemen.name}`}
                           className="w-full h-full object-cover"
                         />

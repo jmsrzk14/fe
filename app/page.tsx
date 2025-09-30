@@ -70,7 +70,7 @@ export default function HomePage() {
     const period = `${currentYear}-${nextYear}`;
 
     // Ambil data visi & misi
-    fetch(`http://localhost:8080/api/visimisibem/${period}`)
+    fetch(`http://localhost:9090/api/visimisibem/${period}`)
       .then((res) => res.json())
       .then((data) => {
         setVisi(data.data.vision);

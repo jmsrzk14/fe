@@ -1,206 +1,283 @@
 "use client";
 
 import React, { useState } from "react";
-import { FileText, Upload, Link, Calendar, Save, ArrowLeft, Megaphone } from "lucide-react";
+import { useRouter } from "next/navigation";
+import axios, { AxiosError } from "axios";
+import {
+  Save,
+  ArrowLeft,
+  FileText,
+  Upload,
+  Calendar,
+  Image,
+  CheckCircle2,
+  Info,
+  Zap,
+} from "lucide-react";
 
-export default function PengumumanCreatePage() {
-  const [formData, setFormData] = useState({
-    judul: "",
-    konten: "",
-    file: null as File | null,
-    url: "",
+interface FormData {
+  title: string;
+  content: string;
+  startDate: string;
+  endDate: string;
+  file: File | null;
+}
+import Swal from "sweetalert2";
+export default function AnnouncementCreatePage() {
+  const router = useRouter();
+  const [formData, setFormData] = useState<FormData>({
+    title: "",
+    content: "",
     startDate: "",
     endDate: "",
+    file: null,
   });
+  const [previewFile, setPreviewFile] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (key: string, value: string | File | null) => {
+  const handleChange = (key: keyof FormData, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
+    setError(null);
+
+    if (key === "file" && value instanceof File) {
+      if (value.size > 5 * 1024 * 1024) {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Ukuran logo tidak boleh melebihi 5MB",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fffff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+        setFormData((prev) => ({ ...prev, file: null }));
+        setPreviewFile(null);
+        return;
+      }
+      setPreviewFile(value.name);
+    } else if (key === "file" && !value) {
+      setPreviewFile(null);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Pengumuman:", formData);
-    alert("Pengumuman berhasil ditambahkan!");
-    // router.push("/admin/pengumuman");
-  };
+    setError(null);
 
-  const handleBack = () => {
-    // router.back();
-    console.log("Navigate back");
+    if (!formData.title || !formData.content) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Semua Kolom Harus Terisi!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: "#fff",
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        setError("Anda harus login.");
+        router.push("/login");
+        return;
+      }
+
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("content", formData.content);
+      if (formData.startDate)
+        formDataToSend.append("start_date", formData.startDate);
+      if (formData.endDate) formDataToSend.append("end_date", formData.endDate);
+      if (formData.file) formDataToSend.append("file", formData.file);
+
+      const response = await axios.post(
+        "http://localhost:9090/api/student/announcements",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "success",
+          title: "Data Pengumuman berhasil ditambahkan!",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          background: "#fff",
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+        router.push("/admin/announcement");
+      }
+    } catch (err) {
+      const error = err as AxiosError<{ message?: string }>;
+      setError(error.response?.data?.message || "Terjadi kesalahan.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white p-6 md:p-10">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-4 transition-colors"
-          >
-            <ArrowLeft size={20} />
-            <span className="font-medium">Kembali</span>
-          </button>
-          
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 bg-blue-600 rounded-xl shadow-lg">
-              <Megaphone className="text-white" size={28} />
+        <button
+          onClick={() => router.push("/admin/announcement")}
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-6 transition-colors group"
+          disabled={isSubmitting}
+        >
+          <ArrowLeft
+            size={20}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          <span className="font-medium">Kembali ke Data Announcement</span>
+        </button>
+
+        <div className="flex items-center gap-4 mb-6">
+          <div className="relative">
+            <div className="p-4 bg-blue-600 rounded-2xl shadow-lg">
+              <FileText className="text-white" size={32} />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">Tambah Pengumuman</h1>
-              <p className="text-gray-600">Buat pengumuman baru untuk dipublikasikan</p>
+            <div className="absolute -top-1 -right-1 p-1 bg-white rounded-full shadow-md">
+              <Zap size={16} className="text-blue-600" />
             </div>
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-blue-900">
+              Tambah Announcement
+            </h1>
+            <p className="text-blue-600">
+              Buat pengumuman baru untuk mahasiswa
+            </p>
           </div>
         </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
-            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-              <FileText size={24} />
-              Detail Pengumuman
-            </h2>
+        {error && (
+          <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-xl text-red-700">
+            {error}
           </div>
-          
-          <div className="p-8 space-y-8">
-            {/* Judul */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <FileText size={18} className="text-blue-600" />
-                Judul Pengumuman
+        )}
+
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-3xl shadow-2xl border border-blue-100 p-8 space-y-6"
+        >
+          {/* Title */}
+          <div>
+            <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
+              <FileText size={18} className="text-blue-600" /> Judul
+            </label>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => handleChange("title", e.target.value)}
+              className="w-full border border-blue-200 rounded-xl px-4 py-3 mt-2 focus:border-blue-500 focus:ring focus:ring-blue-100 outline-none"
+              placeholder="Masukkan judul announcement"
+              disabled={isSubmitting}
+              required
+            />
+          </div>
+
+          {/* Content */}
+          <div>
+            <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
+              <FileText size={18} className="text-blue-600" /> Konten
+            </label>
+            <textarea
+              rows={6}
+              value={formData.content}
+              onChange={(e) => handleChange("content", e.target.value)}
+              className="w-full border border-blue-200 rounded-xl px-4 py-3 mt-2 focus:border-blue-500 focus:ring focus:ring-blue-100 outline-none resize-none"
+              placeholder="Tulis konten pengumuman..."
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {/* Start & End Date */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
+                <Calendar size={18} className="text-blue-600" /> Tanggal Mulai
               </label>
               <input
-                type="text"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
-                value={formData.judul}
-                onChange={(e) => handleChange("judul", e.target.value)}
-                placeholder="Masukkan judul pengumuman yang menarik"
+                type="date"
+                value={formData.startDate}
+                onChange={(e) => handleChange("startDate", e.target.value)}
+                className="w-full border border-blue-200 rounded-xl px-4 py-3 mt-2 focus:border-blue-500 focus:ring focus:ring-blue-100 outline-none"
+                disabled={isSubmitting}
               />
-            </div>
-
-            {/* Konten */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <FileText size={18} className="text-blue-600" />
-                Konten Pengumuman
-              </label>
-              <textarea
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none resize-none"
-                rows={6}
-                value={formData.konten}
-                onChange={(e) => handleChange("konten", e.target.value)}
-                placeholder="Tulis detail pengumuman di sini..."
-              />
-            </div>
-
-            {/* File Upload */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <Upload size={18} className="text-blue-600" />
-                Upload File Pendukung
-              </label>
-              <div className="relative">
-                <input
-                  type="file"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  onChange={(e) =>
-                    handleChange("file", e.target.files ? e.target.files[0] : null)
-                  }
-                />
-                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 hover:bg-blue-50 transition-all cursor-pointer">
-                  <Upload size={32} className="mx-auto text-gray-400 mb-2" />
-                  <p className="text-gray-600">
-                    {formData.file ? (
-                      <span className="text-blue-600 font-medium">
-                        File terpilih: {formData.file.name}
-                      </span>
-                    ) : (
-                      <>
-                        Klik untuk upload file atau drag & drop
-                        <br />
-                        <span className="text-sm text-gray-400">PDF, DOC, atau gambar</span>
-                      </>
-                    )}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* URL */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <Link size={18} className="text-blue-600" />
-                URL Eksternal (Opsional)
-              </label>
-              <input
-                type="url"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
-                value={formData.url}
-                onChange={(e) => handleChange("url", e.target.value)}
-                placeholder="https://contoh.com/link-terkait"
-              />
-            </div>
-
-            {/* Date Range */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <Calendar size={18} className="text-blue-600" />
-                  Tanggal Mulai
-                </label>
-                <input
-                  type="date"
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
-                  value={formData.startDate}
-                  onChange={(e) => handleChange("startDate", e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                  <Calendar size={18} className="text-blue-600" />
-                  Tanggal Selesai
-                </label>
-                <input
-                  type="date"
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
-                  value={formData.endDate}
-                  onChange={(e) => handleChange("endDate", e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="pt-6 border-t border-gray-200">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                <Save size={20} />
-                Simpan Pengumuman
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Info Card */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Megaphone size={20} className="text-blue-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-blue-800 mb-2">Tips Membuat Pengumuman Efektif</h3>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Gunakan judul yang jelas dan menarik perhatian</li>
-                <li>• Sertakan informasi penting seperti tanggal dan lokasi</li>
-                <li>• Lampirkan file pendukung jika diperlukan</li>
-                <li>• Pastikan tanggal mulai dan selesai sudah benar</li>
-              </ul>
+              <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
+                <Calendar size={18} className="text-blue-600" /> Tanggal Selesai
+              </label>
+              <input
+                type="date"
+                value={formData.endDate}
+                onChange={(e) => handleChange("endDate", e.target.value)}
+                className="w-full border border-blue-200 rounded-xl px-4 py-3 mt-2 focus:border-blue-500 focus:ring focus:ring-blue-100 outline-none"
+                disabled={isSubmitting}
+              />
             </div>
           </div>
-        </div>
+
+          {/* File Upload */}
+          <div>
+            <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
+              <Upload size={18} className="text-blue-600" /> Upload File
+              (Opsional)
+            </label>
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              onChange={(e) =>
+                handleChange("file", e.target.files ? e.target.files[0] : null)
+              }
+              disabled={isSubmitting}
+              className="mt-2"
+            />
+            {previewFile && (
+              <p className="text-sm text-blue-600 mt-2">📎 {previewFile}</p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <div className="pt-4 border-t border-blue-100">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all shadow-lg disabled:opacity-50"
+            >
+              <Save size={20} />
+              {isSubmitting ? "Menyimpan..." : "Simpan Announcement"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

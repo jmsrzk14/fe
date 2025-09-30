@@ -106,7 +106,7 @@ export default function AnnouncementCreatePage() {
       if (formData.file) formDataToSend.append("file", formData.file);
 
       const response = await axios.post(
-        "http://localhost:8080/api/admin/announcements",
+        "http://localhost:9090/api/admin/announcements",
         formDataToSend,
         {
           headers: {
