@@ -206,21 +206,16 @@ export default function OrganizationPage() {
         className="relative min-h-[60vh] overflow-hidden py-16"
       >
         <div className="absolute inset-0">
-          {/* Video Background */}
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="absolute w-full h-full object-cover z-0"
-            style={{ filter: 'brightness(0.9)' }}
-          >
-            <source src="/0930.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          {/* Static Image Background */}
+          <div 
+            className="absolute w-full h-full bg-cover bg-center z-0"
+            style={{ 
+              backgroundImage: 'url("/gd5.png")',
+              filter: 'brightness(1.1)'
+            }}
+          ></div>
           
-          {/* Light overlay for text visibility */}
-          <div className="absolute inset-0 bg-black/20 z-[1]"></div>
+          {/* No dark overlay for brighter appearance */}
         </div>
 
         {/* Main content */}
@@ -250,7 +245,7 @@ export default function OrganizationPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className={`${viga.className} text-[3.5em] font-bold text-white`}
+                className={`${viga.className} text-[3.5em] font-bold text-blue-900`}
               >
                 Organisasi Mahasiswa
               </motion.h1>
@@ -258,7 +253,7 @@ export default function OrganizationPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className={`${viga.className} text-[3.5em] font-bold text-white`}
+                className={`${viga.className} text-[3.5em] font-bold text-blue-900`}
               >
                 HIMPUNAN MAHASISWA
               </motion.h1>
@@ -267,7 +262,7 @@ export default function OrganizationPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className={`${viga.className} mt-6 w-[40em] text-xl text-white mb-[6em]`}
+                className={`${viga.className} mt-6 w-[40em] text-xl text-blue-900 mb-[6em]`}
               >
                 Wadah pengembangan akademik dan non-akademik mahasiswa sesuai dengan bidang keahlian masing-masing program studi di Institut Teknologi Del
               </motion.p>
