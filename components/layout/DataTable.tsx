@@ -12,6 +12,22 @@ interface DataTableProps {
   actionIcon?: ReactNode;
 }
 
+function stripHtml(html: string) {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+}
+
+function capitalizeFirstLetter(text: string) {
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function processText(html: string) {
+  const text = stripHtml(html);
+  return capitalizeFirstLetter(text.trim());
+}
+
 const DataTable: React.FC<DataTableProps> = ({
   data,
   fields,
@@ -225,8 +241,8 @@ const DataTable: React.FC<DataTableProps> = ({
                               {item[field.key]}
                             </span>
                           ) : (
-                            <span className="truncate block" title={item[field.key]}>
-                              {item[field.key]}
+                            <span className="truncate block" title={processText(item[field.key])}>
+                              {processText(item[field.key])}
                             </span>
                           )}
                         </div>

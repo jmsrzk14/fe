@@ -92,7 +92,7 @@ export default function OrganizationPage() {
       setLoadingUkm(true);
       setErrorUkm(null);
 
-      const response = await fetch('http://localhost:9090/api/club', {
+      const response = await fetch('http://localhost:8080/api/club', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

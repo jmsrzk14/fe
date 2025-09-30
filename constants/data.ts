@@ -106,8 +106,6 @@ himpunan: [
   
   };
 
-
-
 export const menuItems = [
   { key: "dashboard", label: "Dashboard", icon: Home, path: "/admin/dashboard" },
   { key: "mahasiswa", label: "Mahasiswa", icon: Users, path: "/admin/mahasiswa" },
@@ -117,8 +115,6 @@ export const menuItems = [
   { key: "galeri", label: "Galeri", icon: ImageIcon, path: "/admin/galery" }, 
   { key: "berita", label: "Berita", icon: Newspaper, path: "/admin/news" },
   { key: "pengumuman", label: "Pengumuman", icon: Megaphone, path: "/admin/announcement" },
-  { key: "visiMisi", label: "Visi & Misi", icon: Target, path: "/admin/visimisi" },
-  { key: "profile", label: "Profile", icon: Settings, path: "/admin/profile" },
 ];
 
 export const menuItemsbem = [

@@ -752,182 +752,73 @@ export default function ProfilePage() {
             </div>
           </div>
 
-
-          {/* Departemen-Departemen BEM IT DEL */}
           <div className="mb-20">
             <div className="text-center mb-16">
-              <h1 className="text-4xl font-bold text-[#1c44ac] mb-4">Departemen-Departemen BEM IT DEL</h1>
-              <div className="w-20 h-1 bg-[#1c44ac] mx-auto mb-6"></div>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h1 className="text-4xl font-extrabold text-[#1c44ac] mb-4 mt-12">
+                Departemen-Departemen BEM IT DEL
+              </h1>
+              <div className="w-24 h-1 bg-gradient-to-r from-[#1c44ac] to-[#3b82f6] mx-auto mb-6 rounded-full"></div>
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Mengenal lebih dekat berbagai departemen yang berperan aktif dalam memajukan kehidupan mahasiswa Institut Teknologi Del
               </p>
             </div>
 
-            {/* Departemen Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
               {departments.map((departemen) => (
-                <div key={departemen.id} className="bg-white rounded-3xl shadow-xl p-8 transform hover:scale-105 transition-all duration-300 border border-gray-100">
-                  <div className="text-center">
-                    {/* Department Icon */}
-                    <div className="relative mb-6">
-                      <div className="w-40 h-40 flex items-center justify-center mx-auto rounded-full overflow-hidden">
+                <div
+                  key={departemen.id}
+                  className="relative group bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 overflow-hidden transform hover:-translate-y-2"
+                >
+                  {/* Efek gradient animasi di background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1c44ac]/5 via-transparent to-[#3b82f6]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  {/* Efek garis gradient di atas dengan animasi */}
+                  <div className="absolute top-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r from-[#1c44ac] via-[#3b82f6] to-[#1c44ac] transition-all duration-700"></div>
+
+                  {/* Decorative circles */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-[#1c44ac]/10 to-[#3b82f6]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                  <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-gradient-to-tr from-[#3b82f6]/10 to-[#1c44ac]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+
+                  <div className="relative p-8 text-center flex flex-col items-center">
+                    {/* Department Icon dengan efek floating */}
+                    <div className="relative mb-6 animate-float">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#1c44ac] to-[#3b82f6] rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                      <div className="relative w-32 h-32 rounded-full ring-4 ring-[#e6ecff] group-hover:ring-[#1c44ac] transition-all duration-300 flex items-center justify-center overflow-hidden shadow-lg bg-white">
                         <img
                           src={`http://localhost:9090/departments/${departemen.image}`}
                           alt={`Logo ${departemen.name}`}
-                          className="w-full h-full object-cover"
+                          className="w-28 h-28 object-cover transform group-hover:scale-110 transition-all duration-500 rounded-full"
                         />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold mb-2" style={{ color: departemen.color }}>{departemen.name}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6">
+
+                    {/* Nama Departemen */}
+                    <h3
+                      className="text-2xl font-bold mb-3 group-hover:scale-105 transition-transform duration-300"
+                      style={{ color: departemen.color }}
+                    >
+                      {departemen.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed mb-6 px-2 min-h-[3rem]">
                       {departemen.short_name}
                     </p>
 
-                    <button
-                      className="bg-[#3367d6] text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
-                    >
-                      Read More
+                    {/* Divider subtle */}
+                    <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#1c44ac]/30 to-transparent mb-6 group-hover:w-24 transition-all duration-500"></div>
+
+                    {/* Tombol dengan efek lebih menarik */}
+                    <button className="relative bg-gradient-to-r from-[#3367d6] to-[#1c44ac] hover:from-[#1c44ac] hover:to-[#3367d6] text-white px-8 py-3 rounded-full font-semibold transition-all duration-500 group-hover:scale-105 shadow-lg hover:shadow-xl overflow-hidden">
+                      <span className="relative z-10 flex items-center gap-2">
+                        Selengkapnya
+                        <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                      <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></span>
                     </button>
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Pencapaian dan Prestasi Section */}
-          <div className="mb-20">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl font-bold text-[#1c44ac] mb-4">Pencapaian & Prestasi</h1>
-              <div className="w-20 h-1 bg-[#1c44ac] mx-auto mb-6"></div>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Melihat kembali prestasi dan pencapaian gemilang yang telah diraih BEM IT Del dalam periode 2024/2025
-              </p>
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 mb-12">
-              {filterData.map((filter) => (
-                <button
-                  key={filter.id}
-                  onClick={() => setActiveFilter(filter.id)}
-                  className={`px-6 py-2 rounded-full font-medium text-sm transition-all duration-300 ${activeFilter === filter.id
-                    ? 'bg-[#3b82f6] text-white hover:bg-[#2563eb]'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Pencapaian Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
-              {pencapaianData
-                .filter((pencapaian) => activeFilter === 'semua' || pencapaian.category.toLowerCase() === activeFilter)
-                .map((pencapaian) => (
-                  <div key={pencapaian.id} className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 border border-gray-100">
-                    {/* Card Header with Background */}
-                    <div
-                      className="relative h-32 p-6 flex items-center justify-between"
-                      style={{ backgroundColor: pencapaian.bgColor }}
-                    >
-                      <div>
-                        <h3 className="text-white text-2xl font-bold mb-2">{pencapaian.title}</h3>
-                        <p className="text-white/90 text-sm">{pencapaian.date}</p>
-                      </div>
-                      <div className="text-white text-3xl">{pencapaian.icon}</div>
-
-                      {/* Status Badge */}
-                      <div
-                        className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold text-white"
-                        style={{ backgroundColor: pencapaian.statusColor }}
-                      >
-                        {pencapaian.status}
-                      </div>
-
-                      {/* Bottom Right Circular Icon */}
-                      <div className="absolute bottom-4 right-4 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                          <span className="text-[#3b82f6] text-xs font-bold">ℹ</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Card Content */}
-                    <div className="p-6">
-                      <h4 className="text-lg font-bold text-gray-800 mb-2">{pencapaian.description}</h4>
-                      <div className="w-12 h-1 bg-[#3b82f6] mb-4"></div>
-                      {pencapaian.subDescription && (
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                          {pencapaian.subDescription}
-                        </p>
-                      )}
-
-                      {/* Action Icons */}
-                      <div className="flex justify-between items-center mt-6">
-                        <div className="flex space-x-3">
-                          <button className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors">
-                            <span className="text-gray-500 text-sm">👁</span>
-                          </button>
-                          <button className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors">
-                            <span className="text-gray-500 text-sm">❤</span>
-                          </button>
-                          <button className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors">
-                            <span className="text-gray-500 text-sm">📅</span>
-                          </button>
-                        </div>
-
-                        {/* Category Badge */}
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                          {pencapaian.category}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-
-          {/* Statistik Pencapaian Section */}
-          <div className="mb-20">
-            <div className="text-center mb-16">
-              <h1 className="text-4xl font-bold text-[#3b82f6] mb-4">Statistik Pencapaian</h1>
-              <div className="w-20 h-1 bg-[#3b82f6] mx-auto"></div>
-            </div>
-
-            {/* Statistik Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto mb-12">
-              {statistikData.map((statistik) => (
-                <div key={statistik.id} className="text-center">
-                  {/* Icon Container */}
-                  <div
-                    className="w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center shadow-lg"
-                    style={{ backgroundColor: statistik.bgColor }}
-                  >
-                    <span className="text-3xl">{statistik.icon}</span>
-                  </div>
-
-                  {/* Statistik Value */}
-                  <h3 className="text-4xl font-bold text-[#3b82f6] mb-2">{statistik.value}</h3>
-
-                  {/* Label */}
-                  <p className="text-gray-600 font-medium text-lg">{statistik.label}</p>
-
-                  {/* Description - Optional for hover or additional info */}
-                  <div className="mt-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-sm text-gray-500">{statistik.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Lihat Galeri Lengkap Button */}
-            <div className="text-center">
-              <button className="bg-[#3b82f6] hover:bg-[#2563eb] text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center mx-auto gap-3">
-                <span className="text-2xl">📸</span>
-                <span>Lihat Galeri Lengkap</span>
-                <span className="text-xl">→</span>
-              </button>
             </div>
           </div>
         </div>

@@ -134,7 +134,7 @@ export default function MahasiswaCreatePage() {
       formDataToSend.append("content", formData.content);
       formDataToSend.append("category", formData.category);
       if (formData.gambar) {
-        formDataToSend.append("image_url", formData.gambar);
+        formDataToSend.append("image", formData.gambar);
       }
 
       // Send to API with Authorization header
@@ -177,7 +177,7 @@ export default function MahasiswaCreatePage() {
       } else {
         setError(
           error.response?.data?.message ||
-            "Terjadi kesalahan saat menyimpan data."
+          "Terjadi kesalahan saat menyimpan data."
         );
       }
     } finally {
@@ -217,9 +217,9 @@ export default function MahasiswaCreatePage() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-blue-900">
-                Tambah Data News
+                Tambah Data Berita
               </h1>
-              <p className="text-blue-600">Buat data News mahasiswa baru</p>
+              <p className="text-blue-600">Buat data berita baru</p>
             </div>
           </div>
         </div>
@@ -237,7 +237,7 @@ export default function MahasiswaCreatePage() {
               <div className="bg-blue-600 p-6">
                 <h2 className="text-xl font-bold text-white flex items-center gap-3">
                   <Users size={24} />
-                  Informasi News
+                  Informasi Berita
                 </h2>
               </div>
 
@@ -246,14 +246,13 @@ export default function MahasiswaCreatePage() {
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Building2 size={18} className="text-blue-600" />
-                    Judul News
+                    Judul Berita
                   </label>
                   <input
                     type="text"
                     className="w-full border-2 border-blue-200 rounded-xl px-4 py-4 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all outline-none bg-blue-50 text-blue-900 font-medium"
                     value={formData.title}
                     onChange={(e) => handleChange("title", e.target.value)}
-                    placeholder="🏛️ Contoh: Del Robotic Clubs"
                     required
                     disabled={isSubmitting}
                   />
@@ -269,7 +268,6 @@ export default function MahasiswaCreatePage() {
                       theme="snow"
                       value={formData.content}
                       onChange={(value) => handleChange("content", value)}
-                      placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
                       style={{
                         height: "200px",
                         backgroundColor: "white",
@@ -306,42 +304,46 @@ export default function MahasiswaCreatePage() {
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Target size={18} className="text-blue-600" />
-                    Category
+                    Kategori
                   </label>
                   <div className="border-2 border-blue-200 rounded-xl overflow-hidden bg-white">
-                    <ReactQuill
-                      theme="snow"
+                    <select
                       value={formData.category}
-                      onChange={(value) => handleChange("category", value)}
-                      placeholder="Tulis misi himpunan mahasiswa yang motivatif..."
-                      style={{
-                        height: "200px",
-                        backgroundColor: "white",
-                      }}
-                    />
+                      onChange={(e) => handleChange("category", e.target.value)}
+                      className="w-full p-3 bg-white text-blue-900 text-sm outline-none"
+                    >
+                      <option value="">-- Pilih Kategori --</option>
+                      <option value="teknologi">Teknologi</option>
+                      <option value="sosial">Sosial</option>
+                      <option value="pendidikan">Pendidikan</option>
+                      <option value="olahraga">Olahraga</option>
+                      <option value="karir">Karir</option>
+                      <option value="lingkungan">Lingkungan</option>
+                    </select>
                   </div>
+
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-blue-600">
-                      {formData.category.length > 0 && (
+                      {formData.category && (
                         <span className="font-medium">
                           {formData.category.length} karakter
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      {formData.category.length >= 100 && (
+                      {formData.category.length >= 5 && (
                         <CheckCircle2 size={16} className="text-green-500" />
                       )}
                       <span
                         className={
-                          formData.category.length >= 100
+                          formData.category.length >= 5
                             ? "text-green-600 font-medium"
                             : "text-blue-500"
                         }
                       >
-                        {formData.category.length >= 100
-                          ? "✅ Panjang yang baik"
-                          : "Minimal 100 karakter"}
+                        {formData.category.length >= 5
+                          ? "✅ Pilihan valid"
+                          : "Pilih kategori yang sesuai"}
                       </span>
                     </div>
                   </div>
@@ -351,7 +353,7 @@ export default function MahasiswaCreatePage() {
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
                     <Upload size={18} className="text-blue-600" />
-                    Upload Logo News
+                    Upload Sampul Berita
                   </label>
                   <div className="relative">
                     <input
@@ -453,7 +455,7 @@ export default function MahasiswaCreatePage() {
                         <strong>Visi:</strong>{" "}
                         {stripHtml(formData.content).length > 150
                           ? stripHtml(formData.content).substring(0, 150) +
-                            "..."
+                          "..."
                           : stripHtml(formData.content)}
                       </p>
                     </div>
@@ -465,7 +467,7 @@ export default function MahasiswaCreatePage() {
                         <strong>Misi:</strong>{" "}
                         {stripHtml(formData.category).length > 150
                           ? stripHtml(formData.category).substring(0, 150) +
-                            "..."
+                          "..."
                           : stripHtml(formData.category)}
                       </p>
                     </div>
@@ -499,7 +501,7 @@ export default function MahasiswaCreatePage() {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-blue-700">Visi</span>
+                  <span className="text-sm text-blue-700">Kategori</span>
                   <CheckCircle2
                     size={16}
                     className={
@@ -529,7 +531,7 @@ export default function MahasiswaCreatePage() {
                         (formData.category ? 1 : 0) +
                         (formData.gambar ? 1 : 0)) /
                         4) *
-                        100
+                      100
                     )}
                     %
                   </span>
@@ -538,14 +540,13 @@ export default function MahasiswaCreatePage() {
                   <div
                     className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${
-                        (((formData.title ? 1 : 0) +
+                      width: `${(((formData.title ? 1 : 0) +
                           (formData.content ? 1 : 0) +
                           (formData.category ? 1 : 0) +
                           (formData.gambar ? 1 : 0)) /
                           4) *
                         100
-                      }%`,
+                        }%`,
                     }}
                   ></div>
                 </div>

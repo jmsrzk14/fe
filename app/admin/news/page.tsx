@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"; // ✅ ditambahkan
 interface News {
   id: number;
   title: string;
-  content: string;
   category: string;
 }
 
@@ -35,8 +34,7 @@ const NewsPage: React.FC = () => {
   const router = useRouter(); // ✅ inisialisasi router
 
   const fields = [
-    { key: "title", label: "Judul News", type: "string" },
-    { key: "content", label: "Deskripsi", type: "string" },
+    { key: "title", label: "Judul Berita", type: "string" },
     { key: "category", label: "Kategori", type: "string" },
   ];
 
@@ -193,7 +191,7 @@ const NewsPage: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Data News Mahasiswa
+              Data Berita
             </h1>
           </div>
           <div className="flex items-center space-x-3">
@@ -214,7 +212,7 @@ const NewsPage: React.FC = () => {
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Tambah News
+              Tambah Berita
             </button>
             <button
               onClick={handleSearch}
@@ -245,7 +243,7 @@ const NewsPage: React.FC = () => {
               htmlFor="searchName"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Nama News
+              Judul Berita
             </label>
             <div className="relative">
               <input
@@ -254,7 +252,7 @@ const NewsPage: React.FC = () => {
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Nama News"
+                placeholder="Cari Judul Berita"
                 className="w-full pl-10 pr-4 py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">

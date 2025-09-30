@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Link from "next/link";
 import HeroSection from '@/components/ui/hero-section';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,43 +9,11 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, Users, Award, Megaphone, ArrowRight, Star, Target, Clock, Eye, TrendingUp, Play, Zap, Lightbulb, Heart, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-
-
 export default function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [himpunans, setHimpunans] = useState<any[]>([]);
-  const [ukms, setUkms] = useState<any[]>([]);
-  const [departments, setDepartments] = useState<any[]>([]);
   const [visi, setVisi] = useState<string>("");
   const [misi, setMisi] = useState<string>("");
-
-  const recentNews = [
-    {
-      title: 'Pelantikan Pengurus Baru BEM IT Del',
-      category: 'Announcement',
-      date: '2025-09-10',
-      description:
-        'Pelantikan pengurus baru BEM IT Del periode 2025/2026 dilaksanakan di Auditorium Institut Teknologi Del.',
-      featured: true,
-    },
-    {
-      title: 'Seminar Nasional Teknologi Digital',
-      category: 'Event',
-      date: '2025-09-05',
-      description:
-        'BEM IT Del sukses menyelenggarakan Seminar Nasional dengan tema “Inovasi Digital untuk Generasi Emas 2045”.',
-      featured: false,
-    },
-    {
-      title: 'Donasi Peduli Pendidikan',
-      category: 'Social',
-      date: '2025-08-28',
-      description:
-        'Departemen Sosial BEM IT Del menggalang dana untuk mendukung pendidikan anak-anak di daerah terpencil.',
-      featured: false,
-    },
-
-  ];
+  const [recentNews, setRecentNews] = useState<any[]>([]);
 
   const features = [
     {
@@ -77,7 +46,35 @@ export default function HomePage() {
         setMisi(data.data.mission);
       })
       .catch((err) => console.error("Error fetching visi/misi:", err));
+
+    fetch("http://localhost:8080/api/news") // ganti sesuai endpoint kamu
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data.data)) {
+          // mapping biar sesuai struktur UI
+          const mappedNews = data.data.map((item: any, idx: number) => ({
+            id: item.id,
+            title: item.title,
+            description: item.content, // konten HTML
+            date: item.created_at || new Date().toISOString(), // fallback kalau API belum ada
+            category: item.category || "General",
+            featured: idx === 0 // contoh: berita pertama jadi featured
+          }));
+          setRecentNews(mappedNews);
+        }
+      })
+      .catch((err) => console.error("Error fetching news:", err));
   }, []);
+
+  // helper truncate text
+  function truncateText(html: string, maxLength: number = 200) {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    const text = tmp.textContent || tmp.innerText || "";
+
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength).trim() + "...";
+  }
 
   return (
     <div>
@@ -235,9 +232,6 @@ export default function HomePage() {
         </div>
       </section>
 
-
-
-
       <section className="relative py-32 overflow-hidden bg-gradient-to-br from-white via-blue-50/40 to-slate-50">
         {/* Background Elements */}
         <div className="absolute inset-0">
@@ -343,28 +337,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* News & Announcements - TV News Style */}
+      {/* News & Announcements */}
       <section className="relative py-24 bg-blue-600 overflow-hidden rounded-t-[2rem]">
-        {/* TV Screen Background Pattern */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-blue-600"></div>
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25px 25px, rgba(255,255,255,0.1) 2px, transparent 0), 
-                             radial-gradient(circle at 75px 75px, rgba(255,255,255,0.05) 2px, transparent 0)`,
-            backgroundSize: '100px 100px'
-          }}></div>
-
-          {/* Animated Elements */}
-          <div className="absolute top-20 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-blue-300/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Breaking News Style Header */}
           <div className="text-center mb-16">
-
-
-            {/* Main Title */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -376,97 +352,41 @@ export default function HomePage() {
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-white mx-auto rounded-full"></div>
             </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed"
-            >
-              Bringing you the latest updates, announcements, and breaking news from Institut Teknologi Del
-            </motion.p>
           </div>
 
-          {/* News Navigation Bar */}
-          <div className="flex justify-between items-center mb-12 bg-white/10 backdrop-blur-md rounded-2xl px-6 py-4 border border-white/20">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-white">
-                <TrendingUp className="w-5 h-5 text-blue-300" />
-                <span className="font-semibold">Trending Now</span>
-              </div>
-              <div className="hidden md:flex items-center gap-2 text-blue-200">
-                <Clock className="w-4 h-4" />
-                <span className="text-sm">Updated 5 minutes ago</span>
-              </div>
-            </div>
-            <Button
-              variant="outline"
-              className="hidden md:flex items-center bg-white/10 border-white/30 text-white hover:bg-white/20 transition-all duration-300"
-            >
-              View All <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-
-          {/* News Cards Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {recentNews.map((news, index) => (
               <motion.div
-                key={index}
+                key={news.id}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`group cursor-pointer ${news.featured ? 'lg:col-span-2 lg:row-span-2' : ''
-                  }`}
+                className={`group cursor-pointer ${news.featured ? 'lg:col-span-2 lg:row-span-2' : ''}`}
               >
                 <Card className={`relative overflow-hidden bg-white/95 backdrop-blur-sm border-0 shadow-2xl transition-all duration-500 hover:shadow-blue-900/20 hover:scale-105 ${news.featured
                   ? 'min-h-[500px]'
                   : 'min-h-[350px]'
                   }`}>
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-
-                  {/* Play Button Overlay for Featured */}
-                  {news.featured && (
-                    <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 group-hover:scale-110 transition-transform">
-                        <Play className="w-8 h-8 text-white" />
-                      </div>
-                    </div>
-                  )}
-
                   <CardHeader className={`relative z-10 ${news.featured ? 'p-8' : 'p-6'}`}>
-                    {/* Top Meta Info */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <Badge
-                          className={`font-semibold text-xs tracking-wider shadow-lg ${news.category === 'Announcement'
-                            ? 'bg-red-500 hover:bg-red-600'
-                            : news.category === 'Event'
-                              ? 'bg-green-500 hover:bg-green-600'
-                              : 'bg-blue-500 hover:bg-blue-600'
-                            }`}
-                        >
+                        <Badge className="bg-blue-500 hover:bg-blue-600">
                           {news.category.toUpperCase()}
                         </Badge>
                         {news.featured && (
                           <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg">
                             <Star className="w-3 h-3 mr-1" />
-                            FEATURED
+                            Terbaru
                           </Badge>
                         )}
                       </div>
-                      <div className="flex items-center gap-1 text-blue-600">
-                        <Zap className="w-4 h-4" />
-                      </div>
                     </div>
 
-                    {/* News Title */}
                     <CardTitle className={`font-black text-gray-900 leading-tight group-hover:text-blue-900 transition-colors duration-300 ${news.featured ? 'text-3xl mb-4' : 'text-xl mb-3'
                       }`}>
                       {news.title}
                     </CardTitle>
 
-                    {/* Date and Time */}
                     <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
@@ -476,61 +396,25 @@ export default function HomePage() {
                           year: 'numeric'
                         })}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {/* <span>{news.readTime}</span> */}
-                      </div>
                     </div>
                   </CardHeader>
 
-                  <CardContent className={`relative z-10 ${news.featured ? 'px-8 pb-8' : 'px-6 pb-6'}`}>
-                    {/* News Description */}
-                    <CardDescription className={`text-gray-700 leading-relaxed mb-6 ${news.featured ? 'text-lg' : 'text-base'
-                      }`}>
-                      {news.description}
-                    </CardDescription>
-
-                    {/* Bottom Meta */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Eye className="w-4 h-4" />
-                        {/* <span>{news.views.toLocaleString()} views</span> */}
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 font-semibold"
-                      >
-                        Read More
-                        <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </div>
-                  </CardContent>
+                  <CardDescription className="text-gray-700 leading-relaxed px-7 pb-6">
+                    {truncateText(news.description, 500)}
+                  </CardDescription>
                 </Card>
               </motion.div>
             ))}
           </div>
 
-          {/* Bottom CTA for Mobile */}
-          <div className="text-center mt-12 md:hidden">
-            <Button
-              className="bg-white text-blue-900 hover:bg-blue-50 font-bold px-8 py-3 rounded-full shadow-lg"
-            >
-              View All News
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-
-          {/* Ticker Tape Effect */}
-          <div className="mt-16 bg-white/10 backdrop-blur-md rounded-full py-3 px-6 border border-white/20 overflow-hidden">
-            <div className="flex items-center gap-8 animate-marquee whitespace-nowrap">
-              <span className="text-white font-semibold">🔥 BREAKING:</span>
-              <span className="text-blue-200">Pendaftaran anggota baru BEM IT Del dibuka hingga 30 September</span>
-              <span className="text-white">•</span>
-              <span className="text-blue-200">Kompetisi programming antar jurusan akan dimulai bulan depan</span>
-              <span className="text-white">•</span>
-              <span className="text-blue-200">Workshop AI dan Machine Learning gratis untuk semua mahasiswa</span>
-            </div>
+          {/* Button Lihat Semua Berita */}
+          <div className="mt-12 flex justify-center">
+            <Link href="/user/news">
+              <Button className="bg-white text-blue-600 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-blue-50 transition-all duration-300">
+                Lihat Semua Berita
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
