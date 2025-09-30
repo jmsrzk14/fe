@@ -154,7 +154,7 @@ export default function MahasiswaCreatePage() {
       }
 
       const response = await axios.post(
-        "http://localhost:9090/api/admin/clubs",
+        "http://localhost:8080/api/admin/clubs",
         formDataToSend,
         {
           headers: {

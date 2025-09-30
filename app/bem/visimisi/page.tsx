@@ -30,7 +30,7 @@ export default function VisiMisiPage() {
         }
 
         const response = await fetch(
-          `http://localhost:9090/api/student/visimisibem/${externalUserId}`,
+          `http://localhost:8080/api/student/visimisibem/${externalUserId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

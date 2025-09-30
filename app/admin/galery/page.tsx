@@ -63,7 +63,7 @@ const GaleryPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:9090/api/admin/galery?${params.toString()}`,
+        `http://localhost:8080/api/admin/galery?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -119,7 +119,7 @@ const GaleryPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:9090/api/admin/galery/${item.id}`,
+        `http://localhost:8080/api/admin/galery/${item.id}`,
         {
           method: "DELETE",
           headers: {

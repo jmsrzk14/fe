@@ -64,7 +64,7 @@ const AnnouncementPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:9090/api/admin/announcement?${params.toString()}`,
+        `http://localhost:8080/api/admin/announcement?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -120,7 +120,7 @@ const AnnouncementPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:9090/api/admin/announcement/${item.id}`,
+        `http://localhost:8080/api/admin/announcement/${item.id}`,
         {
           method: "DELETE",
           headers: {

@@ -25,7 +25,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      let res = await fetch('http://localhost:9090/api/auth/campus/login', {
+      let res = await fetch('http://localhost:8080/api/auth/campus/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: email, password }),
@@ -33,7 +33,7 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        res = await fetch('http://localhost:9090/api/auth/login', {
+        res = await fetch('http://localhost:8080/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username: email, password }),

@@ -58,7 +58,7 @@ export default function AdminLayout({
     }
 
     if (organisasiId && token) {
-      fetch(`http://localhost:9090/api/student/departments/${organisasiId}`, {
+      fetch(`http://localhost:8080/api/student/departments/${organisasiId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -145,7 +145,7 @@ export default function AdminLayout({
             <div className="flex items-center gap-4 animate-fadeInUp">
               {orgLogo && (
                 <img
-                  src={`http://localhost:9090/departments/${orgLogo}`}
+                  src={`http://localhost:8080/departments/${orgLogo}`}
                   alt="Logo Organisasi"
                   className="w-16 h-16 rounded-full shadow-md"
                 />

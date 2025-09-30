@@ -37,7 +37,7 @@ export default function ProfilePage() {
     if (!token) return;
 
     axios
-      .get("http://localhost:9090/api/student/profile", {
+      .get("http://localhost:8080/api/student/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -162,7 +162,7 @@ export default function ProfilePage() {
                         ) : (
                           <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center text-white text-xl font-bold shadow-inner">
                             <img
-                              src={`http://localhost:9090/users/${profile.image}`}
+                              src={`http://localhost:8080/users/${profile.image}`}
                               alt="Profile"
                               className="w-full h-full rounded-full object-cover"
                             />
@@ -703,7 +703,7 @@ export default function ProfilePage() {
               });
 
               const res = await axios.put(
-                `http://localhost:9090/api/student/profile`,
+                `http://localhost:8080/api/student/profile`,
                 formData,
                 {
                   headers: {

@@ -57,7 +57,7 @@ export default function VisiMisiEditPage() {
     const externalUserId = user?.external_user_id;
 
     try {
-      const url = `http://localhost:9090/api/student/visimisibem/${externalUserId}`;
+      const url = `http://localhost:8080/api/student/visimisibem/${externalUserId}`;
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ export default function VisiMisiEditPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:9090/api/student/visimisibem/${externalUserId}`,
+        `http://localhost:8080/api/student/visimisibem/${externalUserId}`,
         {
           method: "PUT",
           headers: {
