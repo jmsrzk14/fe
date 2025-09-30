@@ -412,7 +412,6 @@ export default function HomePage() {
             ))}
           </div>
 
-
           {/* Button Lihat Semua Berita */}
           <div className="mt-12 flex justify-center">
             <Link href="/user/news">
