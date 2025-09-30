@@ -195,29 +195,36 @@ export default function OrganizationPage() {
     </div>
   );
 
-  return (
+
+  return ( 
     <div className="text-center mb-16">
       <motion.section
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="relative min-h-[60vh] bg-gradient-to-br from-[#1c46b9] via-[#2563eb] to-[#3b82f6] overflow-hidden py-16"
+        className="relative min-h-[60vh] overflow-hidden py-16"
       >
         <div className="absolute inset-0">
-          {/* Large circles */}
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
-          <div className="absolute top-1/3 right-20 w-48 h-48 bg-white/5 rounded-full"></div>
-          <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-white/10 rounded-full animate-pulse delay-1000"></div>
-          <div className="absolute bottom-32 right-10 w-24 h-24 bg-[#ffe444]/20 rounded-full"></div>
-
-          {/* Gradient overlays for depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1c46b9]/20 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+          {/* Video Background */}
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="absolute w-full h-full object-cover z-0"
+            style={{ filter: 'brightness(0.9)' }}
+          >
+            <source src="/0930.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          
+          {/* Light overlay for text visibility */}
+          <div className="absolute inset-0 bg-black/20 z-[1]"></div>
         </div>
 
         {/* Main content */}
-        <div className="relative z-10 flex items-center justify-center min-h-[60vh] text-center px-4">
+        <div className="relative z-10 flex items-center justify-center min-h-[60vh] mt-9 text-center px-4">
           <div className="max-w-4xl mx-auto">
             <div className="relative z-10">
               <div className="inline-flex items-center">
@@ -228,7 +235,7 @@ export default function OrganizationPage() {
                   transition={{ duration: 0.6 }}
                   className="inline-flex items-center bg-white rounded-full shadow-md px-6 py-3 mb-6"
                 >
-                  <div className="w-11 h-11 rounded-full flex items-center justify-center mr-3">
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center  mr-3">
                     <img src="/del.png" alt="Institut Teknologi Del" />
                   </div>
                   {/* Text */}
@@ -413,5 +420,6 @@ export default function OrganizationPage() {
       </div>
 
     </div>
+  
   );
 }

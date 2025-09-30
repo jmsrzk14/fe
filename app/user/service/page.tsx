@@ -13,9 +13,13 @@ import {
   Building,
   Users,
   CheckCircle,
+  Calendar,
   FileText,
   Package,
-  Lock
+  Lock,
+  MessageCircle,
+  Send,
+  MessagesSquare
 } from 'lucide-react';
 
 const layananData = {
@@ -153,75 +157,21 @@ const filterData = [
 
 // Sarana Prasarana Card Component
 const SaranaCard: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginStatus, setLoginStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const router = useRouter();
-
-  const handleLogin = async () => {
-    try {
-      console.log('Handling login');
-      setIsLoading(true);
-      setLoginStatus('loading');
-      
-      // Simulasi loading
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setLoginStatus('success');
-      
-      // Redirect to form page
-      setTimeout(() => {
-        console.log('Redirecting to form page');
-        router.push('/user/service/sarpras_form');
-      }, 1000);
-    } catch (error) {
-      console.error('Error in handleLogin:', error);
-      setIsLoading(false);
-      setLoginStatus('idle');
-    }
+  
+  const handleLogin = () => {
+    // Langsung redirect tanpa loading
+    router.push('/user/service/sarpras_form');
   };
 
-  const getButtonContent = () => {
-    switch (loginStatus) {
-      case 'loading':
-        return (
-          <div className="flex items-center justify-center space-x-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span>Menghubungkan...</span>
-          </div>
-        );
-      case 'success':
-        return (
-          <div className="flex items-center justify-center space-x-2">
-            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            <span>Berhasil! Mengalihkan...</span>
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center justify-center space-x-2">
-            <Lock className="w-4 h-4" />
-            <span>Lanjut untuk Menggunakan Layanan</span>
-          </div>
-        );
-    }
-  };
-
+  const [isLoading, setIsLoading] = useState(false);
+  
   const getButtonStyles = () => {
-    switch (loginStatus) {
-      case 'loading':
-        return 'bg-gray-500';
-      case 'success':
-        return 'bg-green-500';
-      default:
-        return 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40';
-    }
+    return 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:scale-95 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transform transition-all duration-200';
   };
 
   return (
-    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 p-8 w-full h-full transform transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl cursor-pointer" onClick={handleLogin}>
-      {/* Direct link added for fallback navigation */}
+    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 p-8 w-full h-full transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-3xl active:shadow-xl transition-all duration-200 cursor-pointer" onClick={handleLogin}>
       <Link href="/user/service/sarpras_form" className="absolute inset-0 z-0">
         <span className="sr-only">Buka form peminjaman</span>
       </Link>
@@ -268,10 +218,9 @@ const SaranaCard: React.FC = () => {
         disabled={isLoading}
         className={`
           relative w-full py-4 px-6 rounded-2xl text-white font-semibold text-sm
-          transition-all duration-300 transform hover:-translate-y-1
           focus:outline-none focus:ring-4 focus:ring-blue-500/20
-          disabled:cursor-not-allowed disabled:transform-none
-          overflow-hidden group
+          overflow-hidden group transition-all duration-200
+          active:translate-y-0.5 active:shadow-inner
           ${getButtonStyles()}
         `}
       >
@@ -279,13 +228,9 @@ const SaranaCard: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         
         <div className="relative z-10">
-          {loginStatus === 'idle' ? (
-            <div className="flex items-center justify-center space-x-2">
-              <span>Isi Form Peminjaman</span>
-            </div>
-          ) : (
-            getButtonContent()
-          )}
+          <div className="flex items-center justify-center space-x-2">
+            <span>Isi Form Peminjaman</span>
+          </div>
         </div>
       </button>
 
@@ -302,66 +247,24 @@ const SaranaCard: React.FC = () => {
 
 // Departemen Olahraga Card Component
 const DepolCard: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginStatus, setLoginStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const router = useRouter();
-
-  const handleLogin = async () => {
-    setIsLoading(true);
-    setLoginStatus('loading');
-    
-    // Simulasi loading
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setLoginStatus('success');
-    
-    setTimeout(() => {
-      // Navigasi ke halaman form depol
-      router.push('/user/service/depol_form');
-    }, 1000);
+  
+  const handleLogin = () => {
+    // Langsung redirect tanpa loading
+    router.push('/user/service/depol_form');
   };
 
-  const getButtonContent = () => {
-    switch (loginStatus) {
-      case 'loading':
-        return (
-          <div className="flex items-center justify-center space-x-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span>Menghubungkan...</span>
-          </div>
-        );
-      case 'success':
-        return (
-          <div className="flex items-center justify-center space-x-2">
-            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            <span>Berhasil! Mengalihkan...</span>
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center justify-center space-x-2">
-            <Lock className="w-4 h-4" />
-            <span>Lanjut untuk Menggunakan Layanan</span>
-          </div>
-        );
-    }
-  };
-
+  const [isLoading, setIsLoading] = useState(false);
+  
   const getButtonStyles = () => {
-    switch (loginStatus) {
-      case 'loading':
-        return 'bg-gray-500';
-      case 'success':
-        return 'bg-green-500';
-      default:
-        return 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/40';
-    }
+    return 'bg-green-600 hover:bg-green-700 active:bg-green-800 active:scale-95 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/40 transform transition-all duration-200';
   };
 
   return (
-    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 p-8 w-full h-full transform transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl">
+    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 p-8 w-full h-full transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-3xl active:shadow-xl transition-all duration-200 cursor-pointer" onClick={handleLogin}>
+      <Link href="/user/service/depol_form" className="absolute inset-0 z-0">
+        <span className="sr-only">Buka form peminjaman</span>
+      </Link>
       {/* Subtle top accent */}
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-green-500 rounded-full"></div>
       
@@ -398,14 +301,16 @@ const DepolCard: React.FC = () => {
 
       {/* Login Button */}
       <button
-        onClick={handleLogin}
+        onClick={(e) => {
+          e.stopPropagation(); // Mencegah event bubbling
+          handleLogin();
+        }}
         disabled={isLoading}
         className={`
           relative w-full py-4 px-6 rounded-2xl text-white font-semibold text-sm
-          transition-all duration-300 transform hover:-translate-y-1
           focus:outline-none focus:ring-4 focus:ring-green-500/20
-          disabled:cursor-not-allowed disabled:transform-none
-          overflow-hidden group
+          overflow-hidden group transition-all duration-200
+          active:translate-y-0.5 active:shadow-inner
           ${getButtonStyles()}
         `}
       >
@@ -413,7 +318,9 @@ const DepolCard: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         
         <div className="relative z-10">
-          {getButtonContent()}
+          <div className="flex items-center justify-center space-x-2">
+            <span>Isi Form Peminjaman</span>
+          </div>
         </div>
       </button>
 
@@ -421,6 +328,96 @@ const DepolCard: React.FC = () => {
       <div className="mt-6 text-center">
         <div className="inline-flex items-center space-x-2 text-xs text-gray-500 bg-gray-50/50 px-3 py-1.5 rounded-full">
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span>Sistem Online</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Aspirasi Mahasiswa Card Component
+const AspirationCard: React.FC = () => {
+  const router = useRouter();
+  
+  const handleLogin = () => {
+    // Langsung redirect tanpa loading
+    router.push('/user/service/aspirasi_form');
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const getButtonStyles = () => {
+    return 'bg-purple-600 hover:bg-purple-700 active:bg-purple-800 active:scale-95 shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/40 transform transition-all duration-200';
+  };
+
+  return (
+    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 p-8 w-full h-full transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-3xl active:shadow-xl transition-all duration-200 cursor-pointer" onClick={handleLogin}>
+      <Link href="/user/service/aspirasi_form" className="absolute inset-0 z-0">
+        <span className="sr-only">Buka form aspirasi</span>
+      </Link>
+      {/* Subtle top accent */}
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-purple-500 rounded-full"></div>
+      
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div className="relative inline-block mb-4">
+          <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
+            <MessagesSquare className="w-8 h-8 text-white" />
+          </div>
+          {/* Glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-600 rounded-2xl blur-lg opacity-20 -z-10"></div>
+        </div>
+        
+        <h1 className="text-2xl font-bold text-gray-800 mb-3">
+          Aspirasi Mahasiswa
+        </h1>
+        
+        <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+          Layanan penyampaian aspirasi, saran, kritik, dan masukan dari mahasiswa untuk kemajuan dan pengembangan kampus.
+        </p>
+      </div>
+
+      {/* Features highlights */}
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="text-center p-3 bg-purple-50/50 rounded-xl border border-purple-100/50">
+          <div className="text-2xl mb-1">🔊</div>
+          <div className="text-xs font-medium text-gray-700">Suara Mahasiswa</div>
+        </div>
+        <div className="text-center p-3 bg-purple-50/50 rounded-xl border border-purple-100/50">
+          <div className="text-2xl mb-1">📝</div>
+          <div className="text-xs font-medium text-gray-700">Proses Transparan</div>
+        </div>
+      </div>
+
+      {/* Login Button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // Mencegah event bubbling
+          handleLogin();
+        }}
+        disabled={isLoading}
+        className={`
+          relative w-full py-4 px-6 rounded-2xl text-white font-semibold text-sm
+          focus:outline-none focus:ring-4 focus:ring-purple-500/20
+          overflow-hidden group transition-all duration-200
+          active:translate-y-0.5 active:shadow-inner
+          ${getButtonStyles()}
+        `}
+      >
+        {/* Button shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+        
+        <div className="relative z-10">
+          <div className="flex items-center justify-center space-x-2">
+            <span>Sampaikan Aspirasi</span>
+          </div>
+        </div>
+      </button>
+
+      {/* Footer */}
+      <div className="mt-6 text-center">
+        <div className="inline-flex items-center space-x-2 text-xs text-gray-500 bg-gray-50/50 px-3 py-1.5 rounded-full">
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
           <span>Sistem Online</span>
         </div>
       </div>
@@ -494,28 +491,26 @@ export default function ServicePage() {
         </div>
       </motion.section>
       
-     <div className="text-center mb-12 mt-12">
+     <div className="text-center mb-8 mt-12">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
-          Informasi Layanan
+          Layanan Peminjaman
         </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
-          Tetap update dengan informasi terbaru dari organisasi mahasiswa
+        <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base mb-6">
+          Layanan peminjaman fasilitas dan peralatan untuk mendukung berbagai kegiatan mahasiswa
         </p>
       </div>
 
-
-
       {/* Main Content Area */}
-      <div className="py-16 bg-gradient-to-b from-blue-50 to-white">
+      <div className="py-8 bg-gradient-to-b from-blue-50 to-white">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="max-w-7xl mx-auto px-4"
         >
-          {/* Two Cards Side by Side - Enhanced Design */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-            {/* Sarana Prasarana Card - Enhanced Interactive Style */}
+          {/* Layanan Peminjaman - Redesigned */}
+          <div className="grid grid-cols-1 gap-8 mb-16">
+            {/* Integrated Sarana & Prasarana Service Card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -523,19 +518,357 @@ export default function ServicePage() {
               viewport={{ once: true }}
               className="h-full"
             >
-              <SaranaCard />
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50/50 rounded-2xl p-6 md:p-8 border border-blue-100/70 shadow-sm relative overflow-hidden h-full">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100/30 rounded-full -mr-32 -mt-32 z-0"></div>
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-100/30 rounded-full -ml-20 -mb-20 z-0"></div>
+                
+                <div className="flex flex-col gap-6 relative z-10 h-full">
+                  <div className="flex items-center gap-4">
+                    <div className="shrink-0 bg-gradient-to-br from-blue-500 to-indigo-600 p-4 rounded-2xl shadow-lg">
+                      <Projector className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800">Peminjaman Sarana & Prasarana</h3>
+                  </div>
+                  
+                  <p className="text-gray-600">
+                    Layanan peminjaman peralatan dan aset organisasi untuk mendukung kegiatan mahasiswa seperti sound system, proyektor, dan peralatan lainnya.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-1">
+                    <div>
+                      <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                        <CheckCircle className="w-4 h-4 text-blue-500" /> Yang Dapat Dipinjam
+                      </h4>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="bg-blue-100 p-1 rounded-md mt-0.5">
+                            <Projector className="w-3.5 h-3.5 text-blue-600" />
+                          </span>
+                          <span>Proyektor dan Sound System</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-blue-100 p-1 rounded-md mt-0.5">
+                            <Laptop className="w-3.5 h-3.5 text-blue-600" />
+                          </span>
+                          <span>Laptop untuk presentasi</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-blue-100 p-1 rounded-md mt-0.5">
+                            <Camera className="w-3.5 h-3.5 text-blue-600" />
+                          </span>
+                          <span>Peralatan dokumentasi</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-blue-100 p-1 rounded-md mt-0.5">
+                            <Mic className="w-3.5 h-3.5 text-blue-600" />
+                          </span>
+                          <span>Microphone Wireless</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                        <CheckCircle className="w-4 h-4 text-blue-500" /> Persyaratan
+                      </h4>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Mahasiswa aktif IT Del</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Surat keterangan organisasi (jika atas nama organisasi)</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Pengajuan min. 3 hari sebelum penggunaan</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Kartu identitas yang masih berlaku</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-auto pt-4">
+                    <Link href="/user/service/sarpras_form" className="block text-center w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200 transform active:translate-y-0.5 active:shadow-inner shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/25">
+                      Isi Form Peminjaman Sarpras
+                    </Link>
+                    
+                    <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500 bg-white/80 rounded-full px-3 py-1.5">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                      <span>Sistem Online 24/7</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
+          </div>
 
-            {/* Departemen Olahraga Card - Enhanced Interactive Style */}
+           
+          {/* Departemen Olahraga Section */}
+          <div className="border-t border-gray-200 pt-10 pb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+                Departemen Olahraga
+              </h2>
+              <p className="text-gray-600 max-w-3xl mx-auto text-sm md:text-base mb-6">
+                Layanan peminjaman peralatan olahraga untuk kegiatan mahasiswa
+              </p>
+            </div>
+
+            {/* Departemen Olahraga Card - Full Width */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
+              transition={{ duration: 0.7 }}
               viewport={{ once: true }}
-              className="h-full"
+              className="h-full mb-16"
             >
-              <DepolCard />
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50/50 rounded-2xl p-6 md:p-8 border border-green-100/70 shadow-sm relative overflow-hidden h-full">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-green-100/30 rounded-full -mr-32 -mt-32 z-0"></div>
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-emerald-100/30 rounded-full -ml-20 -mb-20 z-0"></div>
+                
+                <div className="flex flex-col gap-6 relative z-10 h-full">
+                  <div className="flex items-center gap-4">
+                    <div className="shrink-0 bg-gradient-to-br from-green-500 to-emerald-600 p-4 rounded-2xl shadow-lg">
+                      <Dumbbell className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800">Peminjaman Peralatan Olahraga</h3>
+                  </div>
+                  
+                  <p className="text-gray-600">
+                    Layanan peminjaman peralatan olahraga untuk mendukung kegiatan mahasiswa seperti pertandingan, latihan, dan kegiatan rekreasi lainnya. Fasilitas ini bertujuan untuk mendorong gaya hidup sehat dan aktif di kalangan mahasiswa.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-1">
+                    <div>
+                      <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                        <CheckCircle className="w-4 h-4 text-green-500" /> Yang Dapat Dipinjam
+                      </h4>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="bg-green-100 p-1 rounded-md mt-0.5">
+                            <Dumbbell className="w-3.5 h-3.5 text-green-600" />
+                          </span>
+                          <span>Bola Basket, Voli, Sepak Bola</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-green-100 p-1 rounded-md mt-0.5">
+                            <Dumbbell className="w-3.5 h-3.5 text-green-600" />
+                          </span>
+                          <span>Net dan Peralatan Voli</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-green-100 p-1 rounded-md mt-0.5">
+                            <Dumbbell className="w-3.5 h-3.5 text-green-600" />
+                          </span>
+                          <span>Raket dan Kok Badminton</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="bg-green-100 p-1 rounded-md mt-0.5">
+                            <Dumbbell className="w-3.5 h-3.5 text-green-600" />
+                          </span>
+                          <span>Jersey dan Perlengkapan Tim</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                        <Calendar className="w-4 h-4 text-green-500" /> Jadwal Kegiatan Rutin
+                      </h4>
+                      <ul className="text-sm text-gray-600 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Senin: Latihan Basket (16:00-18:00)</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Rabu: Latihan Voli (16:00-18:00)</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Jumat: Latihan Futsal (15:00-17:00)</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5" />
+                          <span>Sabtu: Latihan Badminton (09:00-11:00)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-auto pt-4">
+                    <Link href="/user/service/depol_form" className="block text-center w-full py-4 px-6 bg-green-600 hover:bg-green-700 active:bg-green-800 active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200 transform active:translate-y-0.5 active:shadow-inner shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/25">
+                      Isi Form Peminjaman Olahraga
+                    </Link>
+                    
+                    <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500 bg-white/80 rounded-full px-3 py-1.5">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span>Sistem Online 24/7</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
+          </div>
+          
+          {/* Aspirasi Mahasiswa Section */}
+          <div className="border-t border-gray-200 pt-20 pb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+                Aspirasi Mahasiswa
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto text-sm md:text-base">
+                Sampaikan saran, kritik, dan masukan untuk kemajuan kampus
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-8 mb-12">
+              {/* Aspirasi Card - Integrated */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                viewport={{ once: true }}
+                className="h-full"
+              >
+                <div className="bg-gradient-to-r from-purple-50 to-violet-50/50 rounded-2xl p-6 md:p-8 border border-purple-100/70 shadow-sm relative overflow-hidden h-full">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-purple-100/30 rounded-full -mr-32 -mt-32 z-0"></div>
+                  <div className="absolute bottom-0 left-0 w-40 h-40 bg-violet-100/30 rounded-full -ml-20 -mb-20 z-0"></div>
+                  
+                  <div className="flex flex-col gap-6 relative z-10 h-full">
+                    <div className="flex items-center gap-4">
+                      <div className="shrink-0 bg-gradient-to-br from-purple-500 to-violet-600 p-4 rounded-2xl shadow-lg">
+                        <MessagesSquare className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">Aspirasi Mahasiswa</h3>
+                    </div>
+                    
+                    <p className="text-gray-600">
+                      Layanan Aspirasi Mahasiswa adalah saluran resmi untuk menyampaikan pendapat, ide, saran, dan masukan dari mahasiswa kepada pihak kampus melalui BEM IT Del.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-1">
+                      <div>
+                        <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                          <CheckCircle className="w-4 h-4 text-purple-500" /> Jenis Aspirasi
+                        </h4>
+                        <ul className="text-sm text-gray-600 space-y-2">
+                          <li className="flex items-start gap-2">
+                            <span className="bg-purple-100 p-1 rounded-md mt-0.5">
+                              <MessageCircle className="w-3.5 h-3.5 text-purple-600" />
+                            </span>
+                            <span>Saran pengembangan fasilitas</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="bg-purple-100 p-1 rounded-md mt-0.5">
+                              <MessageCircle className="w-3.5 h-3.5 text-purple-600" />
+                            </span>
+                            <span>Masukan kegiatan kampus</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="bg-purple-100 p-1 rounded-md mt-0.5">
+                              <MessageCircle className="w-3.5 h-3.5 text-purple-600" />
+                            </span>
+                            <span>Ide inovasi layanan mahasiswa</span>
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                          <CheckCircle className="w-4 h-4 text-purple-500" /> Proses Penanganan
+                        </h4>
+                        <ul className="text-sm text-gray-600 space-y-2">
+                          <li className="flex items-start gap-2">
+                            <CheckCircle className="w-3.5 h-3.5 text-purple-500 mt-0.5" />
+                            <span>Pencatatan aspirasi dalam sistem</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle className="w-3.5 h-3.5 text-purple-500 mt-0.5" />
+                            <span>Peninjauan & kategorisasi</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle className="w-3.5 h-3.5 text-purple-500 mt-0.5" />
+                            <span>Tindak lanjut & koordinasi</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4">
+                      <h4 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                        <CheckCircle className="w-4 h-4 text-purple-500" /> Proses Penanganan
+                      </h4>
+                      
+                      <div className="relative border-l-2 border-purple-200 pl-4 py-1 ml-2">
+                        <div className="mb-3 relative">
+                          <div className="absolute -left-[1.25rem] w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                          <h3 className="text-sm font-semibold text-gray-800">Penerimaan</h3>
+                          <p className="text-xs text-gray-500">Aspirasi diterima dan divalidasi</p>
+                        </div>
+                        
+                        <div className="mb-3 relative">
+                          <div className="absolute -left-[1.25rem] w-5 h-5 bg-purple-200 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                          <h3 className="text-sm font-semibold text-gray-800">Koordinasi</h3>
+                          <p className="text-xs text-gray-500">Diteruskan ke divisi terkait</p>
+                        </div>
+                        
+                        <div className="mb-3 relative">
+                          <div className="absolute -left-[1.25rem] w-5 h-5 bg-purple-200 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                          <h3 className="text-sm font-semibold text-gray-800">Tindak Lanjut</h3>
+                          <p className="text-xs text-gray-500">Penyelesaian dan implementasi</p>
+                        </div>
+                        
+                        <div className="relative">
+                          <div className="absolute -left-[1.25rem] w-5 h-5 bg-purple-200 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                          <h3 className="text-sm font-semibold text-gray-800">Feedback</h3>
+                          <p className="text-xs text-gray-500">Laporan hasil ke mahasiswa</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 mt-4 bg-purple-50 border border-purple-100 rounded-lg p-4">
+                      <div className="shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                      </div>
+                      <div>
+                        <h5 className="font-medium text-purple-800 text-sm">Komitmen Kami</h5>
+                        <p className="text-purple-700 text-sm mt-0.5">Semua aspirasi akan mendapatkan tanggapan dalam waktu 3-5 hari kerja. Kami berkomitmen untuk menindaklanjuti setiap aspirasi yang masuk dengan proses yang transparan dan bertanggung jawab.</p>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-auto pt-4">
+                      <Link href="/user/service/aspirasi_form" className="block text-center w-full py-4 px-6 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 active:scale-[0.98] text-white font-semibold rounded-xl transition-all duration-200 transform active:translate-y-0.5 active:shadow-inner shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/25">
+                        Sampaikan Aspirasi Anda
+                      </Link>
+                      
+                      <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500 bg-white/80 rounded-full px-3 py-1.5">
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                        <span>Sistem Online 24/7</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            
+              {/* No additional card here */}
+            </div>
+              
+              {/* Aspirasi Card */}
+
           </div>
           
           {/* Contact Section */}
