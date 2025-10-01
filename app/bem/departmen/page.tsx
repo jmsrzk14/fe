@@ -5,6 +5,9 @@ import { Plus } from "lucide-react"; // ✅ icon tambah
 import DataTable from "@/components/layout/DataTable";
 import { staticData } from "@/constants/data";
 import { fieldConfigs } from "@/constants/field";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
 export default function DepartemenPage() {
   const [data, setData] = useState(staticData.departemen);
