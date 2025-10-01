@@ -52,20 +52,6 @@ export default function HeroSection() {
               Kami berkomitmen untuk aktif, responsif, dan konstruktif melalui berbagai aksi, pengabdian, dan layanan.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button className="px-6 py-3 text-lg rounded-full shadow-lg bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300">
-                Pelajari Lebih Lanjut
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                className="px-6 py-3 text-lg rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 transition-all duration-300"
-              >
-                Hubungi Kami
-              </Button>
-            </div>
-
             {/* Carousel */}
             <div className="mt-10 relative overflow-hidden">
               <motion.div

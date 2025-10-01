@@ -409,21 +409,21 @@ export default function ProfilePage() {
         {/* Video Background */}
         <div className="absolute inset-0">
           {/* Video Background */}
-          <video 
-            autoPlay 
-            loop 
-            muted 
+          <video
+            autoPlay
+            loop
+            muted
             playsInline
             className="absolute w-full h-full object-cover z-0"
-            style={{ 
+            style={{
               filter: 'brightness(0.9)',
-              objectPosition: 'center 60%' 
+              objectPosition: 'center 60%'
             }}
           >
             <source src="/0930.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          
+
           {/* Light overlay for text visibility */}
           <div className="absolute inset-0 bg-black/20 z-[1]"></div>
         </div>
@@ -433,7 +433,7 @@ export default function ProfilePage() {
           <div className="max-w-5xl mx-auto">
             <div className="mb-8">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-6 leading-tight tracking-tight drop-shadow-md">
-                Profil Organisasi
+                Profil
               </h1>
             </div>
 
@@ -441,46 +441,24 @@ export default function ProfilePage() {
               Mengenal lebih dalam tentang organisasi mahasiswa yang berkomitmen
               membangun generasi unggul dan berkarakter di Institut Teknologi Del
             </p>
-
-            {/* Scroll Indicator */}
-            <div className="flex justify-center">
-              <div className="animate-bounce-slow">
-                <svg
-                  className="w-8 h-12 text-black/40"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                  />
-                </svg>
-              </div>
-            </div>
           </div>
         </div>
 
         {/* Animations */}
         <style jsx>{`
-    @keyframes bounce-slow {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(10px);
-      }
-    }
-    .animate-bounce-slow {
-      animation: bounce-slow 3s ease-in-out infinite;
-    }
-  `}</style>
+          @keyframes bounce-slow {
+            0%, 100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(10px);
+            }
+          }
+          .animate-bounce-slow {
+            animation: bounce-slow 3s ease-in-out infinite;
+          }
+        `}</style>
       </section>
-
-
-
 
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

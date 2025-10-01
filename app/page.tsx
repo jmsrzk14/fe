@@ -47,18 +47,21 @@ export default function HomePage() {
       })
       .catch((err) => console.error("Error fetching visi/misi:", err));
 
-    fetch("http://localhost:8080/api/news") // ganti sesuai endpoint kamu
+    fetch("http://localhost:8080/api/news")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.data)) {
-          // mapping biar sesuai struktur UI
-          const mappedNews = data.data.map((item: any, idx: number) => ({
+          const sorted = data.data.sort((a: any, b: any) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+
+          const mappedNews = sorted.slice(0, 3).map((item: any) => ({
             id: item.id,
             title: item.title,
-            description: item.content, // konten HTML
-            date: item.created_at || new Date().toISOString(), // fallback kalau API belum ada
+            description: item.content,
+            image: item.image_url,
+            date: item.created_at || new Date().toISOString(),
             category: item.category || "General",
-            featured: idx === 0 // contoh: berita pertama jadi featured
           }));
           setRecentNews(mappedNews);
         }
@@ -354,58 +357,61 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {recentNews.map((news, index) => (
               <motion.div
                 key={news.id}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`group cursor-pointer ${news.featured ? 'lg:col-span-2 lg:row-span-2' : ''}`}
+                className="group cursor-pointer"
               >
-                <Card className={`relative overflow-hidden bg-white/95 backdrop-blur-sm border-0 shadow-2xl transition-all duration-500 hover:shadow-blue-900/20 hover:scale-105 ${news.featured
-                  ? 'min-h-[500px]'
-                  : 'min-h-[350px]'
-                  }`}>
-                  <CardHeader className={`relative z-10 ${news.featured ? 'p-8' : 'p-6'}`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-blue-500 hover:bg-blue-600">
-                          {news.category.toUpperCase()}
-                        </Badge>
-                        {news.featured && (
-                          <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg">
-                            <Star className="w-3 h-3 mr-1" />
-                            Terbaru
-                          </Badge>
-                        )}
-                      </div>
+                <Card className="relative overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
+                  {/* Gambar berita */}
+                  {news.image && (
+                    <div className="h-48 w-full overflow-hidden">
+                      <img
+                        src={`http://localhost:8080/news/${news.image}`}
+                        alt={news.title}
+                        className="h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+
+                  <CardHeader className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge className="bg-blue-500 text-white">
+                        {news.category.toUpperCase()}
+                      </Badge>
                     </div>
 
-                    <CardTitle className={`font-black text-gray-900 leading-tight group-hover:text-blue-900 transition-colors duration-300 ${news.featured ? 'text-3xl mb-4' : 'text-xl mb-3'
-                      }`}>
+                    <CardTitle className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
                       {news.title}
                     </CardTitle>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>{new Date(news.date).toLocaleDateString('id-ID', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric'
-                        })}</span>
-                      </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                      <Calendar className="w-4 h-4" />
+                      <span>
+                        {new Date(news.date).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </span>
                     </div>
                   </CardHeader>
 
-                  <CardDescription className="text-gray-700 leading-relaxed px-7 pb-6">
-                    {truncateText(news.description, 500)}
-                  </CardDescription>
+                  <CardContent className="px-6 pb-6">
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {truncateText(news.description, 150)}
+                    </p>
+                  </CardContent>
                 </Card>
               </motion.div>
             ))}
           </div>
+
 
           {/* Button Lihat Semua Berita */}
           <div className="mt-12 flex justify-center">
