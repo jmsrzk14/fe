@@ -419,10 +419,7 @@ export default function ProfilePage() {
               filter: 'brightness(0.9)',
               objectPosition: 'center 60%'
             }}
-          >
-            <source src="/09301.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+            src="/09301.mp4" />
 
           {/* Light overlay for text visibility */}
           <div className="absolute inset-0 bg-black/20 z-[1]"></div>
