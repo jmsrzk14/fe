@@ -1,259 +1,423 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "@/components/layout/DataTable";
-import { staticData } from "@/constants/data";
-import { fieldConfigs } from "@/constants/field";
-import { useRouter } from "next/navigation";
-import { Plus, Megaphone, Calendar, Search, Filter } from "lucide-react";
+import { useRouter } from "next/navigation"; // ✅ ditambahkan
 
-export default function PengumumanPage() {
-  const [data, setData] = useState(staticData.pengumuman);
-  const [filteredData, setFilteredData] = useState(staticData.pengumuman);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const router = useRouter();
+interface Announcement {
+  id: number;
+  title: string;
+  start_date: string;
+  end_date: string;
+  position: string;
+}
 
-  // Custom styles untuk animasi lucu
-  const customStyles = `
-    @keyframes wiggle {
-      0%, 7% { transform: rotateZ(0); }
-      15% { transform: rotateZ(-15deg); }
-      20% { transform: rotateZ(10deg); }
-      25% { transform: rotateZ(-10deg); }
-      30% { transform: rotateZ(6deg); }
-      35% { transform: rotateZ(-4deg); }
-      40%, 100% { transform: rotateZ(0); }
-    }
-    @keyframes bounce-slow {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes fade-in-up {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fade-in-right {
-      0% { opacity: 0; transform: translateX(20px); }
-      100% { opacity: 1; transform: translateX(0); }
-    }
-    .animate-wiggle { animation: wiggle 2s ease-in-out infinite; }
-    .animate-bounce-slow { animation: bounce-slow 3s ease-in-out infinite; }
-    .animate-fade-in-up { animation: fade-in-up 0.6s ease-out; }
-    .animate-fade-in-right { animation: fade-in-right 0.8s ease-out; }
-  `;
-
-  const handleEdit = (item: any, index: number) => {
-    console.log("Edit Pengumuman:", item);
-    // Redirect ke halaman edit dengan ID sebagai parameter
-    router.push(`/bem/announcement/edit?id=${index}`);
+interface ApiResponse {
+  status: string;
+  message: string;
+  metadata: {
+    current_page: number;
+    per_page: number;
+    total_items: number;
+    total_pages: number;
+    links: {
+      first: string;
+      last: string;
+    };
   };
+  data: Announcement[];
+}
 
-  const handleDelete = (index: number) => {
-    const newData = data.filter((_, i) => i !== index);
-    setData(newData);
-    setFilteredData(newData);
-  };
+const AnnouncementPage: React.FC = () => {
+  const [data, setData] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const router = useRouter(); // ✅ inisialisasi router
 
-  const handleAdd = () => {
-    router.push("/bem/announcement/create"); // ✅ redirect ke halaman create
-  };
+  function formatDateTime(dateStr: string) {
+    if (!dateStr) return "-";
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "-";
 
-  // Fungsi search dan filter
-  const applyFilters = () => {
-    let filtered = [...data];
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
 
-    // Filter berdasarkan search term
-    if (searchTerm) {
-      filtered = filtered.filter(item => 
-        item.judul?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.content?.toLowerCase().includes(searchTerm.toLowerCase())
+  function formatPosition(str: string) {
+  if (!str) return "-";
+  // Debug log: input value
+  console.log("formatPosition input:", str);
+  const result = str
+    .split("_")
+    .map(
+      (word) =>
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join(" ");
+  // Debug log: output value
+  console.log("formatPosition output:", result);
+  return result;
+}
+  const fields = [
+    { key: "title", label: "Judul Announcement", type: "string" },
+    { key: "start_date", label: "Waktu Mulai", type: "string", render: (val: string) => formatDateTime(val) },
+    { key: "end_date", label: "Waktu Selesai", type: "string", render: (val: string) => formatDateTime(val) },
+    { key: "position", label: "Diposting Oleh", type: "string", render: (val: string) => formatPosition(val) },
+  ];
+
+
+  // Filter states
+  const [searchName, setSearchName] = useState("");
+  const [searchProdi, setSearchProdi] = useState("");
+  const [searchStatus, setSearchStatus] = useState("");
+
+  const fetchData = async (pageNumber: number) => {
+    setLoading(true);
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const params = new URLSearchParams();
+      params.append("page", pageNumber.toString());
+      params.append("per_page", "10");
+
+      if (searchName.trim()) {
+        params.append("name", searchName.trim());
+      }
+      if (searchProdi.trim()) {
+        params.append("study_program", searchProdi.trim());
+      }
+      if (searchStatus.trim()) {
+        params.append("status", searchStatus.trim());
+      }
+
+      let res = await fetch(
+        `http://localhost:9090/api/student/announcement?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+      let json: ApiResponse = await res.json();
+      setData(
+  json.data.map((item) => ({
+    ...item,
+    start_date: formatDateTime(item.start_date),
+    end_date: formatDateTime(item.end_date),
+  })));
+      setTotalPages(json.metadata.total_pages);
+      setTotalItems(json.metadata.total_items);
+      setPage(json.metadata.current_page);
+    } catch (err) {
+      console.error("Gagal fetch data:", err);
+    } finally {
+      setLoading(false);
     }
-
-    // Filter berdasarkan status
-    if (filterStatus !== "all") {
-      const today = new Date();
-      filtered = filtered.filter(item => {
-        const startDate = new Date(item.tanggal_mulai);
-        const endDate = new Date(item.tanggal_tutup);
-        const isActive = today >= startDate && today <= endDate;
-        
-        return filterStatus === "active" ? isActive : !isActive;
-      });
-    }
-
-    setFilteredData(filtered);
   };
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-  };
-
-  const handleFilterChange = (status: string) => {
-    setFilterStatus(status);
-  };
-
-  // Apply filters whenever searchTerm, filterStatus, or data changes
   useEffect(() => {
-    applyFilters();
-  }, [searchTerm, filterStatus, data]);
+    fetchData(page);
+  }, [page]);
 
-  // Hitung statistik
-  const totalPengumuman = data.length;
-  const activeAnnouncements = data.filter(item => {
-    const today = new Date();
-    const startDate = new Date(item.tanggal_mulai);
-    const endDate = new Date(item.tanggal_tutup);
-    return today >= startDate && today <= endDate;
-  }).length;
+  const handleSearch = () => {
+    setPage(1);
+    fetchData(1);
+  };
 
-  return (
-    <div className="min-h-screen bg-blue-50 relative overflow-hidden">
-      {/* Custom CSS untuk animasi */}
-      <style jsx>{customStyles}</style>
-      
-      {/* Floating elements untuk dekorasi */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-20 left-10 w-4 h-4 bg-yellow-400 rounded-full opacity-20 animate-bounce delay-1000"></div>
-        <div className="absolute top-40 right-20 w-6 h-6 bg-blue-400 rounded-full opacity-20 animate-ping delay-2000"></div>
-        <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-yellow-500 rounded-full opacity-30 animate-pulse delay-1500"></div>
-        <div className="absolute top-1/3 right-1/3 w-5 h-5 bg-blue-300 rounded-full opacity-20 animate-bounce delay-3000"></div>
-        <div className="absolute bottom-20 right-10 w-4 h-4 bg-yellow-600 rounded-full opacity-25 animate-ping delay-500"></div>
-      </div>
-      {/* Header dengan Background Solid */}
-      <div className="bg-blue-600 px-6 py-8 shadow-xl relative overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-4 -left-4 w-24 h-24 bg-yellow-300/20 rounded-full animate-bounce delay-1000"></div>
-          <div className="absolute top-8 right-16 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-500"></div>
-          <div className="absolute bottom-4 left-1/3 w-20 h-20 bg-yellow-400/15 rounded-full animate-bounce delay-2000"></div>
-          <div className="absolute top-1/2 right-8 w-12 h-12 bg-white/20 rounded-full animate-ping delay-1500"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl animate-pulse hover:animate-bounce transition-all duration-300">
-                <Megaphone className="w-8 h-8 text-white animate-wiggle" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 animate-fade-in-up">
-                  Manajemen Pengumuman
-                </h1>
-                <p className="text-blue-100 text-lg animate-fade-in-up delay-300">
-                  Kelola pengumuman BEM IT Del dengan mudah dan efisien
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={handleAdd}
-              className="group relative inline-flex items-center px-6 py-3 text-base font-semibold text-blue-900 bg-yellow-400 rounded-xl hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300/50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-2 hover:scale-105 animate-bounce-slow"
-            >
-              <Plus className="w-5 h-5 mr-3 group-hover:rotate-90 transition-transform duration-300" />
-              Tambah Pengumuman
-              {/* Sparkle effect */}
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-200 rounded-full animate-ping"></div>
-            </button>
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const hasActiveFilters =
+    searchName.trim() || searchProdi.trim() || searchStatus.trim();
+
+  // ✅ perbaikan di sini
+  const handleAdd = () => {
+    router.push("/bem/announcement/create"); 
+  };
+
+  const handleEdit = (item: Announcement) => {
+    console.log("Edit item:", item);
+  };
+
+  const handleDelete = async (item: Announcement) => {
+    const token = sessionStorage.getItem("token");
+
+    try {
+      const res = await fetch(
+        `http://localhost:9090/api/student/announcement/${item.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      fetchData(page);
+    } catch (err) {
+      console.error("Gagal hapus data:", err);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const delta = 2;
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (page > delta + 2) pages.push("...");
+      const start = Math.max(2, page - delta);
+      const end = Math.min(totalPages - 1, page + delta);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (page < totalPages - delta - 1) pages.push("...");
+      if (totalPages > 1) pages.push(totalPages);
+    }
+    return pages;
+  };
+
+  const LoadingState = () => (
+    <div className="min-h-96 flex items-center justify-center bg-white rounded-xl shadow-sm border border-gray-100">
+      <div className="text-center space-y-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br bg-gradient-to-br from-blue-500 to-purple-600 rounded-full animate-spin">
+          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
           </div>
         </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="px-6 -mt-6 relative z-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-200 hover:shadow-xl transition-all duration-300 hover:scale-105 hover:rotate-1 animate-fade-in-up">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-600 mb-1">Total Pengumuman</p>
-                <p className="text-3xl font-bold text-blue-700 animate-pulse">{totalPengumuman}</p>
-              </div>
-              <div className="bg-yellow-100 p-3 rounded-full animate-bounce hover:animate-spin">
-                <Megaphone className="w-6 h-6 text-yellow-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-green-200 hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-rotate-1 animate-fade-in-up delay-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-600 mb-1">Sedang Aktif</p>
-                <p className="text-3xl font-bold text-green-600 animate-pulse">{activeAnnouncements}</p>
-              </div>
-              <div className="bg-yellow-100 p-3 rounded-full animate-bounce delay-500 hover:animate-ping">
-                <Calendar className="w-6 h-6 text-yellow-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="px-6 pb-8 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl border border-blue-200 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:scale-[1.01]">
-            <div className="px-6 py-4 bg-blue-50 border-b border-blue-200">
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <h2 className="text-xl font-semibold text-blue-700 animate-pulse">
-                  Daftar Pengumuman
-                </h2>
-                <div className="flex items-center space-x-4">
-                  {/* Search Box */}
-                  <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Search className="h-5 w-5 text-blue-500 group-hover:animate-bounce" />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Cari pengumuman..."
-                      value={searchTerm}
-                      onChange={(e) => handleSearch(e.target.value)}
-                      className="block w-80 pl-10 pr-3 py-2 border-2 border-blue-300 rounded-lg leading-5 bg-white placeholder-blue-400 focus:outline-none focus:placeholder-blue-300 focus:ring-4 focus:ring-blue-300/30 focus:border-blue-500 transition-all duration-300 hover:border-blue-400 hover:shadow-md"
-                    />
-                    {/* Sparkle animation when focused */}
-                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
-                  </div>
-                  
-                  {/* Filter Dropdown */}
-                  <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Filter className="h-4 w-4 text-blue-500 group-hover:animate-spin" />
-                    </div>
-                    <select
-                      value={filterStatus}
-                      onChange={(e) => handleFilterChange(e.target.value)}
-                      className="block w-40 pl-9 pr-8 py-2 border-2 border-blue-300 rounded-lg leading-5 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300/30 focus:border-blue-500 transition-all duration-300 appearance-none hover:border-blue-400 hover:shadow-md cursor-pointer"
-                    >
-                      <option value="all">Semua Status</option>
-                      <option value="active">Sedang Aktif</option>
-                      <option value="inactive">Tidak Aktif</option>
-                    </select>
-                    {/* Custom dropdown arrow */}
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <svg className="w-4 h-4 text-blue-500 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 text-sm text-blue-600 animate-fade-in-right">
-                    <Calendar className="w-4 h-4 animate-pulse" />
-                    <span>Diperbarui hari ini</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6">
-              <DataTable
-                data={filteredData}
-                fields={fieldConfigs.pengumuman}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            </div>
-          </div>
+        <p className="text-gray-600 font-medium">Memuat data Announcement...</p>
+        <div className="flex justify-center space-x-1">
+          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+          <div
+            className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.1s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
         </div>
       </div>
     </div>
   );
-}
+
+  if (loading) return <LoadingState />;
+
+  return (
+    <div className="space-y-6 p-6 bg-gradient-to-br from-gray-50 to-white min-h-screen">
+      {/* Header Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Announcement
+            </h1>
+          </div>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={handleAdd} // ✅ sudah diperbaiki
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg hover:from-green-600 hover:to-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Tambah Announcement
+            </button>
+            <button
+              onClick={handleSearch}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              Cari
+            </button>
+          </div>
+        </div>
+
+        {/* Search input tetap */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <label
+              htmlFor="searchName"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              judul Announcement
+            </label>
+            <div className="relative">
+              <input
+                id="searchName"
+                type="text"
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Judul Announcement"
+                className="w-full pl-10 pr-4 py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+              />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <svg
+                  className="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <DataTable
+          data={data}
+          fields={fields}
+          onEdit={handleEdit}
+          currentPage={page}
+          perPage={10}
+        />
+      </div>
+
+      {/* Pagination tetap */}
+      {totalPages > 1 && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+            <div className="text-sm text-gray-600">
+              Menampilkan{" "}
+              <span className="font-medium text-gray-900">
+                {(page - 1) * 10 + 1}
+              </span>{" "}
+              -{" "}
+              <span className="font-medium text-gray-900">
+                {Math.min(page * 10, totalItems)}
+              </span>{" "}
+              dari
+              <span className="font-medium text-gray-900"> {totalItems}</span>{" "}
+              data
+              {hasActiveFilters && (
+                <span className="text-blue-600"> (terfilter)</span>
+              )}
+            </div>
+
+            <nav className="flex items-center space-x-1">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-sm"
+              >
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                Previous
+              </button>
+
+              <div className="hidden sm:flex items-center space-x-1">
+                {getPageNumbers().map((num, idx) =>
+                  typeof num === "number" ? (
+                    <button
+                      key={idx}
+                      onClick={() => setPage(num)}
+                      className={`inline-flex items-center justify-center w-10 h-10 text-sm font-medium rounded-lg transition-all duration-200 ${
+                        num === page
+                          ? "bg-gradient-to-r from-green-500 to-teal-600 text-white shadow-lg transform scale-105"
+                          : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:shadow-sm"
+                      }`}
+                    >
+                      {num}
+                    </button>
+                  ) : (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center justify-center w-10 h-10 text-gray-400"
+                    >
+                      {num}
+                    </span>
+                  )
+                )}
+              </div>
+
+              <div className="sm:hidden px-4 py-2 text-sm text-gray-600 bg-gray-50 rounded-lg">
+                {page} / {totalPages}
+              </div>
+
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-sm"
+              >
+                Next
+                <svg
+                  className="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </nav>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AnnouncementPage;
