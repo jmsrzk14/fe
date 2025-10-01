@@ -414,7 +414,7 @@ export default function ProfilePage() {
             loop
             muted
             playsInline
-            className="absolute w-full h-full object-cover z-0"
+            className="absolute w-full h-full object-cover z-[-1]"
             style={{
               filter: 'brightness(0.9)',
               objectPosition: 'center 60%'
