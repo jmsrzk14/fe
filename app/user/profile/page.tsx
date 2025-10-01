@@ -420,7 +420,7 @@ export default function ProfilePage() {
               objectPosition: 'center 60%'
             }}
           >
-            <source src="/0930.mp4" type="video/mp4" />
+            <source src="/0930 (1).mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
 
