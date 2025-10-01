@@ -67,15 +67,6 @@ export default function MahasiswaCreatePage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const stripHtml = (html: string) => {
-    if (typeof document !== "undefined") {
-      const tmp = document.createElement("DIV");
-      tmp.innerHTML = html;
-      return tmp.textContent || tmp.innerText || "";
-    }
-    return ""; // default saat server render
-  };
-  
   const handleChange = (
     key: keyof DepartmentForm,
     value: string | File | null
