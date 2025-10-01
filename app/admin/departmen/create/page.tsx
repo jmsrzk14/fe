@@ -84,66 +84,6 @@ export default function DepartemenCreatePage() {
                 />
               </div>
 
-              {/* Visi */}
-              <div className="md:col-span-2">
-                <label className="flex items-center gap-2 font-semibold text-gray-700 mb-3">
-                  <Target className="w-4 h-4 text-blue-600" />
-                  Visi
-                </label>
-                <textarea
-                  value={formData.visi}
-                  onChange={(e) => handleChange("visi", e.target.value)}
-                  className="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors bg-blue-50/30"
-                  rows={3}
-                  placeholder="Tuliskan visi departemen..."
-                />
-              </div>
-
-              {/* Misi */}
-              <div className="md:col-span-2">
-                <label className="flex items-center gap-2 font-semibold text-gray-700 mb-3">
-                  <CheckSquare className="w-4 h-4 text-blue-600" />
-                  Misi
-                </label>
-                <textarea
-                  value={formData.misi}
-                  onChange={(e) => handleChange("misi", e.target.value)}
-                  className="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors bg-blue-50/30"
-                  rows={3}
-                  placeholder="Tuliskan misi departemen..."
-                />
-              </div>
-
-              {/* Rencana Kerja */}
-              <div className="md:col-span-2">
-                <label className="flex items-center gap-2 font-semibold text-gray-700 mb-3">
-                  <Calendar className="w-4 h-4 text-blue-600" />
-                  Rencana Kerja
-                </label>
-                <textarea
-                  value={formData.rencanaKerja}
-                  onChange={(e) => handleChange("rencanaKerja", e.target.value)}
-                  className="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors bg-blue-50/30"
-                  rows={3}
-                  placeholder="Tuliskan rencana kerja departemen..."
-                />
-              </div>
-
-              {/* Nilai */}
-              <div className="md:col-span-2">
-                <label className="flex items-center gap-2 font-semibold text-gray-700 mb-3">
-                  <Star className="w-4 h-4 text-blue-600" />
-                  Nilai-nilai
-                </label>
-                <textarea
-                  value={formData.nilai}
-                  onChange={(e) => handleChange("nilai", e.target.value)}
-                  className="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors bg-blue-50/30"
-                  rows={3}
-                  placeholder="Tuliskan nilai-nilai departemen..."
-                />
-              </div>
-
               {/* Gambar */}
               <div className="md:col-span-2">
                 <label className="flex items-center gap-2 font-semibold text-gray-700 mb-3">
