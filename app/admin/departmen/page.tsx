@@ -2,9 +2,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // ✅ untuk navigasi
 import { Plus } from "lucide-react"; // ✅ icon tambah
-import DataTable from "@/components/layout/DataTable";
 import { staticData } from "@/constants/data";
 import { fieldConfigs } from "@/constants/field";
+import dynamic from "next/dynamic";
+
+const DataTable = dynamic(() => import("@/components/layout/DataTable"), {
+  ssr: false,
+});
 
 export default function DepartemenPage() {
   const [data, setData] = useState(staticData.departemen);

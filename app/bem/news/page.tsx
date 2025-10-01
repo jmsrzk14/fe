@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import DataTable from "@/components/layout/DataTable";
 import { staticData } from "@/constants/data";
 import { fieldConfigs } from "@/constants/field";
 import dynamic from "next/dynamic";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
+
+const DataTable = dynamic(() => import("@/components/layout/DataTable"), {
+  ssr: false,
+});
 
 export default function BeritaPage() {
   const [data, setData] = useState(staticData.berita);
