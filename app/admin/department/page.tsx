@@ -63,7 +63,7 @@ const DepartemenPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:8080/api/admin/department?${params.toString()}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/department?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -119,7 +119,7 @@ const DepartemenPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/admin/department/${item.id}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/department/${item.id}`,
         {
           method: "DELETE",
           headers: {

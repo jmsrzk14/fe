@@ -54,7 +54,7 @@ const NewsDetailPage = () => {
 
     setLoading(true);
     axios
-      .get(`http://localhost:8080/api/news/${id}`)
+      .get(`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/news/${id}`)
       .then((res) => {
         if (res.data.status === "success") {
           setNewsData(res.data.data);
@@ -120,7 +120,7 @@ const NewsDetailPage = () => {
                 <div className="relative h-64 md:h-80 bg-gradient-to-br from-blue-600 to-blue-800">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <img
-                      src={`http://localhost:8080/news/${newsData.image_url}`}
+                      src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/news/${newsData.image_url}`}
                       alt={newsData.image_url}
                       className="w-full h-full object-cover"
                     />

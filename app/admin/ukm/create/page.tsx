@@ -71,7 +71,7 @@ export default function MahasiswaCreatePage() {
       (formData.namaSingkat ? 1 : 0) +
       (formData.gambar ? 1 : 0)) /
       6) *
-      100
+    100
   );
 
   const handleChange = (key: keyof UKMForm, value: string | File | null) => {
@@ -149,7 +149,7 @@ export default function MahasiswaCreatePage() {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/api/admin/clubs",
+        "https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/clubs",
         formDataToSend,
         {
           headers: {
@@ -178,6 +178,12 @@ export default function MahasiswaCreatePage() {
       }
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
+      
+      // Set state error
+      setError(
+        error.response?.data?.message || "Terjadi kesalahan saat menyimpan data."
+      );
+
       if (error.response?.status === 401) {
         setError(
           "Sesi tidak valid atau telah berakhir. Silakan login kembali."
@@ -187,7 +193,7 @@ export default function MahasiswaCreatePage() {
       } else {
         setError(
           error.response?.data?.message ||
-            "Terjadi kesalahan saat menyimpan data."
+          "Terjadi kesalahan saat menyimpan data."
         );
       }
     } finally {
@@ -285,7 +291,7 @@ export default function MahasiswaCreatePage() {
                   disabled={isSubmitting}
                 />
               </div>
-              
+
               {/* File Upload */}
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-bold text-blue-900">
@@ -361,41 +367,41 @@ export default function MahasiswaCreatePage() {
           {/* Preview Card */}
           {(formData.nama ||
             formData.namaSingkat
-            ) && (
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
-              <div className="bg-blue-600 p-4">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 size={20} />
-                  👀 Preview
-                </h3>
+          ) && (
+              <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-100 overflow-hidden">
+                <div className="bg-blue-600 p-4">
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <CheckCircle2 size={20} />
+                    👀 Preview
+                  </h3>
+                </div>
+                <div className="p-6 space-y-4">
+                  {previewImage && (
+                    <div className="text-center">
+                      <NextImage
+                        src={previewImage as string}
+                        alt="Logo Preview"
+                        width={96}
+                        height={96}
+                        className="object-cover rounded-xl mx-auto border-2 border-blue-200 shadow-md"
+                      />
+                    </div>
+                  )}
+                  {formData.nama && (
+                    <div className="text-center">
+                      <h4 className="font-bold text-blue-900 text-lg">
+                        {formData.nama}
+                      </h4>
+                      {formData.namaSingkat && (
+                        <p className="text-blue-600 font-medium text-sm mt-1">
+                          ({formData.namaSingkat})
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="p-6 space-y-4">
-                {previewImage && (
-                  <div className="text-center">
-                    <NextImage
-                      src={previewImage as string}
-                      alt="Logo Preview"
-                      width={96}
-                      height={96}
-                      className="object-cover rounded-xl mx-auto border-2 border-blue-200 shadow-md"
-                    />
-                  </div>
-                )}
-                {formData.nama && (
-                  <div className="text-center">
-                    <h4 className="font-bold text-blue-900 text-lg">
-                      {formData.nama}
-                    </h4>
-                    {formData.namaSingkat && (
-                      <p className="text-blue-600 font-medium text-sm mt-1">
-                        ({formData.namaSingkat})
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+            )}
 
           {/* Progress Card */}
           <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
@@ -441,7 +447,7 @@ export default function MahasiswaCreatePage() {
                       (formData.namaSingkat ? 1 : 0) +
                       (formData.gambar ? 1 : 0)) /
                       3) *
-                      100
+                    100
                   )}
                   %
                 </span>

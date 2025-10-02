@@ -36,7 +36,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/news");
+        const res = await axios.get("https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/news");
         if (res.data.status === "success") {
           setNewsData(res.data.data);
         }
@@ -176,7 +176,7 @@ export default function ProfilePage() {
                 <div className="relative h-48 p-6 overflow-hidden">
                   <div className="absolute inset-0">
                     <img
-                      src={`http://localhost:8080/news/${news.image_url}`}
+                      src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/news/${news.image_url}`}
                       alt={news.image_url}
                       className="w-full h-full object-cover"
                     />

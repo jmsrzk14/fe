@@ -166,7 +166,7 @@ export default function HimpunanCreatePage() {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/api/admin/associations",
+        "https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/associations",
         formDataToSend,
         {
           headers: {

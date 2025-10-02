@@ -106,7 +106,7 @@ export default function AnnouncementCreatePage() {
       if (formData.file) formDataToSend.append("file", formData.file);
 
       const response = await axios.post(
-        "http://localhost:8080/api/student/announcements",
+        "https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/student/announcements",
         formDataToSend,
         {
           headers: {

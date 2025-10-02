@@ -243,7 +243,7 @@ export default function ProfilePage() {
       try {
         setIsLoading(true);
         // Replace with your actual API endpoint
-        const response = await fetch('http://localhost:8080/api/bems/manage/2024-2025');
+        const response = await fetch('https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/bems/manage/2024-2025');
         if (!response.ok) {
           throw new Error('Failed to fetch executive data');
         }
@@ -394,7 +394,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // Fetch Departments
-    fetch('http://localhost:8080/api/department')
+    fetch('https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/department')
       .then(response => response.json())
       .then(data => {
         console.log('Departments API response:', data.data);
@@ -644,7 +644,7 @@ export default function ProfilePage() {
                           style={{ backgroundColor: executive.color }}
                         >
                           <img
-                            src={`http://localhost:8080/users/${executive.image}`}
+                            src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/users/${executive.image}`}
                             alt={`Logo ${executive.image}`}
                             className="w-16 h-16 object-contain"
                           />
@@ -777,7 +777,7 @@ export default function ProfilePage() {
                       <div className="absolute inset-0 bg-gradient-to-br from-[#1c44ac] to-[#3b82f6] rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                       <div className="relative w-32 h-32 rounded-full ring-4 ring-[#e6ecff] group-hover:ring-[#1c44ac] transition-all duration-300 flex items-center justify-center overflow-hidden shadow-lg bg-white">
                         <img
-                          src={`http://localhost:8080/departments/${departemen.image}`}
+                          src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/departments/${departemen.image}`}
                           alt={`Logo ${departemen.name}`}
                           className="w-28 h-28 object-cover transform group-hover:scale-110 transition-all duration-500 rounded-full"
                         />

@@ -63,7 +63,7 @@ const HimpunanPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:8080/api/admin/association?${params.toString()}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/association?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -119,7 +119,7 @@ const HimpunanPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/admin/himpunan/${item.id}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/himpunan/${item.id}`,
         {
           method: "DELETE",
           headers: {

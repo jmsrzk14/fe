@@ -63,7 +63,7 @@ const UkmPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:8080/api/admin/clubs?${params.toString()}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/clubs?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -119,7 +119,7 @@ const UkmPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/admin/ukm/${item.id}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/ukm/${item.id}`,
         {
           method: "DELETE",
           headers: {

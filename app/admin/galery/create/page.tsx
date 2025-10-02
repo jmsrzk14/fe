@@ -130,7 +130,7 @@ export default function GaleryCreatePage() {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/api/admin/galery",
+        "https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/galery",
         formDataToSend,
         {
           headers: {

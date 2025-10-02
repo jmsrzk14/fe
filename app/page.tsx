@@ -39,7 +39,7 @@ export default function HomePage() {
     const period = `${currentYear}-${nextYear}`;
 
     // Ambil data visi & misi
-    fetch(`http://localhost:8080/api/visimisibem/${period}`)
+    fetch(`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/visimisibem/${period}`)
       .then((res) => res.json())
       .then((data) => {
         setVisi(data.data.vision);
@@ -47,7 +47,7 @@ export default function HomePage() {
       })
       .catch((err) => console.error("Error fetching visi/misi:", err));
 
-    fetch("http://localhost:8080/api/news")
+    fetch("https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/news")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.data)) {
@@ -372,7 +372,7 @@ export default function HomePage() {
                   {news.image && (
                     <div className="h-48 w-full overflow-hidden">
                       <img
-                        src={`http://localhost:8080/news/${news.image}`}
+                        src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/news/${news.image}`}
                         alt={news.title}
                         className="h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                       />

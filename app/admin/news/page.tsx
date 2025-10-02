@@ -63,7 +63,7 @@ const NewsPage: React.FC = () => {
       }
 
       let res = await fetch(
-        `http://localhost:8080/api/admin/news?${params.toString()}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/news?${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -119,7 +119,7 @@ const NewsPage: React.FC = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/admin/news/${item.id}`,
+        `https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/news/${item.id}`,
         {
           method: "DELETE",
           headers: {

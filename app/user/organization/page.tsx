@@ -65,7 +65,7 @@ export default function OrganizationPage() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://localhost:8080/api/association', {
+      const response = await fetch('https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/association', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ export default function OrganizationPage() {
       setLoadingUkm(true);
       setErrorUkm(null);
 
-      const response = await fetch('http://localhost:8080/api/club', {
+      const response = await fetch('https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/club', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -315,7 +315,7 @@ export default function OrganizationPage() {
                       className="p-4 rounded-lg mb-4 flex items-center justify-center"
                     >
                     <img 
-                        src={`http://localhost:8080/associations/${item.image}`} 
+                        src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/associations/${item.image}`} 
                         alt={`Logo ${item.image}`}
                         className="w-24 h-24 object-contain rounded-full"
                       />
@@ -384,7 +384,7 @@ export default function OrganizationPage() {
                       className="p-4 rounded-lg mb-4 flex items-center justify-center"
                     >
                       <img 
-                        src={`http://localhost:8080/clubs/${item.image}`} 
+                        src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/clubs/${item.image}`} 
                         alt={`Logo ${item.image}`}
                         className="w-24 h-24 object-contain rounded-full"
                       />

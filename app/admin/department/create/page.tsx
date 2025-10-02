@@ -131,7 +131,7 @@ export default function MahasiswaCreatePage() {
       // Send to API with Authorization header
       // Do NOT set Content-Type here; let the browser/axios set the multipart boundary
       const response = await axios.post(
-        "http://localhost:8080/api/admin/department",
+        "https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/department",
         formDataToSend,
         {
           headers: {

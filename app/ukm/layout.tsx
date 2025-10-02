@@ -58,7 +58,7 @@ export default function AdminLayout({
     }
 
     if (organisasiId && token) {
-      fetch(`http://localhost:8080/api/student/clubs/${organisasiId}`, {
+      fetch(`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/student/clubs/${organisasiId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -119,7 +119,7 @@ export default function AdminLayout({
             <div className="flex items-center gap-4">
               {orgLogo && (
                 <img
-                  src={`http://localhost:8080/clubs/${orgLogo}`}
+                  src={`https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/clubs/${orgLogo}`}
                   alt="Logo Organisasi"
                   className="w-16 h-16 rounded-full shadow-md"
                 />

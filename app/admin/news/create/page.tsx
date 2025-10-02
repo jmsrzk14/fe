@@ -154,7 +154,7 @@ const stripHtml = (html: string) => {
 
       // Send to API with Authorization header
       const response = await axios.post(
-        "http://localhost:8080/api/admin/news",
+        "https://be-jmsrzk147707-ttmyeqw8.apn.leapcell.online/api/admin/news",
         formDataToSend,
         {
           headers: {
