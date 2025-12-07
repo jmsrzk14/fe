@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import {
   ArrowLeft,
@@ -24,7 +24,9 @@ import {
   Tag,
   Shield,
   AlertCircle,
-  Info
+  Info,
+  Upload,
+  Check
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
@@ -39,16 +41,60 @@ import { cn } from '@/lib/utils';
 import axios from "axios";
 
 export default function AspirasiForm() {
+  // State untuk form (sesuai model Aspiration)
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [category, setCategory] = useState<string>("fasilitas");
-  const [priorityLevel, setPriorityLevel] = useState<string>("medium");
+  const [category, setCategory] = useState<string>("fasilitas"); // maps to Category
+  const [priorityLevel, setPriorityLevel] = useState<string>("medium"); // high|medium|low
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  // handler untuk file upload
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validasi ukuran file (Max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        Swal.fire({
+          icon: 'error',
+          title: 'File Terlalu Besar',
+          text: 'Ukuran file maksimal adalah 5MB',
+          confirmButtonColor: "#8b5cf6",
+        });
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
+
+      // Validasi tipe file
+      const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!validTypes.includes(file.type)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Format Salah',
+          text: 'Harap upload file berformat JPG atau PNG',
+          confirmButtonColor: "#8b5cf6",
+        });
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
+
+      setImageFile(file);
+      setUploadedFileName(file.name);
+    }
+  };
+  const removeFile = () => {
+    setImageFile(null);
+    setUploadedFileName("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  // Handler untuk form submission -> kirim sesuai model Aspiration
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -70,20 +116,44 @@ export default function AspirasiForm() {
         return;
       }
 
-      const payload = {
-        title: title.trim(),
-        description: description.trim(),
-        content: content.trim(),  // ✅ tambahkan ini
-        category: category,
-        priority_level: priorityLevel,
+      const formData = new FormData();
 
-        user_name: userName, // ✅ kirim ke backend
-      };
+      // Append semua data text
+      formData.append("title", title.trim());
+      formData.append("description", description.trim());
+      formData.append("content", content.trim());
+      formData.append("category", category);
+      formData.append("priority_level", priorityLevel);
+      formData.append("user_name", userName || "");
 
-      const res = await axios.post(`${API_URL}/student/aspirations`, payload, {
-        headers: token
-          ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
-          : { "Content-Type": "application/json" },
+      // Append file HANYA jika ada
+      if (imageFile) {
+        // "image" adalah nama parameter yang harus sesuai dengan Backend (Controller)
+        formData.append("image", imageFile);
+      }
+
+
+      // const payload = {
+      //   title: title.trim(),
+      //   description: description.trim(),
+      //   content: content.trim(),  // ✅ tambahkan ini
+      //   category: category,
+      //   priority_level: priorityLevel,
+
+      //   user_name: userName, // ✅ kirim ke backend
+      // };
+
+      // const res = await axios.post("http://localhost:9090/api/student/aspirations", formData, {
+      //   headers: token
+      //     ? { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
+      //     : { "Content-Type": "multipart/form-data" },
+      // });
+      const res = await fetch(`http://localhost:9090/api/student/aspirations`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData, // FormData, bukan JSON.stringify
       });
 
       if (res.status === 201 || res.status === 200) {
@@ -266,6 +336,69 @@ export default function AspirasiForm() {
                         <span className="ml-1">Rendah</span>
                       </label>
                     </div>
+                    {/* YANG HARUS DIPERBAIKI */}
+                    {/* Bagian Upload Gambar */}
+                    <section className="bg-white rounded-lg shadow-sm p-6 mt-4">
+                      <h2 className="text-xl font-semibold text-gray-800 flex items-center mb-4">
+                        <Upload className="mr-2 h-5 w-5 text-purple-500" />
+                        Foto Pendukung / Bukti
+                      </h2>
+
+                      <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 hover:bg-gray-50 transition-colors">
+
+                        {/* Input Tersembunyi */}
+                        <input
+                          type="file"
+                          ref={fileInputRef}     // Hubungkan ref
+                          className="hidden"     // Sembunyikan input asli
+                          onChange={handleFileChange} // Hubungkan handler
+                          accept=".jpg,.jpeg,.png"
+                        />
+
+                        {/* Tampilan jika belum ada file */}
+                        {!imageFile ? (
+                          <>
+                            <Upload className="h-8 w-8 text-gray-400 mb-2" />
+                            <p className="text-sm text-gray-500 mb-1">Upload foto bukti (Opsional)</p>
+                            <p className="text-xs text-gray-400">Format: JPG, PNG maks 5MB</p>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              type="button"
+                              className="mt-4"
+                              onClick={() => fileInputRef.current?.click()} // Trigger input asli saat tombol diklik
+                            >
+                              Pilih File
+                            </Button>
+                          </>
+                        ) : (
+                          /* Tampilan jika file sudah dipilih */
+                          <div className="w-full flex items-center justify-between bg-purple-50 p-3 rounded-lg border border-purple-200">
+                            <div className="flex items-center gap-3">
+                              <div className="bg-purple-200 p-2 rounded-full">
+                                <Check className="h-4 w-4 text-purple-700" />
+                              </div>
+                              <span className="text-sm text-gray-700 font-medium truncate max-w-[200px]">
+                                {uploadedFileName}
+                              </span>
+                            </div>
+
+                            {/* Tombol Hapus / Ganti */}
+                            <div className="flex gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                type="button"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0"
+                                onClick={removeFile}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </section>
                   </section>
 
                   {/* Pernyataan */}
