@@ -66,47 +66,47 @@ export default function AnnouncementsPage() {
     fetchAnnouncements();
   }, [token]);
 
-  useEffect(() => {
-    if (isLoadingToken) return; 
-    if (!token) {
-      Swal.fire({
-        title: "Access Denied!",
-        text: "Kamu harus login terlebih dahulu untuk mengakses halaman ini.",
-        icon: "warning",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#2563eb",
-        background: "#fefefe",
-        allowOutsideClick: false,
-        customClass: {
-          confirmButton: "swal-confirm-button",
-        },
-        didOpen: () => {
-          const style = document.createElement("style");
-          style.innerHTML = `
-              .swal-confirm-button {
-                color: #fff !important;
-                background-color: #2563eb !important;
-                border: none !important;
-                border-radius: 8px !important;
-                font-weight: 600 !important;
-                padding: 10px 24px !important;
-                box-shadow: none !important;
-                transition: background-color 0.2s ease !important;
-              }
-              .swal-confirm-button:hover {
-                background-color: #1d4ed8 !important; /* lebih gelap saat hover */
-              }
-            `;
-          document.head.appendChild(style);
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push("/auth/login");
-        }
-      });
-      return;
-    }
-  }, [router, token, isLoadingToken]);
+  // useEffect(() => {
+  //   if (isLoadingToken) return; 
+  //   if (!token) {
+  //     Swal.fire({
+  //       title: "Access Denied!",
+  //       text: "Kamu harus login terlebih dahulu untuk mengakses halaman ini.",
+  //       icon: "warning",
+  //       confirmButtonText: "OK",
+  //       confirmButtonColor: "#2563eb",
+  //       background: "#fefefe",
+  //       allowOutsideClick: false,
+  //       customClass: {
+  //         confirmButton: "swal-confirm-button",
+  //       },
+  //       didOpen: () => {
+  //         const style = document.createElement("style");
+  //         style.innerHTML = `
+  //             .swal-confirm-button {
+  //               color: #fff !important;
+  //               background-color: #2563eb !important;
+  //               border: none !important;
+  //               border-radius: 8px !important;
+  //               font-weight: 600 !important;
+  //               padding: 10px 24px !important;
+  //               box-shadow: none !important;
+  //               transition: background-color 0.2s ease !important;
+  //             }
+  //             .swal-confirm-button:hover {
+  //               background-color: #1d4ed8 !important; /* lebih gelap saat hover */
+  //             }
+  //           `;
+  //         document.head.appendChild(style);
+  //       },
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         router.push("/auth/login");
+  //       }
+  //     });
+  //     return;
+  //   }
+  // }, [router, token, isLoadingToken]);
 
   const getPriorityBadge = useCallback((type: Announcement["type"]) => {
     switch (type) {
